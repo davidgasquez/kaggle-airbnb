@@ -83,4 +83,4 @@ for i in range(len(id_test)):
 
 # Generate submission
 sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
-sub.to_csv('sub.csv',index=False)
+sub.to_csv('data/submissions/sub.csv', index=False)
