@@ -67,9 +67,9 @@ y = le.fit_transform(labels)
 X_test = values[piv_train:]
 
 # Classifier
-xgb = XGBClassifier(max_depth=6, learning_rate=0.25, n_estimators=30,
-                    objective='multi:softprob', subsample=0.7,
-                    colsample_bytree=0.6, seed=0)
+xgb = XGBClassifier(max_depth=6, learning_rate=0.25, n_estimators=50,
+                    objective='multi:softprob', subsample=0.6,
+                    colsample_bytree=0.6, seed=42)
 xgb.fit(X, y)
 y_pred = xgb.predict_proba(X_test)
 
