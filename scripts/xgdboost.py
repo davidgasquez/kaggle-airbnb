@@ -28,6 +28,7 @@ df_all = pd.concat((df_train, df_test), axis=0, ignore_index=True)
 df_all = df_all.drop(['id', 'date_first_booking'], axis=1)
 
 # Filling nan values
+df_all.loc[df_all.age > 500, 'age'] = 2015 - df_all.age
 df_all = df_all.fillna(-1)
 
 # Parse account date creation
@@ -54,6 +55,7 @@ ohe_feats = [
     'affiliate_channel', 'affiliate_provider', 'first_affiliate_tracked',
     'signup_app', 'first_device_type', 'first_browser'
 ]
+
 for f in ohe_feats:
     df_all_dummy = pd.get_dummies(df_all[f], prefix=f)
     df_all = df_all.drop([f], axis=1)
@@ -67,9 +69,9 @@ y = le.fit_transform(labels)
 X_test = values[piv_train:]
 
 # Classifier
-xgb = XGBClassifier(max_depth=6, learning_rate=0.25, n_estimators=50,
+xgb = XGBClassifier(max_depth=6, learning_rate=0.25, n_estimators=43,
                     objective='multi:softprob', subsample=0.6,
-                    colsample_bytree=0.6, seed=42)
+                    colsample_bytree=0.6, seed=0)
 xgb.fit(X, y)
 y_pred = xgb.predict_proba(X_test)
 
