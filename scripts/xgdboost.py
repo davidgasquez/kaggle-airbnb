@@ -42,7 +42,9 @@ av = df_all.age.values
 df_all['age'] = np.where(np.logical_or(av<14, av>100), -1, av)
 
 #One-hot-encoding features
-ohe_feats = ['gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel', 'affiliate_provider', 'first_affiliate_tracked', 'signup_app', 'first_device_type', 'first_browser']
+ohe_feats = ['gender', 'signup_method', 'signup_flow', 'language',
+'affiliate_channel', 'affiliate_provider', 'first_affiliate_tracked',
+'signup_app', 'first_device_type', 'first_browser']
 for f in ohe_feats:
     df_all_dummy = pd.get_dummies(df_all[f], prefix=f)
     df_all = df_all.drop([f], axis=1)
@@ -57,7 +59,8 @@ X_test = vals[piv_train:]
 
 #Classifier
 xgb = XGBClassifier(max_depth=6, learning_rate=0.25, n_estimators=43,
-                    objective='multi:softprob', subsample=0.6, colsample_bytree=0.6, seed=0)
+                    objective='multi:softprob', subsample=0.6,
+                    colsample_bytree=0.6, seed=0)
 xgb.fit(X, y)
 y_pred = xgb.predict_proba(X_test)
 
@@ -71,4 +74,4 @@ for i in range(len(id_test)):
 
 #Generate submission
 sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
-sub.to_csv('../data/submissions/sub.csv',index=False)
+sub.to_csv('data/submissions/sub.csv',index=False)
