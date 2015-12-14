@@ -65,5 +65,3 @@ def ndcg_score(y_true, y_pred, k=5):
     best = dcg_score(y_true, [[i] for i in y_true])
     actual = dcg_score(y_true, y_pred, k)
     return actual / best
-
-print ndcg_score(['FR', 'GR'], [['FR', 'ES', 'PT'], ['US', 'GR']])
