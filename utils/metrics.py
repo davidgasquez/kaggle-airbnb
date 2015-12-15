@@ -23,7 +23,7 @@ def dcg_score(y_true, y_pred, k=5):
     --------
     >>> y_true = ['FR', 'GR']
     >>> y_pred = [['FR', 'ES', 'PT'], ['US', 'GR']]
-    >>> dcg(y_true, y_pred)
+    >>> dcg_score(y_true, y_pred)
     """
     score = 0
     for y_true_value, y_pred_array in zip(y_true, y_pred):
@@ -59,9 +59,7 @@ def ndcg_score(y_true, y_pred, k=5):
     --------
     >>> y_true = ['FR', 'GR']
     >>> y_pred = [['FR', 'ES', 'PT'], ['US', 'GR']]
-    >>> ndcg(y_true, y_pred))
+    >>> ndcg_score(y_true, y_pred))
     """
-    # TODO: Best score is always len(y_true)?
-    best = dcg_score(y_true, [[i] for i in y_true])
     actual = dcg_score(y_true, y_pred, k)
-    return actual / best
+    return actual / len(y_true)
