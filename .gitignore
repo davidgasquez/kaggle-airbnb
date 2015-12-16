@@ -8,6 +8,3 @@ __pycache__/
 
 # Distribution / packaging
 .ipynb_checkpoints
-
-# Raw data
-data/
