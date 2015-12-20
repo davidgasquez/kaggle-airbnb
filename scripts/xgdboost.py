@@ -4,8 +4,8 @@ from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
 
 # Data loading
-train_users = pd.read_csv('data/raw/train_users.csv')
-test_users = pd.read_csv('data/raw/test_users.csv')
+train_users = pd.read_csv('datasets/raw/train_users.csv')
+test_users = pd.read_csv('datasets/raw/test_users.csv')
 labels = train_users['country_destination'].values
 train_users = train_users.drop(['country_destination'], axis=1)
 id_test = test_users['id']
@@ -94,4 +94,4 @@ for i in range(len(id_test)):
 
 # Generate Submission
 sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
-sub.to_csv('data/submissions/xgboost.csv',index=False)
+sub.to_csv('datasets/submissions/xgboost.csv',index=False)
