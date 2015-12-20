@@ -1,11 +1,3 @@
-<img
-    src="http://trabble.co/toolkit/img/airbnb.png"
-    alt="Promises/A+ logo"
-    title="Promises/A+ 1.1 compliant"
-    align="right"
-    width="60"
-/>
-
 New User Bookings
 =================
 
