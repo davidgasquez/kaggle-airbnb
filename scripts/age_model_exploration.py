@@ -74,10 +74,15 @@ svr = RandomForestRegressor(n_jobs=-1)
 
 # Grid Search
 param_grid = [
-    {'n_estimators': [50,100,150,200]},
+    {
+        'n_estimators': [50,100,150,200],
+        'max_features': ['auto', 'sqrt', 'log2'],
+        'max_depth': [None, 10, 20, 30, 40]
+    },
 ]
 
-clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1, scoring='r2', cv=5)
+clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
+                               scoring='r2', cv=5, verbose=0)
 
 # Run Grid Search
 clf.fit(
@@ -85,7 +90,7 @@ clf.fit(
     users_with_age['age']
 )
 
-print('\t', clf.best_score_, 'with', clf.best_params_)
+print '\t', clf.best_score_, 'with', clf.best_params_
 
 ################################################################################
 print("- ET:")
@@ -98,7 +103,8 @@ param_grid = [
     {'n_estimators': [50,100,150,200]},
 ]
 
-clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1, scoring='r2', cv=5)
+clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
+                               scoring='r2', cv=5, verbose=0)
 
 # Run Grid Search
 clf.fit(
@@ -106,7 +112,7 @@ clf.fit(
     users_with_age['age']
 )
 
-print('\t', clf.best_score_, 'with', clf.best_params_)
+print '\t', clf.best_score_, 'with', clf.best_params_
 
 ################################################################################
 print("- SVR:")
@@ -120,7 +126,8 @@ param_grid = {
     'gamma': [0.001, 0.005, 0.01]
 }
 
-clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1, scoring='r2', cv=5)
+clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
+                               scoring='r2', cv=5, verbose=0)
 
 # Run Grid Search
 clf.fit(
@@ -128,12 +135,12 @@ clf.fit(
     users_with_age['age']
 )
 
-print('\t', clf.best_score_, 'with', clf.best_params_)
+print '\t', clf.best_score_, 'with', clf.best_params_
 
 ################################################################################
 print("- KNN:")
 from sklearn.neighbors import KNeighborsClassifier
-svr = KNeighborsClassifier(n_jobs=-1)
+svr = KNeighborsClassifier()
 
 # Grid Search
 param_grid = {
@@ -142,7 +149,8 @@ param_grid = {
     'algorithm': ['ball_tree', 'kd_tree', 'brute']
 }
 
-clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1, scoring='r2', cv=5)
+clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
+                               scoring='r2', cv=5, verbose=0)
 
 # Run Grid Search
 clf.fit(
@@ -150,4 +158,4 @@ clf.fit(
     users_with_age['age']
 )
 
-print('\t', clf.best_score_, 'with', clf.best_params_)
+print '\t', clf.best_score_, 'with', clf.best_params_
