@@ -3,7 +3,7 @@
 import pandas as pd
 
 # Set default path
-DEFAULT_PATH = '../data/raw/'
+DEFAULT_PATH = '../datasets/raw/'
 
 
 def load_users_data(path=DEFAULT_PATH):
