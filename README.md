@@ -1,12 +1,11 @@
-<a href="http://promisesaplus.com/">
-    <img
-        src="http://trabble.co/toolkit/img/airbnb.png"
-        alt="Promises/A+ logo"
-        title="Promises/A+ 1.1 compliant"
-        align="right"
-        width="90"
-    />
-</a>
+<img
+    src="http://trabble.co/toolkit/img/airbnb.png"
+    alt="Promises/A+ logo"
+    title="Promises/A+ 1.1 compliant"
+    align="right"
+    width="80"
+/>
+
 New User Bookings
 =================
 
