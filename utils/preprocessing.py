@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 
 def one_hot_encoding(data, categorical_features):
@@ -25,7 +26,7 @@ def one_hot_encoding(data, categorical_features):
     return data
 
 
-def input_missing_values(data, column):
+def input_missing_values(data, column, model, scale=True):
     """Input missing values into the DataFrame using SVM.
 
     Parameters
@@ -36,19 +37,24 @@ def input_missing_values(data, column):
     Returns
     -------
     data : DataFrame
-    Returns a pandas DataFrame with new binary columns.
+        Returns a pandas DataFrame with the feature column filled with
+        predictions.
     """
-    null_values = data[column].isnull()
+    df = data
+    null_values = df[column].isnull()
 
-    from sklearn.svm import SVR
-    clf = SVR()
+    if scale:
+        X = df.columns.tolist()
+        X.remove(column)
 
-    clf.fit(
-        data[~null_values].drop(column, axis=1),
-        data[~null_values][column]
+        df[X] = StandardScaler().fit_transform(df[X])
+
+    model.fit(
+        df[~null_values].drop(column, axis=1),
+        df[~null_values][column]
     )
 
-    predicted_values = clf.predict(data[null_values].drop(column, axis=1))
+    predicted_values = model.predict(df[null_values].drop(column, axis=1))
 
     data.loc[null_values, column] = np.around(predicted_values)
 
