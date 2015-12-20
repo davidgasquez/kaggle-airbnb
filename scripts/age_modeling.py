@@ -7,7 +7,6 @@ from utils.preprocessing import one_hot_encoding
 from sklearn.preprocessing import StandardScaler
 from sklearn import grid_search
 
-
 # Load users
 print("Loading data...")
 train_users, test_users = load_users_data()
