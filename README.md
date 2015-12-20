@@ -3,7 +3,7 @@
     alt="Promises/A+ logo"
     title="Promises/A+ 1.1 compliant"
     align="right"
-    width="80"
+    width="60"
 />
 
 New User Bookings
