@@ -32,9 +32,9 @@ will make his or her first booking. There are **12** possible outcomes of the
 destination country and the datasets consists in a list of users with their
 demographics, web session records, and some summary statistics.
 
-Due to [Competition Rules][rules], the dataset's can not be shared. If you want
-to take a look to the data, head over the [competition][competition] page and
-download it.
+Due to the [*Competition Rules*][rules], the dataset's can not be shared. If
+you want to take a look to the data, head over the [competition][competition]
+page and download it.
 
 [rules]: https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings/rules
 
@@ -53,4 +53,3 @@ License
 
 Copyright (c) 2015 David Gasquez
 Licensed under the MIT license.
-
