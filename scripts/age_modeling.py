@@ -74,9 +74,9 @@ svr = RandomForestRegressor(n_jobs=-1)
 # Grid Search
 param_grid = [
     {
-        'n_estimators': [50,100,150,200],
+        'n_estimators': [50, 75, 100, 125, 150],
         'max_features': ['auto', 'sqrt', 'log2'],
-        'max_depth': [None, 10, 20, 30, 40]
+        'max_depth': [None, 5, 10, 20, 30]
     },
 ]
 
@@ -99,31 +99,12 @@ svr = ExtraTreesRegressor(n_jobs=-1)
 
 # Grid Search
 param_grid = [
-    {'n_estimators': [50,100,150,200]},
+    {
+        'n_estimators': [50, 75, 100, 125, 150],
+        'max_features': ['auto', 'sqrt', 'log2'],
+        'max_depth': [None, 5, 10, 20, 30]
+    },
 ]
-
-clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
-                               scoring='r2', cv=5, verbose=0)
-
-# Run Grid Search
-clf.fit(
-    users_with_age.drop('age', axis=1),
-    users_with_age['age']
-)
-
-print '\t', clf.best_score_, 'with', clf.best_params_
-
-################################################################################
-print("- SVR:")
-from sklearn.svm import SVR
-svr = SVR()
-
-# Grid Search
-param_grid = {
-    'C': [1, 10, 100],
-    'kernel': ['linear', 'rbf'],
-    'gamma': [0.001, 0.005, 0.01]
-}
 
 clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
                                scoring='r2', cv=5, verbose=0)
@@ -146,6 +127,29 @@ param_grid = {
     'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9],
     'weights': ['uniform', 'distance'],
     'algorithm': ['ball_tree', 'kd_tree', 'brute']
+}
+
+clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
+                               scoring='r2', cv=5, verbose=0)
+
+# Run Grid Search
+clf.fit(
+    users_with_age.drop('age', axis=1),
+    users_with_age['age']
+)
+
+print '\t', clf.best_score_, 'with', clf.best_params_
+
+################################################################################
+print("- SVR:")
+from sklearn.svm import SVR
+svr = SVR()
+
+# Grid Search
+param_grid = {
+    'C': [1, 10, 100],
+    'kernel': ['linear', 'rbf'],
+    'gamma': [0.001, 0.005, 0.01]
 }
 
 clf = grid_search.GridSearchCV(svr, param_grid, n_jobs=-1,
