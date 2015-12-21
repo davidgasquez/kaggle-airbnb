@@ -13,4 +13,4 @@
 #$ -cwd
 # If a different working directory is preferred, then #$ -wd <dir>
 # must be used instead
-python age_modeling.py > run.out 
+python age_modeling.py > age_modeling.out 
