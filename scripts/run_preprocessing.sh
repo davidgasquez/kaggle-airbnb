@@ -13,4 +13,4 @@
 #$ -cwd
 # If a different working directory is preferred, then #$ -wd <dir>
 # must be used instead
-python preprocessing.py > preprocessing.out
+python preprocessing_general.py > preprocessing.out
