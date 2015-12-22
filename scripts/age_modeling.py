@@ -1,11 +1,12 @@
 import sys
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn import grid_search
+
 sys.path.append('..')
 from utils.data_loading import load_users_data
 from utils.preprocessing import one_hot_encoding
-from sklearn.preprocessing import StandardScaler
-from sklearn import grid_search
 
 # Load users
 print("Loading data...")

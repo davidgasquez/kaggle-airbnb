@@ -1,43 +1,27 @@
-
-# coding: utf-8
-
-# In[ ]:
-
 import sys
 import numpy as np
 import pandas as pd
 
 sys.path.append('..')
-
-
-# In[ ]:
-
 from utils.data_loading import load_users_data, load_sessions_data
 
+print 'START'
+
+print 'Loading data...',
 train_users, test_users = load_users_data()
 sessions = load_sessions_data()
 sessions.replace('-unknown-', np.nan, inplace=True)
+print '\tDONE'
 
-
-# In[ ]:
-
+print 'Basic preprocessing...',
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
 users = users.drop('date_first_booking', axis=1)
-
-
-# In[ ]:
 
 users['gender'].replace('-unknown-', np.nan, inplace=True)
 users['language'].replace('-unknown-', np.nan, inplace=True)
 
-
-# In[ ]:
-
 users.loc[users['age'] > 100, 'age'] = np.nan
 users.loc[users['age'] < 14, 'age'] = np.nan
-
-
-# In[ ]:
 
 categorical_features = [
     'affiliate_channel',
@@ -55,14 +39,8 @@ categorical_features = [
 for categorical_feature in categorical_features:
     users[categorical_feature] = users[categorical_feature].astype('category')
 
-
-# In[ ]:
-
 users['date_account_created'] = pd.to_datetime(users['date_account_created'])
 users['date_first_active'] = pd.to_datetime(users['timestamp_first_active'], format='%Y%m%d%H%M%S')
-
-
-# In[ ]:
 
 weekdays = []
 for date in users.date_account_created:
@@ -77,27 +55,17 @@ users['weekday_first_active'] = pd.Series(weekdays)
 users['year_account_created'] = pd.DatetimeIndex(users['date_account_created']).year
 users['month_account_created'] = pd.DatetimeIndex(users['date_account_created']).month
 users['day_account_created'] = pd.DatetimeIndex(users['date_account_created']).day
-
 users['year_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).year
 users['month_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).month
 users['day_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).day
 
-
-# In[ ]:
-
-sessions_lengths = sessions['user_id'].value_counts()
-
-
-# In[ ]:
-
-# for user, session_length in sessions_lengths.iteritems():
-#     users.loc[users['id'] == user, 'session_length'] = int(session_length)
-
-
-# In[ ]:
+print '\tDONE'
 
 n = 5
 c = 0
+total = len(sessions['user_id'].unique())
+print 'Processing Sessions...\t0%\r',
+sys.stdout.flush()
 for user in sessions['user_id'].unique():
     user_session = sessions.loc[sessions['user_id'] == user]
 
@@ -107,7 +75,7 @@ for user in sessions['user_id'].unique():
     action_type = user_session['action_type'].value_counts()
     for i in range(min(n, len(action_type.index))):
         users.loc[users['id'] == user, action_type.index[i] + '_count'] = action_type.values[i]
-    
+
     # Count numer of time repeating each actions
     action = user_session['action'].value_counts()
     for i in range(min(n, len(action.index))):
@@ -121,12 +89,13 @@ for user in sessions['user_id'].unique():
     if user_session['device_type'].value_counts().sum() is not 0:
         users.loc[users['id'] == user, 'most_used_device'] = user_session['device_type'].value_counts().index[0]
 
-    if c % 1000 == 0:                                                                                            
-        print c
-    c = c + 1                                                                                                       
+    c = c + 1
+    if c % 1350 == 0:
+        percentage = float(c) / float(total)
+        print 'Processing Sessions...\t{0}%\r'.format(percentage * 100),
+        sys.stdout.flush()
 
-
-# In[ ]:
+print 'Processing...\tDONE\r'
 
 users.to_csv('preprocessed.csv')
-
+print 'END'
