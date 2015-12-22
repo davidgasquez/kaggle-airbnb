@@ -6,6 +6,8 @@ if [ $# -eq 0 ]; then
 fi
 
 #$ -N $1
+#$ -M davidgasquez@gmail.com
+#$ -m abe
 #$ -o output/$JOB_NAME_$JOB_ID.out
 #$ -e output/$JOB_NAME_$JOB_ID.error
 #$ -q larga
