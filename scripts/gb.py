@@ -15,8 +15,8 @@ print "Data Loaded"
 id_test = test_users['id']
 piv_train = train_users.shape[0]
 
-users = users.drop(['id'], axis=1)
-users = users.drop(['date_account_created'], axis=1)
+users = users.drop(['id', 'country_destination'], axis=1)
+users = users.drop(['date_account_created', 'date_first_active'], axis=1)
 users = users.drop(['timestamp_first_active'], axis=1)
 
 users = users.fillna(-1)
@@ -26,7 +26,7 @@ from utils.preprocessing import one_hot_encoding
 categorical_features = [
     'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',
     'affiliate_provider', 'first_affiliate_tracked', 'signup_app',
-    'first_device_type', 'first_browser'
+    'first_device_type', 'first_browser', 'most_used_device'
 ]
 
 users = one_hot_encoding(users, categorical_features)

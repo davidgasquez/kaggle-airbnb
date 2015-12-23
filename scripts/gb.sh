@@ -6,4 +6,4 @@
 #$ -q larga
 #$ -cwd
 
-python gb.py
+python -u gb.py
