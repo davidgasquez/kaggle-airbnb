@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+import argparse
+import uuid
+
+
+TEMPLATE_SERIAL = """
+#$ -cwd
+#$ -N {name}
+#$ -e {errfile}
+#$ -o {logfile}
+#$ -q {queue}
+
+echo "Job started on" `date`
+echo "------------------------------------------------------------------------"
+
+{script}
+
+echo "------------------------------------------------------------------------"
+echo "Job ended on" `date`
+"""
+
+
+def random_id(length=8):
+    return str(uuid.uuid4()).replace('-', '')[:length]
+
+
+def send_code(python_file, name='', logfile='$JOB_NAME_$JOB_ID.out',
+              errfile='$JOB_NAME_$JOB_ID.error', cleanup=True, queue='larga'):
+
+    script = 'python -u ' + python_file
+
+    # Handle job name
+    if not name:
+        name = python_file[:-3]
+    else:
+        name = name
+
+    # Fill template
+    template = TEMPLATE_SERIAL.format(
+        script=script, name=name,
+        logfile=logfile, errfile=errfile, queue=queue
+    )
+
+    # Write temporary file
+    open('job.qsub', 'wb').write(template)
+
+    # Make the call to qsub and remove temporary file
+    try:
+        subprocess.call('qsub < job.qsub', shell=True)
+    finally:
+        if cleanup:
+            os.remove('job.qsub')
+
+
+if __name__ == '__main__':
+
+    # Parse arguments
+    parser = argparse.ArgumentParser(description='Utility description')
+    parser.add_argument('script', help='Script to add')
+    parser.add_argument('-q', '--queue', default='larga', help='Queue to add')
+    parser.add_argument('-n', '--name', default='', help='Queue to add')
+    args = parser.parse_args()
+
+    #
+    send_code(args.script, queue=args.queue, name=args.name)
