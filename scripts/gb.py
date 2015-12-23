@@ -30,11 +30,14 @@ categorical_features = [
 ]
 
 users = one_hot_encoding(users, categorical_features)
+
+from sklearn.preprocessing import StandardScaler
 print "Preprocessed"
 from sklearn.preprocessing import LabelEncoder
 
 # Splitting train and test
 values = users.values
+values = StandardScaler().fit_transform(values)
 X = values[:piv_train]
 le = LabelEncoder()
 y = le.fit_transform(labels)
