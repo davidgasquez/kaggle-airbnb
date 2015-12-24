@@ -1,7 +1,3 @@
-# This R script is based on  indradenbakker's R script
-# I customized eval_metric ndcg5 so that it is much easier to monitor ndcg value.
-
-# load libraries
 library(xgboost)
 library(readr)
 library(stringr)
@@ -17,12 +13,11 @@ labels = df_train['country_destination']
 df_train = df_train[-grep('country_destination', colnames(df_train))]
 
 ndcg5 <- function(preds, dtrain) {
-
   labels <- getinfo(dtrain,"label")
   num.class = 12
   pred <- matrix(preds, nrow = num.class)
   top <- t(apply(pred, 2, function(y) order(y)[num.class:(num.class-4)]-1))
-  
+
   x <- ifelse(top==labels,1,0)
   dcg <- function(y) sum((2^y - 1)/log(2:(length(y)+1), base = 2))
   ndcg <- mean(apply(x,1,dcg))
@@ -65,11 +60,11 @@ y <- recode(labels$country_destination,"'NDF'=0; 'US'=1; 'other'=2; 'FR'=3; 'CA'
 X_test = df_all_combined[df_all_combined$id %in% df_test$id,]
 
 # train xgboost
-xgb <- xgboost(data = data.matrix(X[,-1]), 
-               label = y, 
+xgb <- xgboost(data = data.matrix(X[,-1]),
+               label = y,
                eta = 0.1,
-               max_depth = 6, 
-               nround=100, 
+               max_depth = 6,
+               nround=100,
                subsample = 0.7,
                colsample_bytree = 0.8,
                seed = 1,
@@ -87,7 +82,7 @@ predictions <- as.data.frame(matrix(y_pred, nrow=12))
 rownames(predictions) <- c('NDF','US','other','FR','CA','GB','ES','IT','PT','NL','DE','AU')
 predictions_top5 <- as.vector(apply(predictions, 2, function(x) names(sort(x)[12:8])))
 
-# create submission 
+# create submission
 ids <- NULL
 for (i in 1:NROW(X_test)) {
   idx <- X_test$id[i]
