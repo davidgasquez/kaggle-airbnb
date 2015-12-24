@@ -18,7 +18,7 @@ print("Data Loaded")
 id_test = test_users['id']
 piv_train = train_users.shape[0]
 
-users = users.drop(['id', 'country_destination'], axis=1)
+users = users.drop(['id', 'country_destination', 'Unnamed: 0'], axis=1)
 users = users.drop(['date_account_created', 'date_first_active'], axis=1)
 users = users.drop(['timestamp_first_active'], axis=1)
 
