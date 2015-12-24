@@ -56,7 +56,7 @@ X_test = values[piv_train:]
 
 print "\tDONE"
 
-print "Fitting..."
+print "Fitting...",
 # Classifier
 xgb = XGBClassifier(
     max_depth=6,
@@ -80,11 +80,11 @@ xgb = XGBClassifier(
 xgb.fit(X, y)
 print "\tDONE"
 
-print "Predicting..."
+print "Predicting...",
 y_pred = xgb.predict_proba(X_test)
 print "\tDONE"
 
-print "Generating submission..."
+print "Generating submission...",
 # Taking the 5 classes with highest probabilities
 ids = []
 cts = []
