@@ -8,18 +8,15 @@ from utils.preprocessing import one_hot_encoding
 from utils.data_loading import load_users_data
 from sklearn.preprocessing import LabelEncoder
 
-
-print 'START'
-
-print 'Loading data...',
+print('START')
+print('Loading data...',)
 
 train_users, test_users = load_users_data()
 labels = train_users['country_destination'].values
 train_users = train_users.drop(['country_destination'], axis=1)
 
-print '\tDONE'
-
-print 'Preprocessing...',
+print('\tDONE')
+print('Preprocessing...',)
 
 id_test = test_users['id']
 piv_train = train_users.shape[0]
@@ -28,7 +25,6 @@ users = users.drop(['id', 'date_first_booking'], axis=1)
 
 # Fill NaN values
 users = users.fillna(-1)
-
 users['date_account_created'] = pd.to_datetime(users['date_account_created'])
 users['year_account_created'] = pd.DatetimeIndex(users['date_account_created']).year
 users['month_account_created'] = pd.DatetimeIndex(users['date_account_created']).month
@@ -56,14 +52,14 @@ X = values[:piv_train]
 le = LabelEncoder()
 y = le.fit_transform(labels)
 X_test = values[piv_train:]
-print '\tDONE'
+print('\tDONE')
 
-print 'TPOT...',
-tpot = TPOT(generations=10)
+print('TPOT...',)
+tpot = TPOT(generations=2, verbosity=2)
 
 tpot.fit(X, y)
-print '\tDONE'
+print('\tDONE')
 
-print 'Scoring...',
+print('Scoring...',)
 print(tpot.score(X, y, X, y))
-print 'END'
+print('END')
