@@ -4,38 +4,47 @@ import pandas as pd
 import datetime
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
+from xgboost.sklearn import XGBClassifier
+
 sys.path.append('..')
-
-print("START")
 from utils.data_loading import load_users_data
-train_users, test_users = load_users_data()
+from utils.preprocessing import one_hot_encoding
 
+print "Loading data...",
+train_users, test_users = load_users_data()
+users = pd.read_csv('../datasets/processed/users_with_session.csv')
+print "\tDONE"
+
+print "Preprocessing...",
+
+# Get train labels and ids
 labels = train_users['country_destination'].values
 train_users = train_users.drop(['country_destination'], axis=1)
-users = pd.read_csv('../datasets/processed/users_with_session.csv')
-
-print("Data Loaded")
 id_test = test_users['id']
 piv_train = train_users.shape[0]
 
-users = users.drop(['id', 'country_destination', 'Unnamed: 0'], axis=1)
-users = users.drop(['date_account_created', 'date_first_active'], axis=1)
-users = users.drop(['timestamp_first_active'], axis=1)
+drop_list = [
+    'id',
+    'country_destination',
+    'Unnamed: 0',
+    'date_account_created',
+    'date_first_active',
+    'timestamp_first_active'
+]
 
+# Drop columns
+users = users.drop(drop_list, axis=1)
+
+# Fill NaNs
 users = users.fillna(-1)
 
-from utils.preprocessing import one_hot_encoding
-
+# Encode categorical features
 categorical_features = [
     'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',
     'affiliate_provider', 'first_affiliate_tracked', 'signup_app',
     'first_device_type', 'first_browser', 'most_used_device'
 ]
-
 users = one_hot_encoding(users, categorical_features)
-
-print("Preprocessed")
-
 
 # Splitting train and test
 values = users.values
@@ -45,7 +54,9 @@ le = LabelEncoder()
 y = le.fit_transform(labels)
 X_test = values[piv_train:]
 
-from xgboost.sklearn import XGBClassifier
+print "\tDONE"
+
+print "Fitting..."
 # Classifier
 xgb = XGBClassifier(
     max_depth=8,
@@ -67,10 +78,13 @@ xgb = XGBClassifier(
 )
 
 xgb.fit(X, y)
-print("Fitted")
+print "\tDONE"
 
+print "Predicting..."
 y_pred = xgb.predict_proba(X_test)
-print("Predicted")
+print "\tDONE"
+
+print "Generating submission..."
 # Taking the 5 classes with highest probabilities
 ids = []
 cts = []
@@ -83,4 +97,5 @@ for i in range(len(id_test)):
 sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
 date = datetime.datetime.now().strftime("%m-%d_%H:%M")
 sub.to_csv('../datasets/submissions/xgboost' + str(date) + '.csv',index=False)
-print("END")
+print "\tDONE"
+print "END"
