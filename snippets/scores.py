@@ -40,4 +40,4 @@ def score_predictions(preds, truth):
 preds = pd.DataFrame([['US','FR', 'ES'],['FR','US'],['FR','FR']])
 truth = pd.Series(['US','US','FR'])
 
-print score_predictions(preds, truth)
+print(score_predictions(preds, truth))
