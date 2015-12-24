@@ -12,7 +12,7 @@ train_users, test_users = load_users_data()
 
 labels = train_users['country_destination'].values
 train_users = train_users.drop(['country_destination'], axis=1)
-users = pd.read_csv('../datasets/processed/preprocessed.csv')
+users = pd.read_csv('../datasets/processed/users_with_session.csv')
 
 print("Data Loaded")
 id_test = test_users['id']
