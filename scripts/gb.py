@@ -1,9 +1,12 @@
 import sys
 import numpy as np
 import pandas as pd
+import datetime
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 sys.path.append('..')
 
-print "START"
+print("START")
 from utils.data_loading import load_users_data
 train_users, test_users = load_users_data()
 
@@ -11,7 +14,7 @@ labels = train_users['country_destination'].values
 train_users = train_users.drop(['country_destination'], axis=1)
 users = pd.read_csv('../datasets/processed/preprocessed.csv')
 
-print "Data Loaded"
+print("Data Loaded")
 id_test = test_users['id']
 piv_train = train_users.shape[0]
 
@@ -31,9 +34,8 @@ categorical_features = [
 
 users = one_hot_encoding(users, categorical_features)
 
-from sklearn.preprocessing import StandardScaler
-print "Preprocessed"
-from sklearn.preprocessing import LabelEncoder
+print("Preprocessed")
+
 
 # Splitting train and test
 values = users.values
@@ -65,10 +67,10 @@ xgb = XGBClassifier(
 )
 
 xgb.fit(X, y)
-print "Fitted"
+print("Fitted")
 
 y_pred = xgb.predict_proba(X_test)
-print "Predicted"
+print("Predicted")
 # Taking the 5 classes with highest probabilities
 ids = []
 cts = []
@@ -79,5 +81,6 @@ for i in range(len(id_test)):
 
 # Generate Submission
 sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
-sub.to_csv('../datasets/submissions/xgboost.csv',index=False)
-print "END"
+date = datetime.datetime.now().strftime("%m-%d_%H:%M")
+sub.to_csv('../datasets/submissions/xgboost' + str(date) + '.csv',index=False)
+print("END")
