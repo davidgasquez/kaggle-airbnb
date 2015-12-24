@@ -9,7 +9,7 @@ from utils.data_loading import load_users_data
 from sklearn.preprocessing import LabelEncoder
 
 print 'START'
-print 'Loading data...'
+print 'Loading data...',
 
 train_users, test_users = load_users_data()
 labels = train_users['country_destination'].values
