@@ -59,9 +59,9 @@ print "\tDONE"
 print "Fitting..."
 # Classifier
 xgb = XGBClassifier(
-    max_depth=8,
+    max_depth=6,
     learning_rate=0.2,
-    n_estimators=50,
+    n_estimators=45,
     objective="multi:softprob",
     nthread=-1,
     gamma=0,
