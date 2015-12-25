@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 def dcg_at_k(r, k, method=1):
     r = np.asfarray(r)[:k]
@@ -20,7 +20,7 @@ def ndcg_at_k(r, k=5, method=1):
     return dcg_at_k(r, k, method) / dcg_max
 
 
-def score_predictions(preds, truth):
+def score_predictions(preds, truth, n_modes=5):
     """
     preds: pd.DataFrame
       one row for each observation, one column for each prediction.
@@ -29,15 +29,15 @@ def score_predictions(preds, truth):
       one row for each obeservation.
     """
     assert(len(preds)==len(truth))
-
-    r = pd.DataFrame()
+    r = pd.DataFrame(0, index=preds.index, columns=preds.columns, dtype=np.float64)
     for col in preds.columns:
-        r[col] = (preds[col] == truth)
+        r[col] = (preds[col] == truth) * 1.0
 
-    score = pd.Series(r.apply(ndcg_at_k, axis=1, reduce=True))
-    return np.mean(score)
+    score = pd.Series(r.apply(ndcg_at_k, axis=1, reduce=True), name='score')
+    return score
 
-preds = pd.DataFrame([['US','FR', 'ES'],['FR','US'],['FR','FR']])
+
+preds = pd.DataFrame([['US','FR'],['FR','US'],['FR','FR']])
 truth = pd.Series(['US','US','FR'])
 
-print(score_predictions(preds, truth))
+print '\n\n scores: \n', score_predictions(preds, truth)
