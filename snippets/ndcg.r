@@ -7,8 +7,8 @@ library(car)
 set.seed(1)
 
 # load data
-df_train = read_csv("datasets/raw/train_users.csv")
-df_test = read_csv("datasets/raw/test_users.csv")
+df_train = read_csv("../datasets/raw/train_users.csv")
+df_test = read_csv("../datasets/raw/test_users.csv")
 labels = df_train['country_destination']
 df_train = df_train[-grep('country_destination', colnames(df_train))]
 
@@ -71,7 +71,7 @@ xgb <- xgboost(data = data.matrix(X[,-1]),
                eval_metric = ndcg5,
                objective = "multi:softprob",
                num_class = 12,
-               nthread = 3
+               nthread = -1
 )
 
 # predict values in test set
