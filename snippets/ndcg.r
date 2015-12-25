@@ -9,6 +9,7 @@ set.seed(1)
 # load data
 df_train = read_csv("../datasets/raw/train_users.csv")
 df_test = read_csv("../datasets/raw/test_users.csv")
+
 labels = df_train['country_destination']
 df_train = df_train[-grep('country_destination', colnames(df_train))]
 
@@ -59,6 +60,9 @@ X = df_all_combined[df_all_combined$id %in% df_train$id,]
 y <- recode(labels$country_destination,"'NDF'=0; 'US'=1; 'other'=2; 'FR'=3; 'CA'=4; 'GB'=5; 'ES'=6; 'IT'=7; 'PT'=8; 'NL'=9; 'DE'=10; 'AU'=11")
 X_test = df_all_combined[df_all_combined$id %in% df_test$id,]
 
+a <- data.matrix(X[,-1]
+watchlist <- list(train=a, test=a)
+
 # train xgboost
 xgb <- xgboost(data = data.matrix(X[,-1]),
                label = y,
@@ -71,7 +75,8 @@ xgb <- xgboost(data = data.matrix(X[,-1]),
                eval_metric = ndcg5,
                objective = "multi:softprob",
                num_class = 12,
-               nthread = -1
+               nthread = -1,
+               watchlist=watchlist
 )
 
 # predict values in test set
