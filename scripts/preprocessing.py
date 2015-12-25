@@ -9,6 +9,11 @@ print 'START'
 
 print 'Loading data...',
 train_users, test_users = load_users_data()
+
+# Number of train user for latter splitting
+piv_train = train_users.shape[0]
+
+# Sessions data
 sessions = load_sessions_data()
 print '\tDONE'
 
@@ -75,7 +80,7 @@ users['day_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).da
 print '\tDONE'
 
 # The constant N it's used to limit the values we get from the session data.
-N = 5
+N = 8
 
 # Counter to compute the progress
 processed_users = 0
@@ -108,7 +113,7 @@ for user in sessions['user_id'].unique():
     action_detail = user_session['action_detail'].value_counts()
     for i in range(min(N, len(action_detail.index))):
         new_column = action_detail.index[i] + '_count'
-        users.loc[users['id'] == user, ] = action_detail.values[i]
+        users.loc[users['id'] == user, new_column] = action_detail.values[i]
 
     # Get the most used device
     if user_session['device_type'].value_counts().sum() is not 0:
