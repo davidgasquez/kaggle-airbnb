@@ -9,7 +9,7 @@ from utils.data_loading import load_users_data
 from utils.preprocessing import one_hot_encoding
 
 print "Loading data...",
-train_users, test_users = load_users_data
+train_users, test_users = load_users_data()
 users = pd.read_csv('../datasets/processed/users_with_session.csv')
 print "\tDONE"
 
