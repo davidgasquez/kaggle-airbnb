@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
@@ -7,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 sys.path.append('..')
 from utils.data_loading import load_users_data
 from utils.preprocessing import one_hot_encoding
+from utils.metrics import ndcg_scorer
 
 print "Loading data...",
 train_users, test_users = load_users_data()
@@ -76,17 +76,17 @@ xgb_model = xgboost.XGBClassifier(
 clf = GridSearchCV(
     xgb_model,
     {
-        'max_depth':[1,2,3,4,6],
-        'n_estimators': [20,25,30,35,40],
-        'learning_rate':[0.2, 0.4, 0.1],
+        'max_depth': [1, 2, 3, 4, 6],
+        'n_estimators':  [20, 25, 30, 35, 40],
+        'learning_rate': [0.2,  0.4,  0.1],
     },
     cv=2,
     verbose=2,
-    n_jobs=-1,
-    scoring='log_loss'
+    n_jobs=1,
+    scoring=ndcg_scorer
     )
 
-clf.fit(X,y)
+clf.fit(X, y)
 
 print
 print(clf.grid_scores_)
