@@ -1,44 +1,57 @@
+"""Script to append a python file to an OGE queue.
+
+Place this script at /bin folder and run with `qadd script.py`.
+"""
 #!/usr/bin/env python
 
 import os
 import subprocess
 import argparse
-import uuid
 
 
 TEMPLATE_SERIAL = """
 #$ -cwd
-#$ -N {name}
+#$ -N {job_name}
 #$ -e {errfile}
 #$ -o {logfile}
 #$ -q {queue}
 
 echo "Job started on" `date`
-echo "------------------------------------------------------------------------"
+echo
 
 {script}
 
-echo "------------------------------------------------------------------------"
 echo "Job ended on" `date`
 """
 
 
-def random_id(length=8):
-    return str(uuid.uuid4()).replace('-', '')[:length]
+def send_code(python_file, job_name=None, cleanup=True, queue='larga'):
+    """Puts a Python script into an OGE queue.
 
-
-def send_code(python_file, name='', logfile='$JOB_NAME_$JOB_ID.out',
-              errfile='$JOB_NAME_$JOB_ID.error', cleanup=True, queue='larga'):
+    Parameters
+    ----------
+    python_file : str
+        Script containing the code to run.
+    job_name : str
+        Name of the job.
+    cleanup : Boolean
+        Indicates to remove the temporary file.
+    queue: str
+        Name of the queue to append the job.
+    """
 
     script = 'python -u ' + python_file
 
+    logfile = '$JOB_NAME_$JOB_ID.out'
+    errfile = '$JOB_NAME_$JOB_ID.error'
+
     # Handle job name
-    if not name:
-        name = python_file[:-3]
+    if not job_name:
+        job_name = python_file[:-3]
 
     # Fill template
     template = TEMPLATE_SERIAL.format(
-        script=script, name=name,
+        script=script, job_name=job_name,
         logfile=logfile, errfile=errfile, queue=queue
     )
 
@@ -52,9 +65,7 @@ def send_code(python_file, name='', logfile='$JOB_NAME_$JOB_ID.out',
         if cleanup:
             os.remove('job.qsub')
 
-
 if __name__ == '__main__':
-
     # Parse arguments
     parser = argparse.ArgumentParser(description='Utility description')
     parser.add_argument('script', help='Script to add')
@@ -63,4 +74,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Send code with queue and name
-    send_code(args.script, queue=args.queue, name=args.name)
+    send_code(args.script, queue=args.queue, job_name=args.name)
