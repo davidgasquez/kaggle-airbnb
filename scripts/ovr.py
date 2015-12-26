@@ -77,12 +77,17 @@ xgb_model = xgboost.XGBClassifier(
     reg_lambda=1,
     scale_pos_weight=1,
     base_score=0.5,
-    seed=42
+    seed=42,
 )
 
 xgb = OneVsRestClassifier(xgb_model, n_jobs=-1)
 
-xgb.fit(X, y)
+param = {}
+param['num_class'] = 12
+
+xg_train = xgboost.DMatrix(X, label=y)
+
+xgb.fit(param, xg_train)
 print "\tDONE"
 
 print "Predicting...",

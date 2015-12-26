@@ -6,7 +6,7 @@ import pandas as pd
 DEFAULT_PATH = '../datasets/raw/'
 
 
-def load_users_data(path=DEFAULT_PATH):
+def load_users_data(path=DEFAULT_PATH, preprocessed=False):
     """Loads users data into train and test users.
 
     Parameters
@@ -19,8 +19,13 @@ def load_users_data(path=DEFAULT_PATH):
     train_users, test_users: DataFrame, DataFrame
         Loaded DataFrames.
     """
-    train_users = pd.read_csv(path + 'train_users.csv')
-    test_users = pd.read_csv(path + 'test_users.csv')
+    if not preprocessed:
+        train_users = pd.read_csv(path + 'train_users.csv')
+        test_users = pd.read_csv(path + 'test_users.csv')
+    else:
+        path = '../datasets/processed/'
+        train_users = pd.read_csv(path + 'preprocessed_train_users.csv')
+        test_users = pd.read_csv(path + 'preprocessed_test_users.csv')
     return train_users, test_users
 
 
