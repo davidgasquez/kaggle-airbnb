@@ -35,8 +35,6 @@ def send_code(python_file, name='', logfile='$JOB_NAME_$JOB_ID.out',
     # Handle job name
     if not name:
         name = python_file[:-3]
-    else:
-        name = name
 
     # Fill template
     template = TEMPLATE_SERIAL.format(
