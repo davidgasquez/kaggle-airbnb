@@ -101,6 +101,7 @@ for user in sessions['user_id'].unique():
         most_used_device = user_session['device_type'].value_counts().index[0]
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
 
+    processed_users = processed_users + 1
     print processed_users, '/', total_users
 
 # Remove columns with a lot of NaNs
