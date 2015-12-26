@@ -5,71 +5,71 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import make_scorer
 
 
-def dcg_score(y_true, y_score, k=5, gains="exponential"):
-    """Discounted cumulative gain (DCG) at rank k.
+def dcg_score(y_true, y_score, k=5):
+    """Discounted cumulative gain (DCG) at rank K.
 
     Parameters
     ----------
-    y_true : array-like, shape = [n_samples]
+    y_true : array, shape = [n_samples]
         Ground truth (true relevance labels).
-    y_score : array-like, shape = [n_samples]
+    y_score : array, shape = [n_samples, n_classes]
         Predicted scores.
     k : int
         Rank.
-    gains : str
-        Whether gains should be "exponential" (default) or "linear".
 
     Returns
     -------
-    DCG @k : float
+    score : float
     """
     order = np.argsort(y_score)[::-1]
     y_true = np.take(y_true, order[:k])
 
-    if gains == "exponential":
-        gains = 2 ** y_true - 1
-    elif gains == "linear":
-        gains = y_true
-    else:
-        raise ValueError("Invalid gains option.")
+    gain = 2 ** y_true - 1
 
-    # highest rank is 1 so +2 instead of +1
     discounts = np.log2(np.arange(len(y_true)) + 2)
-    return np.sum(gains / discounts)
+    return np.sum(gain / discounts)
 
 
-def ndcg_score(y_true, y_score, k=5, gains="exponential"):
-    """Normalized discounted cumulative gain (NDCG) at rank k.
+def ndcg_score(ground_truth, predictions, k=5):
+    """Normalized discounted cumulative gain (NDCG) at rank K.
+
+    Normalized Discounted Cumulative Gain (NDCG) measures the performance of a
+    recommendation system based on the graded relevance of the recommended
+    entities. It varies from 0.0 to 1.0, with 1.0 representing the ideal
+    ranking of the entities.
 
     Parameters
     ----------
-    y_true : array-like, shape = [n_samples]
-        Ground truth (true labels).
-    y_score : array-like, shape = [n_samples, n_classes]
-        Predicted scores.
+    ground_truth : array, shape = [n_samples]
+        Ground truth (true labels represended as integers).
+    predictions : array, shape = [n_samples, n_classes]
+        Predicted probabilities.
     k : int
         Rank.
-    gains : str
-        Whether gains should be "exponential" (default) or "linear".
 
     Returns
     -------
-    NDCG @k : float
+    score : float
+
+    Examples
+    --------
+    >>> ground_truth = [1, 0, 2]
+    >>> predictions = [[0.15, 0.55, 0.2], [0.7, 0.2, 0.1], [0.06, 0.04, 0.9]]
+    >>> score = ndcg_score(ground_truth, predictions)
     """
-    best = dcg_score(y_true, y_true, k, gains)
-    actual = dcg_score(y_true, y_score, k, gains)
-    return actual / best
-
-
-def ndcg(ground_truth, predictions, k=5, gains="exponential"):
     lb = LabelBinarizer()
     T = lb.fit_transform(ground_truth)
 
-    score = []
+    scores = []
 
+    # Iterate over each y_true and compute  the DCG score
     for y_true, y_score in zip(T, predictions):
-        score.append(ndcg_score(y_true, y_score, k=k, gains=gains))
+        actual = dcg_score(y_true, y_score, k)
+        best = dcg_score(y_true, y_true, k)
+        score = float(actual) / float(best)
+        scores.append(score)
 
-    return np.mean(score)
+    return np.mean(scores)
 
-ndcg_scorer = make_scorer(ndcg, needs_proba=True)
+# NDCG Scorer function
+ndcg_scorer = make_scorer(ndcg_score, needs_proba=True)
