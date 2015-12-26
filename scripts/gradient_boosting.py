@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
-from sklearn.multiclass import OneVsRestClassifier
 from xgboost.sklearn import XGBClassifier
 
 
@@ -13,11 +12,9 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
     cts = []
     for i in range(len(test_users_ids)):
         idx = test_users_ids[i]
-        print idx,
         ids += [idx] * 5
         sorted_countries = np.argsort(y_pred[i])[::-1]
         cts += label_encoder.inverse_transform(sorted_countries)[:5].tolist()
-        print cts
 
     sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
     return sub
@@ -59,16 +56,14 @@ def main():
         seed=42
     )
 
-    ovr = OneVsRestClassifier(xgb, n_jobs=-1)
+    xgb.fit(x_train, encoded_y_train)
 
-    ovr.fit(x_train, encoded_y_train)
-
-    y_pred = ovr.predict_proba(x_test)
+    y_pred = xgb.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
-    date = datetime.datetime.now().strftime("%m-%d_%H:%M")
-    name = '../datasets/submissions/xgboost' + str(date) + '.csv'
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M")
+    name = 'xgboost_' + __file__ + '_' + str(date) + '.csv'
     submission.to_csv(name, index=False)
 
 
