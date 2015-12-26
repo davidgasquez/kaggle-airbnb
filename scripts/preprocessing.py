@@ -2,22 +2,12 @@ import sys
 import numpy as np
 import pandas as pd
 
-sys.path.append('..')
-from utils.data_loading import load_users_data, load_sessions_data
-
 print 'START'
 
-print 'Loading data...',
-train_users, test_users = load_users_data()
-
-# Number of train user for latter splitting
-piv_train = train_users.shape[0]
-
-# Sessions data
-sessions = load_sessions_data()
-print '\tDONE'
-
-print 'Basic preprocessing...',
+path = '../datasets/raw/'
+train_users = pd.read_csv(path + 'train_users.csv')
+test_users = pd.read_csv(path + 'test_users.csv')
+sessions = pd.read_csv(path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -77,19 +67,10 @@ users['year_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).y
 users['month_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).month
 users['day_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).day
 
-print '\tDONE'
-
 # The constant N it's used to limit the values we get from the session data.
 N = 8
-
-# Counter to compute the progress
 processed_users = 0
-
-# Number of users with session
-unique_session_users = len(sessions['user_id'].unique())
-
-print 'Processing Sessions...\t0%\r',
-
+total_users = len(sessions['user_id'].unique())
 for user in sessions['user_id'].unique():
     # Get the user session
     user_session = sessions.loc[sessions['user_id'] == user]
@@ -120,20 +101,13 @@ for user in sessions['user_id'].unique():
         most_used_device = user_session['device_type'].value_counts().index[0]
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
 
-    # Print the processing progress
-    processed_users = processed_users + 1
-
-    if processed_users % 1000 == 0:
-        percentage = float(processed_users) / float(unique_session_users)
-        print 'Processing Sessions...\t{0}%\r'.format(percentage * 100),
-
-print 'Processing Sessions...\tDONE\r'
-
-print 'Processing secs_elapsed...',
+    print processed_users, '/', total_users
 
 # Remove columns with a lot of NaNs
 to_remove = users.isnull().sum().loc[users.isnull().sum() > 275542].index
 users.drop(to_remove, axis=1, inplace=True)
+
+users = users.set_index('id')
 
 # Elapsed seconds sum
 elapsed_secs_sum = sessions.groupby('user_id')['secs_elapsed'].sum()
@@ -220,5 +194,42 @@ last_secs_elapsed = sessions.groupby('user_id')['secs_elapsed'].last()
 last_secs_elapsed.name = 'last_secs_elapsed'
 users = pd.concat([users, last_secs_elapsed], axis=1)
 
-users.to_csv('users.cvs')
+train_users = train_users.set_index('id')
+test_users = test_users.set_index('id')
+
+processed_train_users = users.loc[train_users.index]
+processed_test_users = users.loc[test_users.index]
+processed_test_users.drop('country_destination', inplace=True, axis=1)
+
+processed_train_users.to_csv('semi_processed_train_users.csv')
+processed_test_users.to_csv('semi_processed_test_users.csv')
+
+drop_list = [
+    'date_account_created',
+    'date_first_active',
+    'timestamp_first_active'
+]
+
+# Drop columns
+users = users.drop(drop_list, axis=1)
+
+# Encode categorical features
+categorical_features = [
+    'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',
+    'affiliate_provider', 'first_affiliate_tracked', 'signup_app',
+    'first_device_type', 'first_browser', 'most_used_device'
+]
+
+sys.path.append('..')
+from utils.preprocessing import one_hot_encoding
+users = one_hot_encoding(users, categorical_features)
+
+users.index.name = 'id'
+processed_train_users = users.loc[train_users.index]
+processed_test_users = users.loc[test_users.index]
+processed_test_users.drop('country_destination', inplace=True, axis=1)
+
+processed_train_users.to_csv('processed_train_users.csv')
+processed_test_users.to_csv('processed_test_users.csv')
+
 print 'END'
