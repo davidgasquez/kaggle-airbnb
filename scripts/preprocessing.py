@@ -2,8 +2,6 @@ import sys
 import numpy as np
 import pandas as pd
 
-print 'START'
-
 path = '../datasets/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
 test_users = pd.read_csv(path + 'test_users.csv')
@@ -60,17 +58,22 @@ for date in users.date_account_created:
 users['weekday_first_active'] = pd.Series(weekdays)
 
 # Split dates into day,month,year
-users['year_account_created'] = pd.DatetimeIndex(users['date_account_created']).year
-users['month_account_created'] = pd.DatetimeIndex(users['date_account_created']).month
-users['day_account_created'] = pd.DatetimeIndex(users['date_account_created']).day
-users['year_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).year
-users['month_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).month
-users['day_first_active'] = pd.DatetimeIndex(users['timestamp_first_active']).day
+year_account_created = pd.DatetimeIndex(users['date_account_created']).year
+users['year_account_created'] = year_account_created
+month_account_created = pd.DatetimeIndex(users['date_account_created']).month
+users['month_account_created'] = month_account_created
+day_account_created = pd.DatetimeIndex(users['date_account_created']).day
+users['day_account_created'] = day_account_created
+year_first_active = pd.DatetimeIndex(users['timestamp_first_active']).year
+users['year_first_active'] = year_first_active
+month_first_active = pd.DatetimeIndex(users['timestamp_first_active']).month
+users['month_first_active'] = month_first_active
+day_first_active = pd.DatetimeIndex(users['timestamp_first_active']).day
+users['day_first_active'] = day_first_active
 
 # The constant N it's used to limit the values we get from the session data.
 N = 8
-processed_users = 0
-total_users = len(sessions['user_id'].unique())
+
 for user in sessions['user_id'].unique():
     # Get the user session
     user_session = sessions.loc[sessions['user_id'] == user]
@@ -100,9 +103,6 @@ for user in sessions['user_id'].unique():
     if user_session['device_type'].value_counts().sum() is not 0:
         most_used_device = user_session['device_type'].value_counts().index[0]
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
-
-    processed_users = processed_users + 1
-    print processed_users, '/', total_users
 
 # Remove columns with a lot of NaNs
 to_remove = users.isnull().sum().loc[users.isnull().sum() > 275542].index
@@ -171,17 +171,20 @@ skew.name = 'elapsed_secs_skew'
 users = pd.concat([users, skew], axis=1)
 
 # Number of elapsed seconds greater than 1 day
-day_pauses = sessions.loc[sessions['secs_elapsed'] > 86400].groupby('user_id').count()['secs_elapsed']
+query = sessions['secs_elapsed'] > 86400
+day_pauses = sessions.loc[query].groupby('user_id').count()['secs_elapsed']
 day_pauses.name = 'day_pauses'
 users = pd.concat([users, day_pauses], axis=1)
 
 # Number of elapsed seconds lesser than 1 hour
-short_sessions = sessions.loc[sessions['secs_elapsed'] < 3600].groupby('user_id').count()['secs_elapsed']
+query = sessions['secs_elapsed'] < 3600
+short_sessions = sessions.loc[query].groupby('user_id').count()['secs_elapsed']
 short_sessions.name = 'short_sessions'
 users = pd.concat([users, short_sessions], axis=1)
 
 # Users not returning in a big time
-long_sessions = sessions.loc[sessions['secs_elapsed'] > 300000].groupby('user_id').count()['secs_elapsed']
+query = sessions['secs_elapsed'] > 300000
+long_sessions = sessions.loc[query].groupby('user_id').count()['secs_elapsed']
 long_sessions.name = 'long_sessions'
 users = pd.concat([users, long_sessions], axis=1)
 
@@ -232,5 +235,3 @@ processed_test_users.drop('country_destination', inplace=True, axis=1)
 
 processed_train_users.to_csv('processed_train_users.csv')
 processed_test_users.to_csv('processed_test_users.csv')
-
-print 'END'
