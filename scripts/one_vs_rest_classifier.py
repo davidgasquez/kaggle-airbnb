@@ -66,7 +66,7 @@ def main():
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
     date = datetime.datetime.now().strftime("%m-%d_%H:%M")
-    name = 'xgboost_' + __file__ + '_' + str(date) + '.csv'
+    name = __file__ + '_' + str(date) + '.csv'
     submission.to_csv(name, index=False)
 
 
