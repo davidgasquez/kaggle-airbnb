@@ -22,8 +22,8 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 def main():
     path = '../datasets/processed/'
-    train_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = pd.read_csv(path + 'processed_test_users.csv')
+    train_users = pd.read_csv(path + 'train_users.csv')
+    test_users = pd.read_csv(path + 'test_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop('country_destination', axis=1, inplace=True)
