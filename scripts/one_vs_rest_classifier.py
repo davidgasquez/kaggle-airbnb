@@ -57,11 +57,13 @@ def main():
         seed=42
     )
 
-    ovr = OneVsRestClassifier(xgb, n_jobs=-1)
+    one_vs_rest = OneVsRestClassifier(xgb, n_jobs=-1)
 
-    ovr.fit(x_train, encoded_y_train)
+    one_vs_rest.fit(x_train, encoded_y_train)
 
-    y_pred = ovr.predict_proba(x_test)
+    print 'Train score:', one_vs_rest.score(x_train, encoded_y_train)
+
+    y_pred = one_vs_rest.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
