@@ -23,8 +23,8 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 def main():
     path = '../datasets/processed/'
-    train_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = pd.read_csv(path + 'processed_test_users.csv')
+    train_users = pd.read_csv(path + 'train_users.csv')
+    test_users = pd.read_csv(path + 'test_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop('country_destination', axis=1, inplace=True)
@@ -67,9 +67,9 @@ def main():
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
-    date = datetime.datetime.now().strftime("%m-%d_%H:%M")
-    name = __file__ + '_' + str(date) + '.csv'
-    submission.to_csv(name, index=False)
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
+    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
+    submission.to_csv('../datasets/submissions/' + name, index=False)
 
 
 if __name__ == '__main__':
