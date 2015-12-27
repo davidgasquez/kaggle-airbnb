@@ -1,6 +1,8 @@
 import sys
 import numpy as np
 import pandas as pd
+sys.path.append('..')
+from utils.preprocessing import one_hot_encoding
 
 path = '../datasets/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
@@ -72,7 +74,7 @@ day_first_active = pd.DatetimeIndex(users['timestamp_first_active']).day
 users['day_first_active'] = day_first_active
 
 # The constant N it's used to limit the values we get from the session data.
-N = 8
+N = 100
 
 for user in sessions['user_id'].unique():
     # Get the user session
@@ -224,8 +226,6 @@ categorical_features = [
     'first_device_type', 'first_browser', 'most_used_device'
 ]
 
-sys.path.append('..')
-from utils.preprocessing import one_hot_encoding
 users = one_hot_encoding(users, categorical_features)
 
 users.index.name = 'id'
