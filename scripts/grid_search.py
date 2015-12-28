@@ -27,14 +27,11 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     xgb_model = xgboost.XGBClassifier(
-        learning_rate = 0.22
         objective="multi:softprob",
         nthread=-1,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=0.6,
-        colsample_bytree=0.6,
         colsample_bylevel=1,
         reg_alpha=0,
         reg_lambda=1,
@@ -46,10 +43,13 @@ def main():
     clf = GridSearchCV(
         xgb_model,
         {
-            'max_depth': [8, 9, 10],
-            'n_estimators': [45, 46, 48, 49, 50]
+            'max_depth': [8, 9, 10, 11],
+            'n_estimators': [45, 46, 48, 49, 50],
+            'learning_rate': [0.18, 0.2, 0.22, 0.24],
+            'subsample': [0.5, 0.6, 0.7],
+            'colsample_bytree': [0.5, 0.5, 0.7],
         },
-        cv=5,
+        cv=10,
         verbose=10,
         n_jobs=3,
         scoring=ndcg_scorer
