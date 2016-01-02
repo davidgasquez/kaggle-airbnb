@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.decomposition import PCA
 
 
 def polinomial_features(data, degree):
@@ -68,17 +69,23 @@ def main():
         'gender_OTHER'
     ]
 
+    pca = PCA(n_components=1)
+
+    # Add features to train users
     train_df = polinomial_features(train_users[interaction_columns], 3)
+    pca_train = pca.fit_transform(train_users)
 
     train_users = pd.read_csv(path + 'train_users.csv')
-    train_users = pd.concat([train_users, train_df], axis=1)
-    train_users.to_csv('train_users_interaction.csv')
+    train_users = pd.concat([train_users, train_df, pca_train], axis=1)
+    train_users.to_csv('full_train_users.csv')
 
+    # Add features to test users
     test_df = polinomial_features(test_users[interaction_columns], 3)
+    pca_test = pca.fit_transform(test_users)
 
     test_users = pd.read_csv(path + 'test_users.csv')
-    test_users = pd.concat([test_users, test_df], axis=1)
-    test_users.to_csv('test_users_interaction.csv')
+    test_users = pd.concat([test_users, test_df, pca_test], axis=1)
+    test_users.to_csv('full_test_users.csv')
 
 if __name__ == '__main__':
     main()
