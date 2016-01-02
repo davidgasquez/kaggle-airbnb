@@ -66,11 +66,11 @@ month_account_created = pd.DatetimeIndex(users['date_account_created']).month
 users['month_account_created'] = month_account_created
 day_account_created = pd.DatetimeIndex(users['date_account_created']).day
 users['day_account_created'] = day_account_created
-year_first_active = pd.DatetimeIndex(users['timestamp_first_active']).year
+year_first_active = pd.DatetimeIndex(users['date_first_active']).year
 users['year_first_active'] = year_first_active
-month_first_active = pd.DatetimeIndex(users['timestamp_first_active']).month
+month_first_active = pd.DatetimeIndex(users['date_first_active']).month
 users['month_first_active'] = month_first_active
-day_first_active = pd.DatetimeIndex(users['timestamp_first_active']).day
+day_first_active = pd.DatetimeIndex(users['date_first_active']).day
 users['day_first_active'] = day_first_active
 
 # The constant N it's used to limit the values we get from the session data.
