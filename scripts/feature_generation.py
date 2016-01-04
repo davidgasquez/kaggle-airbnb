@@ -43,10 +43,10 @@ def main():
         'day_pauses',
         'elapsed_secs_average',
         'elapsed_secs_median',
-        'elapsed_secs_skew',
-        'elapsed_secs_std',
-        'elapsed_secs_sum',
-        'elapsed_secs_var',
+#        'elapsed_secs_skew',
+#        'elapsed_secs_std',
+#        'elapsed_secs_sum',
+#        'elapsed_secs_var',
         'first_quantile',
         'first_secs_elapsed',
         'fourth_quantile',
@@ -63,16 +63,13 @@ def main():
         'weekday_account_created',
         'weekday_first_active',
         'year_account_created',
-        'year_first_active',
-        'gender_FEMALE',
-        'gender_MALE',
-        'gender_OTHER'
+        'year_first_active'
     ]
 
-    pca = PCA(n_components=1)
+    pca = PCA(n_components=3)
 
     # Add features to train users
-    train_df = polinomial_features(train_users[interaction_columns], 3)
+    train_df = polinomial_features(train_users[interaction_columns], 2)
     pca_train = pd.DataFrame(pca.fit_transform(train_users.drop('id', axis=1)))
 
     train_users = pd.read_csv(path + 'train_users.csv')
@@ -80,7 +77,7 @@ def main():
     train_users.to_csv('full_train_users.csv')
 
     # Add features to test users
-    test_df = polinomial_features(test_users[interaction_columns], 3)
+    test_df = polinomial_features(test_users[interaction_columns], 2)
     pca_test = pd.DataFrame(pca.fit_transform(test_users.drop('id', axis=1)))
 
     test_users = pd.read_csv(path + 'test_users.csv')
