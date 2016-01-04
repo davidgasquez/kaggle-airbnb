@@ -73,7 +73,7 @@ def main():
 
     # Add features to train users
     train_df = polinomial_features(train_users[interaction_columns], 3)
-    pca_train = pca.fit_transform(train_users)
+    pca_train = pca.fit_transform(train_users.drop('id', axis=1))
 
     train_users = pd.read_csv(path + 'train_users.csv')
     train_users = pd.concat([train_users, train_df, pca_train], axis=1)
@@ -81,7 +81,7 @@ def main():
 
     # Add features to test users
     test_df = polinomial_features(test_users[interaction_columns], 3)
-    pca_test = pca.fit_transform(test_users)
+    pca_test = pca.fit_transform(test_users.drop('id', axis=1))
 
     test_users = pd.read_csv(path + 'test_users.csv')
     test_users = pd.concat([test_users, test_df, pca_test], axis=1)
