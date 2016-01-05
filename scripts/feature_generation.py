@@ -6,9 +6,9 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.decomposition import PCA
 
 
-def polinomial_features(data, degree):
+def interaction_features(data, degree):
     # Generate 3 degrees
-    poly = PolynomialFeatures(degree)
+    poly = PolynomialFeatures(degree, interaction_only=True)
 
     interaction_data = poly.fit_transform(data)
 
@@ -43,10 +43,10 @@ def main():
         'day_pauses',
         'elapsed_secs_average',
         'elapsed_secs_median',
-#        'elapsed_secs_skew',
-#        'elapsed_secs_std',
-#        'elapsed_secs_sum',
-#        'elapsed_secs_var',
+        'elapsed_secs_skew',
+        'elapsed_secs_std',
+        'elapsed_secs_sum',
+        'elapsed_secs_var',
         'first_quantile',
         'first_secs_elapsed',
         'fourth_quantile',
@@ -66,10 +66,10 @@ def main():
         'year_first_active'
     ]
 
-    pca = PCA(n_components=3)
+    pca = PCA(n_components=10)
 
     # Add features to train users
-    train_df = polinomial_features(train_users[interaction_columns], 2)
+    train_df = interaction_features(train_users[interaction_columns], 3)
     pca_train = pd.DataFrame(pca.fit_transform(train_users.drop('id', axis=1)))
 
     train_users = pd.read_csv(path + 'train_users.csv')
@@ -77,7 +77,7 @@ def main():
     train_users.to_csv('full_train_users.csv')
 
     # Add features to test users
-    test_df = polinomial_features(test_users[interaction_columns], 2)
+    test_df = interaction_features(test_users[interaction_columns], 3)
     pca_test = pd.DataFrame(pca.fit_transform(test_users.drop('id', axis=1)))
 
     test_users = pd.read_csv(path + 'test_users.csv')
