@@ -43,15 +43,15 @@ def main():
     clf = GridSearchCV(
         xgb_model,
         {
-            'max_depth': [8, 10, 12],
-            'n_estimators': [45, 48, 50],
-            'learning_rate': [0.18, 0.2, 0.22],
-            'subsample': [0.5, 0.6, 0.7],
-            'colsample_bytree': [0.5, 0.5, 0.7],
+            'max_depth': [6, 8],
+            'n_estimators': [40, 42, 44, 45],
+            'learning_rate': [0.2, 0.22],
+            'subsample': [0.6],
+            'colsample_bytree': [0.6],
         },
         cv=5,
         verbose=10,
-        n_jobs=3,
+        n_jobs=4,
         scoring=ndcg_scorer
     )
 
