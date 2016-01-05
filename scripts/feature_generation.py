@@ -7,7 +7,6 @@ from sklearn.decomposition import PCA
 
 
 def interaction_features(data, degree):
-    # Generate 3 degrees
     poly = PolynomialFeatures(degree, interaction_only=True)
 
     interaction_data = poly.fit_transform(data)
@@ -43,27 +42,27 @@ def main():
         'day_pauses',
         'elapsed_secs_average',
         'elapsed_secs_median',
-        'elapsed_secs_skew',
-        'elapsed_secs_std',
-        'elapsed_secs_sum',
-        'elapsed_secs_var',
-        'first_quantile',
-        'first_secs_elapsed',
-        'fourth_quantile',
-        'last_secs_elapsed',
-        'long_sessions',
-        'max_secs_elapsed',
-        'min_secs_elapsed',
-        'month_account_created',
-        'month_first_active',
-        'second_quantile',
+        # 'elapsed_secs_skew',
+        # 'elapsed_secs_std',
+        # 'elapsed_secs_sum',
+        # 'elapsed_secs_var',
+        # 'first_quantile',
+        # 'second_quantile',
+        # 'third_quantile',
+        # 'fourth_quantile',
+        # 'first_secs_elapsed',
+        # 'last_secs_elapsed',
+        # 'long_sessions',
+        # 'max_secs_elapsed',
+        # 'min_secs_elapsed',
+        # 'month_account_created',
+        # 'month_first_active',
         'session_length',
-        'short_sessions',
-        'third_quantile',
+        # 'short_sessions',
         'weekday_account_created',
         'weekday_first_active',
-        'year_account_created',
-        'year_first_active'
+        # 'year_account_created',
+        # 'year_first_active'
     ]
 
     pca = PCA(n_components=10)
