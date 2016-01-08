@@ -42,7 +42,7 @@ def main():
     xgb = XGBClassifier(
         max_depth=6,
         learning_rate=0.2,
-        n_estimators=45,
+        n_estimators=50,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
