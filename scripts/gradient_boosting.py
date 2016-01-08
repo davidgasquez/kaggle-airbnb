@@ -41,13 +41,13 @@ def main():
 
     xgb = XGBClassifier(
         max_depth=6,
-        learning_rate=0.22,
+        learning_rate=0.2,
         n_estimators=43,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=0.8,
-        colsample_bytree=0.8,
+        subsample=1,
+        colsample_bytree=1,
         colsample_bylevel=1,
         reg_alpha=0,
         reg_lambda=1,
