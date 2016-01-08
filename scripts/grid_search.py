@@ -3,11 +3,11 @@
 import pandas as pd
 import xgboost
 import sys
+from sklearn.preprocessing import LabelEncoder
+from sklearn.grid_search import GridSearchCV
 
 sys.path.append('..')
-from sklearn.preprocessing import LabelEncoder
 from utils.metrics import ndcg_scorer
-from sklearn.grid_search import GridSearchCV
 
 
 def main():
@@ -44,15 +44,15 @@ def main():
         xgb_model,
         {
             'max_depth': [6, 8],
-            'n_estimators': [40, 42, 44, 45],
-            'learning_rate': [0.2, 0.22],
+            'n_estimators': [20, 42, 60],
+            'learning_rate': [0.2],
             'subsample': [0.6],
             'colsample_bytree': [0.6],
         },
         cv=5,
         verbose=10,
         n_jobs=4,
-        scoring=ndcg_scorer
+        scoring='log_loss'
     )
 
     clf.fit(x_train, encoded_y_train)
