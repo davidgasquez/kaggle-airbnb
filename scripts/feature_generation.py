@@ -26,8 +26,8 @@ def interaction_features(data, degree):
 
 def main():
     path = '../datasets/processed/'
-    train_users = pd.read_csv(path + 'train_users.csv')
-    test_users = pd.read_csv(path + 'test_users.csv')
+    train_users = pd.read_csv(path + 'processed_train_users.csv')
+    test_users = pd.read_csv(path + 'processed_train_users.csv')
 
     train_users = train_users.fillna(0)
     test_users = test_users.fillna(0)

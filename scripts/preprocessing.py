@@ -207,8 +207,10 @@ processed_train_users = users.loc[train_users.index]
 processed_test_users = users.loc[test_users.index]
 processed_test_users.drop('country_destination', inplace=True, axis=1)
 
-processed_train_users.to_csv('semi_processed_train_users.csv')
-processed_test_users.to_csv('semi_processed_test_users.csv')
+path = '../datasets/processed/'
+
+processed_train_users.to_csv(path + 'semi_processed_train_users.csv')
+processed_test_users.to_csv(path + 'semi_processed_test_users.csv')
 
 drop_list = [
     'date_account_created',
@@ -233,5 +235,5 @@ processed_train_users = users.loc[train_users.index]
 processed_test_users = users.loc[test_users.index]
 processed_test_users.drop('country_destination', inplace=True, axis=1)
 
-processed_train_users.to_csv('processed_train_users.csv')
-processed_test_users.to_csv('processed_test_users.csv')
+processed_train_users.to_csv(path + 'processed_train_users.csv')
+processed_test_users.to_csv(path + 'processed_test_users.csv')
