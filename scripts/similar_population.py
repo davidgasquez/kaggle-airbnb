@@ -16,11 +16,9 @@ def country_probabilities(df):
     return df
 
 
-path = '../datasets/processed/'
-train_users = pd.read_csv(path + 'processed_train_users.csv')
-test_users = pd.read_csv(path + 'processed_test_users.csv')
-
 path = '../datasets/raw/'
+train_users = pd.read_csv(path + 'train_users.csv')
+test_users = pd.read_csv(path + 'test_users.csv')
 bkts = pd.read_csv(path + 'age_gender_bkts.csv')
 
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -37,8 +35,13 @@ bkts.loc[bkts['gender'] == 'female', 'gender'] = 'FEMALE'
 
 country_population = bkts.groupby('country_destination')['population_in_thousands'].sum()
 
-train_users = train_users.apply(country_probabilities, axis=1)
-test_users = test_users.apply(country_probabilities, axis=1)
+train_users_exta = train_users.head().apply(country_probabilities, axis=1)
+test_users_extra = test_users.head().apply(country_probabilities, axis=1)
 
-train_users.to_csv('train_users_extra.csv')
-test_users.to_csv('test_users_extra.csv')
+similar_population_columns = test_users_extra.columns.difference(train_users.columns)
+similar_population_columns = similar_population_columns.values
+
+train_users_exta[similar_population_columns].to_csv('train_users_extra.csv')
+train_users_exta[similar_population_columns].to_csv('test_users_extra.csv')
+
+# TODO: Join
