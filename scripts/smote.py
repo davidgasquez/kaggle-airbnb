@@ -20,7 +20,7 @@ def main():
 
     train_users.drop('country_destination', axis=1, inplace=True)
     train_users.drop('id', axis=1, inplace=True)
-    train_users = train_users.fillna(0)
+    train_users = train_users.fillna(-1)
 
     x = train_users.values
 

@@ -31,7 +31,7 @@ def main():
     train_users = train_users.fillna(-1)
 
     x_train = train_users.values
-    
+
     test_users_ids = test_users['id']
     test_users.drop('id', axis=1, inplace=True)
     test_users = test_users.fillna(-1)
