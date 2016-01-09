@@ -28,62 +28,79 @@ def main():
     y = label_encoder.fit_transform(y_train)
 
     verbose = True
-    # 'Random under-sampling'
+
+    print '\nRandom under-sampling:'
     US = UnderSampler(verbose=verbose)
     usx, usy = US.fit_transform(x, y)
-    # 'Tomek links'
+
+    print '\nTomek links:'
     TL = TomekLinks(verbose=verbose)
     tlx, tly = TL.fit_transform(x, y)
-    # 'Clustering centroids'
+
+    print '\nClustering centroids:'
     CC = ClusterCentroids(verbose=verbose)
     ccx, ccy = CC.fit_transform(x, y)
-    # 'NearMiss-1'
+
+    print '\nNearMiss-1:'
     NM1 = NearMiss(version=1, verbose=verbose)
     nm1x, nm1y = NM1.fit_transform(x, y)
-    # 'NearMiss-2'
+
+    print '\nNearMiss-2:'
     NM2 = NearMiss(version=2, verbose=verbose)
     nm2x, nm2y = NM2.fit_transform(x, y)
-    # 'NearMiss-3'
+
+    print '\nNearMiss-3:'
     NM3 = NearMiss(version=3, verbose=verbose)
     nm3x, nm3y = NM3.fit_transform(x, y)
-    # 'Condensed Nearest Neighbour'
+
+    print '\nCondensed Nearest Neighbour:'
     CNN = CondensedNearestNeighbour(size_ngh=2, n_seeds_S=2, verbose=verbose)
     cnnx, cnny = CNN.fit_transform(x, y)
-    # 'One-Sided Selection'
+
+    print '\nOne-Sided Selection:'
     OSS = OneSidedSelection(size_ngh=2, n_seeds_S=2, verbose=verbose)
     ossx, ossy = OSS.fit_transform(x, y)
-    # 'Neighboorhood Cleaning Rule'
+
+    print '\nNeighboorhood Cleaning Rule:'
     NCR = NeighbourhoodCleaningRule(size_ngh=2, verbose=verbose)
     ncrx, ncry = NCR.fit_transform(x, y)
 
     ratio = 0.1
-    # 'Random over-sampling'
+
+    print '\nRandom over-sampling:'
     OS = OverSampler(ratio=ratio, verbose=verbose)
     osx, osy = OS.fit_transform(x, y)
-    # 'SMOTE'
+
+    print '\nSMOTE:'
     smote = SMOTE(ratio=ratio, verbose=verbose, kind='regular')
     smox, smoy = smote.fit_transform(x, y)
-    # 'SMOTE bordeline 1'
+
+    print '\nSMOTE bordeline 1:'
     bsmote1 = SMOTE(ratio=ratio, verbose=verbose, kind='borderline1')
     bs1x, bs1y = bsmote1.fit_transform(x, y)
-    # 'SMOTE bordeline 2'
+
+    print '\nSMOTE bordeline 2:'
     bsmote2 = SMOTE(ratio=ratio, verbose=verbose, kind='borderline2')
     bs2x, bs2y = bsmote2.fit_transform(x, y)
-    # 'SMOTE SVM'
+
+    print '\nSMOTE SVM:'
     svm_args = {'class_weight': 'auto'}
     svmsmote = SMOTE(ratio=ratio, verbose=verbose, kind='svm', **svm_args)
     svsx, svsy = svmsmote.fit_transform(x, y)
-    # 'SMOTE Tomek links'
+
+    print '\nSMOTE Tomek links:'
     STK = SMOTETomek(ratio=ratio, verbose=verbose)
     stkx, stky = STK.fit_transform(x, y)
-    # 'SMOTE ENN'
+
+    print '\nSMOTE ENN:'
     SENN = SMOTEENN(ratio=ratio, verbose=verbose)
     ennx, enny = SENN.fit_transform(x, y)
 
-    # 'EasyEnsemble'
+    print '\nEasyEnsemble:'
     EE = EasyEnsemble(verbose=verbose)
     eex, eey = EE.fit_transform(x, y)
-    # 'BalanceCascade'
+
+    print '\nBalanceCascade:'
     BS = BalanceCascade(verbose=verbose)
     bsx, bsy = BS.fit_transform(x, y)
 
