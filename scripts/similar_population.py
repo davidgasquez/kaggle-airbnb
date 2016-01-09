@@ -45,8 +45,8 @@ train_users_extra = train_users_extra[similar_population_columns]
 test_users_extra = test_users_extra[similar_population_columns]
 
 path = '../datasets/processed/'
-processed_train_users = pd.read_csv(path + 'train_users.csv')
-processed_test_users = pd.read_csv(path + 'test_users.csv')
+processed_train_users = pd.read_csv(path + 'processed_train_users.csv')
+processed_test_users = pd.read_csv(path + 'processed_test_users.csv')
 
 train_result = pd.concat([processed_train_users, train_users_extra], axis=1)
 test_result = pd.concat([processed_test_users, test_users_extra], axis=1)
