@@ -47,13 +47,13 @@ def main():
     NM3 = NearMiss(version=3, verbose=verbose)
     nm3x, nm3y = NM3.fit_transform(x, y)
     # 'Condensed Nearest Neighbour'
-    CNN = CondensedNearestNeighbour(size_ngh=51, n_seeds_S=51, verbose=verbose)
+    CNN = CondensedNearestNeighbour(size_ngh=2, n_seeds_S=2, verbose=verbose)
     cnnx, cnny = CNN.fit_transform(x, y)
     # 'One-Sided Selection'
-    OSS = OneSidedSelection(size_ngh=51, n_seeds_S=51, verbose=verbose)
+    OSS = OneSidedSelection(size_ngh=2, n_seeds_S=2, verbose=verbose)
     ossx, ossy = OSS.fit_transform(x, y)
     # 'Neighboorhood Cleaning Rule'
-    NCR = NeighbourhoodCleaningRule(size_ngh=51, verbose=verbose)
+    NCR = NeighbourhoodCleaningRule(size_ngh=2, verbose=verbose)
     ncrx, ncry = NCR.fit_transform(x, y)
 
     ratio = 0.1
