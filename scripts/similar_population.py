@@ -39,8 +39,8 @@ bkts.loc[bkts['gender'] == 'female', 'gender'] = 'FEMALE'
 grouped_bkts = bkts.groupby('country_destination')
 country_population = grouped_bkts['population_in_thousands'].sum()
 
-train_users_extra = train_users.head().apply(country_probabilities, axis=1)
-test_users_extra = test_users.head().apply(country_probabilities, axis=1)
+train_users_extra = train_users.apply(country_probabilities, axis=1)
+test_users_extra = test_users.apply(country_probabilities, axis=1)
 
 new_columns = test_users_extra.columns.difference(train_users.columns)
 new_columns = new_columns.values
