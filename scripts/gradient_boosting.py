@@ -62,7 +62,7 @@ def main():
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
-    date = datetime.datetime.now().strftime("%m-%d-%H:%M")
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
     submission.to_csv('../datasets/submissions/' + name, index=False)
 
