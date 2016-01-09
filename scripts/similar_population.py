@@ -35,21 +35,21 @@ bkts.loc[bkts['gender'] == 'female', 'gender'] = 'FEMALE'
 
 country_population = bkts.groupby('country_destination')['population_in_thousands'].sum()
 
-train_users_exta = train_users.head().apply(country_probabilities, axis=1)
+train_users_extra = train_users.head().apply(country_probabilities, axis=1)
 test_users_extra = test_users.head().apply(country_probabilities, axis=1)
 
 similar_population_columns = test_users_extra.columns.difference(train_users.columns)
 similar_population_columns = similar_population_columns.values
 
-train_users_exta = train_users_exta[similar_population_columns]
-test_users_exta = test_users_exta[similar_population_columns]
+train_users_extra = train_users_extra[similar_population_columns]
+test_users_extra = test_users_extra[similar_population_columns]
 
 path = '../datasets/processed/'
 processed_train_users = pd.read_csv(path + 'train_users.csv')
 processed_test_users = pd.read_csv(path + 'test_users.csv')
 
-train_result = pd.concat([processed_train_users, train_users_exta], axis=1)
-test_result = pd.concat([processed_test_users, test_users_exta], axis=1)
+train_result = pd.concat([processed_train_users, train_users_extra], axis=1)
+test_result = pd.concat([processed_test_users, test_users_extra], axis=1)
 
 train_result.to_csv('train_users_extra.csv')
 test_result.to_csv('test_users_extra.csv')
