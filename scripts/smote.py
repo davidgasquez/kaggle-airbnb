@@ -15,7 +15,6 @@ from utils.unbalanced_dataset import (
 def main():
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
-    train_users = train_users.head(10000)
     y_train = train_users['country_destination']
 
     train_users.drop('country_destination', axis=1, inplace=True)
