@@ -33,6 +33,8 @@ def main():
         min_child_weight=1,
         max_delta_step=0,
         colsample_bylevel=1,
+	colsample_bytree=1,
+	subsample=1,
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
@@ -43,15 +45,13 @@ def main():
     clf = GridSearchCV(
         xgb_model,
         {
-            'max_depth': [6, 8],
-            'n_estimators': [20, 42, 60],
-            'learning_rate': [0.2],
-            'subsample': [0.6],
-            'colsample_bytree': [0.6],
+            'max_depth': [6, 7, 8],
+            'n_estimators': [55, 56, 57],
+            'learning_rate': [0.2, 0.18],
         },
         cv=5,
         verbose=10,
-        n_jobs=4,
+        n_jobs=1,
         scoring='log_loss'
     )
 
