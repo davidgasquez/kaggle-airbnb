@@ -15,7 +15,6 @@ from utils.unbalanced_dataset import (
 def main():
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
-    train_users = train_users.head(10000)
     y_train = train_users['country_destination']
 
     train_users.drop('country_destination', axis=1, inplace=True)
@@ -99,10 +98,6 @@ def main():
     print '\nEasyEnsemble:'
     EE = EasyEnsemble(verbose=verbose)
     eex, eey = EE.fit_transform(x, y)
-
-    print '\nBalanceCascade:'
-    BS = BalanceCascade(verbose=verbose)
-    bsx, bsy = BS.fit_transform(x, y)
 
 
 if __name__ == '__main__':
