@@ -113,14 +113,14 @@ users.drop(to_remove, axis=1, inplace=True)
 users = users.set_index('id')
 
 # Elapsed seconds sum
-elapsed_secs_sum = sessions.groupby('user_id')['secs_elapsed'].sum()
-elapsed_secs_sum.name = 'elapsed_secs_sum'
-users = pd.concat([users, elapsed_secs_sum], axis=1)
+secs_elapsed_sum = sessions.groupby('user_id')['secs_elapsed'].sum()
+secs_elapsed_sum.name = 'secs_elapsed_sum'
+users = pd.concat([users, secs_elapsed_sum], axis=1)
 
 # Elapsed seconds mean
-elapsed_secs_average = sessions.groupby('user_id')['secs_elapsed'].mean()
-elapsed_secs_average.name = 'elapsed_secs_average'
-users = pd.concat([users, elapsed_secs_average], axis=1)
+secs_elapsed_average = sessions.groupby('user_id')['secs_elapsed'].mean()
+secs_elapsed_average.name = 'secs_elapsed_average'
+users = pd.concat([users, secs_elapsed_average], axis=1)
 
 # Elapsed seconds min
 min_secs_elapsed = sessions.groupby('user_id')['secs_elapsed'].min()
@@ -134,42 +134,42 @@ users = pd.concat([users, max_secs_elapsed], axis=1)
 
 # Elapsed seconds first_quantile
 first_quantile = sessions.groupby('user_id')['secs_elapsed'].quantile(0.25)
-first_quantile.name = 'first_quantile'
+first_quantile.name = 'secs_elapsed_first_quantile'
 users = pd.concat([users, first_quantile], axis=1)
 
 # Elapsed seconds second_quantile
 second_quantile = sessions.groupby('user_id')['secs_elapsed'].quantile(0.5)
-second_quantile.name = 'second_quantile'
+second_quantile.name = 'secs_elapsed_second_quantile'
 users = pd.concat([users, second_quantile], axis=1)
 
 # Elapsed seconds third_quantile
 third_quantile = sessions.groupby('user_id')['secs_elapsed'].quantile(0.75)
-third_quantile.name = 'third_quantile'
+third_quantile.name = 'secs_elapsed_third_quantile'
 users = pd.concat([users, third_quantile], axis=1)
 
 # Elapsed seconds fourth_quantile
 fourth_quantile = sessions.groupby('user_id')['secs_elapsed'].quantile(0.9)
-fourth_quantile.name = 'fourth_quantile'
+fourth_quantile.name = 'secs_elapsed_fourth_quantile'
 users = pd.concat([users, fourth_quantile], axis=1)
 
 # Elapsed seconds median
 median = sessions.groupby('user_id')['secs_elapsed'].median()
-median.name = 'elapsed_secs_median'
+median.name = 'secs_elapsed_median'
 users = pd.concat([users, median], axis=1)
 
 # Elapsed seconds std
 std = sessions.groupby('user_id')['secs_elapsed'].std()
-std.name = 'elapsed_secs_std'
+std.name = 'secs_elapsed_std'
 users = pd.concat([users, std], axis=1)
 
 # Elapsed seconds var
 var = sessions.groupby('user_id')['secs_elapsed'].var()
-var.name = 'elapsed_secs_var'
+var.name = 'secs_elapsed_var'
 users = pd.concat([users, var], axis=1)
 
 # Elapsed seconds skew
 skew = sessions.groupby('user_id')['secs_elapsed'].skew()
-skew.name = 'elapsed_secs_skew'
+skew.name = 'secs_elapsed_skew'
 users = pd.concat([users, skew], axis=1)
 
 # Number of elapsed seconds greater than 1 day
