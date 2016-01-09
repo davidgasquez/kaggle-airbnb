@@ -40,9 +40,9 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     xgb = XGBClassifier(
-        max_depth=6,
+        max_depth=8,
         learning_rate=0.2,
-        n_estimators=50,
+        n_estimators=55,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -62,7 +62,7 @@ def main():
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
-    date = datetime.datetime.now().strftime("%m-%d-%H:%M")
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
     submission.to_csv('../datasets/submissions/' + name, index=False)
 
