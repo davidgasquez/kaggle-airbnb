@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 sys.path.append('..')
-from utils.unbalanced_dataset import NearMiss
+from utils.unbalanced_dataset import NearMiss, SMOTEENN
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
 
     train_users.drop('country_destination', axis=1, inplace=True)
     train_users.drop('id', axis=1, inplace=True)
-    train_users.fillna(0)
+    train_users = train_users.fillna(0)
 
     x_train = train_users.values
 
@@ -27,7 +27,12 @@ def main():
     NM1 = NearMiss(version=1, verbose=verbose)
     nm1x, nm1y = NM1.fit_transform(x_train, encoded_y_train)
 
-    print nm1x
+    print "Undersample Completed"
+
+    SENN = SMOTEENN(ratio=ratio, verbose=verbose)
+    ennx, enny = SENN.fit_transform(x_train, encoded_y_train)
+
+    print ennx
 
 
 if __name__ == '__main__':
