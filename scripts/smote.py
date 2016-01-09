@@ -16,6 +16,7 @@ def main():
 
     train_users.drop('country_destination', axis=1, inplace=True)
     train_users.drop('id', axis=1, inplace=True)
+    train_users.fillna(0)
 
     x_train = train_users.values
 
