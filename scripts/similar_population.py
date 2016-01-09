@@ -11,7 +11,8 @@ def country_probabilities(df):
 
     for index, row in similar_population.iterrows():
         country = row['country_destination']
-        df['similar_population_in_' + country] = row['population_in_thousands'] # / country_population[country]
+        df['similar_population_in_' + country] = row['population_in_thousands']
+        # TODO: Maybe trying with  row['popul..'] / country_population[country]
 
     return df
 
@@ -25,24 +26,27 @@ users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
 
 bkts.loc[bkts['age_bucket'] == '100+', 'age_bucket'] = '100-200'
 
-bkts['from_age'] = bkts.age_bucket.str.split('-').apply(pd.Series, 2)[0].astype(int)
-bkts['to_age'] = bkts.age_bucket.str.split('-').apply(pd.Series, 2)[1].astype(int)
+splitted_age = bkts.age_bucket.str.split('-')
+
+bkts['from_age'] = splitted_age.apply(pd.Series, 2)[0].astype(int)
+bkts['to_age'] = splitted_age.apply(pd.Series, 2)[1].astype(int)
 
 bkts.drop('age_bucket', axis=1, inplace=True)
 
 bkts.loc[bkts['gender'] == 'male', 'gender'] = 'MALE'
 bkts.loc[bkts['gender'] == 'female', 'gender'] = 'FEMALE'
 
-country_population = bkts.groupby('country_destination')['population_in_thousands'].sum()
+grouped_bkts = bkts.groupby('country_destination')
+country_population = grouped_bkts['population_in_thousands'].sum()
 
 train_users_extra = train_users.head().apply(country_probabilities, axis=1)
 test_users_extra = test_users.head().apply(country_probabilities, axis=1)
 
-similar_population_columns = test_users_extra.columns.difference(train_users.columns)
-similar_population_columns = similar_population_columns.values
+new_columns = test_users_extra.columns.difference(train_users.columns)
+new_columns = new_columns.values
 
-train_users_extra = train_users_extra[similar_population_columns]
-test_users_extra = test_users_extra[similar_population_columns]
+train_users_extra = train_users_extra[new_columns]
+test_users_extra = test_users_extra[new_columns]
 
 path = '../datasets/processed/'
 processed_train_users = pd.read_csv(path + 'processed_train_users.csv')
