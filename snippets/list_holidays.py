@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import date
 import holidays
 
+
 def process_holidays(df):
     year = df['year']
     user_date = date(year, df['month'], df['day'])
@@ -13,7 +14,9 @@ def process_holidays(df):
         if days < 0:
             days = days + 364
 
-        name = "".join([c for c in name if c.isalpha() or c.isdigit() or c==' ']).rstrip().lower().replace(" ", "_")
+        name = "".join(
+            [c for c in name if c.isalpha() or c.isdigit() or c == ' ']
+        ).rstrip().lower().replace(" ", "_")
 
         df['days_to_' + name] = days
 
