@@ -82,11 +82,6 @@ def main():
     bsmote2 = SMOTE(ratio=ratio, verbose=verbose, kind='borderline2')
     bs2x, bs2y = bsmote2.fit_transform(x, y)
 
-    print '\nSMOTE SVM:'
-    svm_args = {'class_weight': 'auto'}
-    svmsmote = SMOTE(ratio=ratio, verbose=verbose, kind='svm', **svm_args)
-    svsx, svsy = svmsmote.fit_transform(x, y)
-
     print '\nSMOTE Tomek links:'
     STK = SMOTETomek(ratio=ratio, verbose=verbose)
     stkx, stky = STK.fit_transform(x, y)
