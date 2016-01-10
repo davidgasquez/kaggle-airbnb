@@ -3,8 +3,9 @@ New User Bookings
 
 This repository contains the code developed for the [Airbnb's Kaggle
 competition][competition]. It's written in **Python** mostly in the form
-of **Jupyter Notebooks**. Feel free to contribute to the code or open an issue
-if you see something wrong.
+of **Jupyter Notebooks** when exploring or developing new models, and in
+regular Python files when it's something I think it's important.
+Feel free to contribute to the code or open an issue if you see something wrong.
 
 [competition]: https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings
 
@@ -23,9 +24,15 @@ will make his or her first booking. There are **12** possible outcomes of the
 destination country and the datasets consists in a list of users with their
 demographics, web session records, and some summary statistics.
 
+Data
+----
+
 Due to the [*Competition Rules*][rules], the dataset's can not be shared. If
 you want to take a look to the data, head over the [competition][competition]
 page and download it.
+
+You need to download `train_users_2.csv`, `test_users.csv` and `sessions.csv`
+files and unzip them into the 'dataset/raw' folder.
 
 [rules]: https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings/rules
 
