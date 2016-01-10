@@ -107,6 +107,7 @@ for user in sessions['user_id'].unique():
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
 
 # Remove columns with a lot of NaNs
+# TODO: Make it based on a percentage
 to_remove = users.isnull().sum().loc[users.isnull().sum() > 275542].index
 users.drop(to_remove, axis=1, inplace=True)
 
