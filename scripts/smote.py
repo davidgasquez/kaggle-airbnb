@@ -8,7 +8,7 @@ sys.path.append('..')
 from utils.unbalanced_dataset import (
     UnderSampler, NearMiss, CondensedNearestNeighbour, OneSidedSelection,
     NeighbourhoodCleaningRule, TomekLinks, ClusterCentroids, OverSampler,
-    SMOTE, SMOTETomek, SMOTEENN, EasyEnsemble, BalanceCascade
+    SMOTE, SMOTETomek, SMOTEENN, EasyEnsemble
 )
 
 
