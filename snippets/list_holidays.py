@@ -19,12 +19,11 @@ def process_holidays(df):
     holidays_dates = holidays.US(years=df['year'])
 
     for holiday_date, name in holidays_dates.iteritems():
+        # if 'observed' in name:
+        #     pass
+
         # Compute difference in days
         days = (holiday_date - user_date).days
-
-        # Past dates will happen more or less in the next year
-        if days < 0:
-            days = days + 364
 
         # Clean holiday name
         name = sanitize_holiday_name(name)
