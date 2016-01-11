@@ -2,12 +2,8 @@
 
 import pandas as pd
 import xgboost
-import sys
 from sklearn.preprocessing import LabelEncoder
 from sklearn.grid_search import GridSearchCV
-
-sys.path.append('..')
-from utils.metrics import ndcg_scorer
 
 
 def main():
