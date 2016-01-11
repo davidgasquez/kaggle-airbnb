@@ -54,8 +54,10 @@ data.
 Main Ideas
 ----------
 
-1. A
-2. B
+1. The provided datasets have lot of NaNs and some other weirds values, so, a
+good preprocessing will be primary to obtain a good solution.
+2. Those kind of classification task works nicely with tree based methods, it
+would be interesting to take a look at Random Forest and Gradient Boosting.
 
 Requirements
 ------------
@@ -71,9 +73,10 @@ basically the next Python packages:
 Resources
 ---------
 
-- 1
-- 2
-- 3
+- [Unbalanced Dataset](https://github.com/fmfn/UnbalancedDataset) - Library with
+implementation to handle unbalanced datasets.
+- [XGBoost Documentation](https://xgboost.readthedocs.org) - A library that is
+designed, and optimized for boosted (tree) algorithms.
 
 License
 -------
