@@ -6,9 +6,9 @@ import holidays
 
 
 def sanitize_holiday_name(name):
-        new_name = [c for c in name if c.isalpha() or c.isdigit() or c == ' ']
-        new_name = "".join(new_name).lower().replace(" ", "_")
-        return new_name
+    new_name = [c for c in name if c.isalpha() or c.isdigit() or c == ' ']
+    new_name = "".join(new_name).lower().replace(" ", "_")
+    return new_name
 
 
 def process_holidays(df):
