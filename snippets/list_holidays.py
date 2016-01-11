@@ -13,7 +13,11 @@ def sanitize_holiday_name(name):
 
 def process_holidays(df):
     # Create a date object
-    user_date = date(df['year'], df['month'], df['day'])
+    user_date = date(
+        df['year_account_created'],
+        df['month_account_created'],
+        df['day_account_created']
+    )
 
     # Get US holidays for this year
     holidays_dates = holidays.US(years=df['year'])
@@ -35,12 +39,15 @@ def process_holidays(df):
 
 
 def main():
-    df = pd.DataFrame()
-    df['year'] = pd.Series(range(2010, 2015))
-    df['day'] = pd.Series(range(11, 27, 3))
-    df['month'] = pd.Series(range(2, 12, 2))
+    path = '../datasets/processed/'
+    train_users = pd.read_csv(path + 'processed_train_users.csv')
+    train_users = train_users.head(500)
+    test_users = pd.read_csv(path + 'processed_train_users.csv')
+    test_users = test_users.head(500)
 
-    print df.apply(process_holidays, axis=1)
+    train_users = train_users.apply(process_holidays, axis=1)
+
+    print train_users.columns
 
 
 if __name__ == '__main__':
