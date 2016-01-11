@@ -20,7 +20,7 @@ def process_holidays(df):
     )
 
     # Get US holidays for this year
-    holidays_dates = holidays.US(years=df['year'])
+    holidays_dates = holidays.US(years=df['year_account_created'])
 
     for holiday_date, name in holidays_dates.iteritems():
         # if 'observed' in name:
@@ -41,14 +41,13 @@ def process_holidays(df):
 def main():
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
-    train_users = train_users.head(500)
     test_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = test_users.head(500)
 
     train_users = train_users.apply(process_holidays, axis=1)
+    test_users = test_users.apply(process_holidays, axis=1)
 
-    print train_users.columns
-
+    train_users.to_csv('train_users_with_holidays.csv')
+    test_users.to_csv('test_users_with_holidays.csv')
 
 if __name__ == '__main__':
     main()
