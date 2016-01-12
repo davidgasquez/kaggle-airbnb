@@ -41,7 +41,7 @@ def process_holidays(df):
 def main():
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = pd.read_csv(path + 'processed_train_users.csv')
+    test_users = pd.read_csv(path + 'processed_test_users.csv')
 
     train_users = train_users.apply(process_holidays, axis=1)
     test_users = test_users.apply(process_holidays, axis=1)
