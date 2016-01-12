@@ -7,7 +7,7 @@ DEFAULT_PATH = '../datasets/raw/'
 
 
 def load_users_data(path=DEFAULT_PATH, preprocessed=False):
-    """Loads users data into train and test users.
+    """Load users data into train and test users.
 
     Parameters
     ----------
@@ -30,7 +30,7 @@ def load_users_data(path=DEFAULT_PATH, preprocessed=False):
 
 
 def load_sessions_data(path=DEFAULT_PATH):
-    """Loads the users sessions data.
+    """Load the users sessions data.
 
     Parameters
     ----------

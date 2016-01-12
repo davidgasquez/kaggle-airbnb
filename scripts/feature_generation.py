@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+"""Process the final dataset to generate new features."""
+
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
@@ -7,6 +10,7 @@ from sklearn.decomposition import PCA
 
 
 def interaction_features(data, degree):
+    """Generate polynomial features given a dataset and a degree."""
     poly = PolynomialFeatures(degree, interaction_only=True)
 
     interaction_data = poly.fit_transform(data)
@@ -25,6 +29,7 @@ def interaction_features(data, degree):
 
 
 def main():
+    """Main function that joins the polynomial features and the PCA."""
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
     test_users = pd.read_csv(path + 'processed_train_users.csv')
