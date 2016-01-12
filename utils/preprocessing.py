@@ -1,4 +1,4 @@
-"""Utils used in the preprocessing stage"""
+"""Utils used in the preprocessing stage."""
 
 import pandas as pd
 
