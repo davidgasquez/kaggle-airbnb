@@ -22,8 +22,8 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 def main():
     path = '../datasets/processed/'
-    train_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = pd.read_csv(path + 'processed_test_users.csv')
+    train_users = pd.read_csv(path + 'train_users_with_holidays.csv')
+    test_users = pd.read_csv(path + 'test_users_with_holidays.csv')
 
     y_train = train_users['country_destination']
     train_users.drop('country_destination', axis=1, inplace=True)
@@ -42,9 +42,9 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     xgb = XGBClassifier(
-        max_depth=8,
-        learning_rate=0.2,
-        n_estimators=57,
+        max_depth=7,
+        learning_rate=0.18,
+        n_estimators=55,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
