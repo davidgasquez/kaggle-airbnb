@@ -5,6 +5,10 @@ import xgboost
 from sklearn.preprocessing import LabelEncoder
 from sklearn.grid_search import GridSearchCV
 
+import sys
+sys.path.append('..')
+from utils.metrics import ndcg_scorer
+
 
 def main():
     path = '../datasets/processed/'
@@ -41,15 +45,16 @@ def main():
     clf = GridSearchCV(
         xgb_model,
         {
-            'max_depth': [6, 7, 8],
-            'n_estimators': [50, 52, 54],
-            'learning_rate': [0.16, 0.18, 0.2],
+            'max_depth': [4, 5, 6],
+            'n_estimators': [45, 50, 55],
+            'learning_rate': [0.15, 0.2, 0.22],
         },
         cv=10,
         verbose=10,
         n_jobs=1,
         scoring='log_loss'
     )
+
 
     clf.fit(x_train, encoded_y_train)
 
