@@ -21,9 +21,10 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
     y_values = y_binary
 
     if sampling == 'SMOTE':
-        print 'SMOTE'
-        ratio = 1
-        smote = SMOTE(ratio=ratio)
+        ones = np.count_nonzero(y_values == 1)
+        zeros = np.count_nonzero(y_values == 0)
+        ratio = (ones - zeros) / zeros
+        smote = SMOTE(ratio=ratio, verbose=True)
         X_values, y_values = smote.fit_transform(X_values, y_values)
 
     return _fit_binary(estimator, X_values, y_values, classes=[i, j])
