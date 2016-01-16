@@ -13,6 +13,12 @@ sys.path.append('..')
 from utils.metrics import ndcg_scorer
 
 
+class OneVsOneClassifierProba(OneVsOneClassifier):
+
+    def predict_proba(self, X):
+        return super(OneVsOneClassifierProba, self).decision_function(X)
+
+
 def main():
     """Generate the submission file calling a XGBClassifier."""
     path = '../datasets/processed/'
@@ -45,7 +51,7 @@ def main():
         seed=42
     )
 
-    clf = OneVsOneClassifier(xgb_model)
+    clf = OneVsOneClassifierProba(xgb_model)
 
     gs_clf = GridSearchCV(
         clf,
