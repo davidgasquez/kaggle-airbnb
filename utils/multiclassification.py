@@ -23,7 +23,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
     if sampling == 'SMOTE':
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
-        ratio = (ones - zeros) / zeros
+        ratio = abs(ones - zeros) / min(ones, zeros)
         smote = SMOTE(ratio=ratio, verbose=True)
         X_values, y_values = smote.fit_transform(X_values, y_values)
 
