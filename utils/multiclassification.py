@@ -8,7 +8,7 @@ from sklearn.externals.joblib import Parallel, delayed
 from unbalanced_dataset import SMOTE
 
 
-def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
+def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     """Fit a single binary estimator (one-vs-one)."""
     cond = np.logical_or(y == i, y == j)
     y = y[cond]
@@ -24,7 +24,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
         ratio = abs(ones - zeros) / min(ones, zeros)
-        smote = SMOTE(ratio=ratio, verbose=True)
+        smote = SMOTE(ratio=ratio, verbose=verbose)
         X_values, y_values = smote.fit_transform(X_values, y_values)
 
     return _fit_binary(estimator, X_values, y_values, classes=[i, j])
@@ -32,10 +32,11 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
 
 class CustomOneVsOneClassifier(OneVsOneClassifier):
 
-    def __init__(self, estimator, n_jobs=1, sampling=None):
+    def __init__(self, estimator, n_jobs=1, sampling=None, verbose=False):
         self.estimator = estimator
         self.n_jobs = n_jobs
         self.sampling = sampling
+        self.verbose = verbose
 
     def predict_proba(self, X):
         return super(CustomOneVsOneClassifier, self).decision_function(X)
@@ -58,8 +59,13 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         n_classes = self.classes_.shape[0]
         self.estimators_ = Parallel(n_jobs=self.n_jobs)(
             delayed(_fit_ovo_binary)(
-                self.estimator, X, y,
-                self.classes_[i], self.classes_[j], sampling=self.sampling)
-            for i in range(n_classes) for j in range(i + 1, n_classes))
+                self.estimator,
+                X,
+                y,
+                self.classes_[i],
+                self.classes_[j],
+                sampling=self.sampling,
+                verbose=self.verbose
+            ) for i in range(n_classes) for j in range(i + 1, n_classes))
 
         return self
