@@ -49,12 +49,11 @@ def main():
             'n_estimators': [45, 50, 55],
             'learning_rate': [0.15, 0.2, 0.22],
         },
-        cv=10,
+        cv=5,
         verbose=10,
         n_jobs=1,
-        scoring='log_loss'
+        scoring=ndcg_scorer
     )
-
 
     clf.fit(x_train, encoded_y_train)
 
