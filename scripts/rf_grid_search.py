@@ -31,7 +31,7 @@ def main():
         min_weight_fraction_leaf=0.0,
         max_leaf_nodes=None,
         bootstrap=True,
-        oob_score=True,
+        oob_score=False,
         class_weight=None,
         n_jobs=-1,
         random_state=42
@@ -40,11 +40,11 @@ def main():
     grid_search = GridSearchCV(
         clf,
         {
-            'max_depth': [None, 8, 10],
-            'n_estimators': [30, 40, 50],
+            'max_depth': [None, 10],
+            'n_estimators': [30, 50],
             'max_features': ['auto', 'log2', None],
         },
-        cv=5,
+        cv=10,
         verbose=10,
         n_jobs=1,
         scoring=ndcg_scorer
