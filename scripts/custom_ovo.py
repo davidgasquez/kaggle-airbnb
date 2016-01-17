@@ -68,7 +68,7 @@ def main():
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTEENN')
+    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTEENN', verbose=True)
     clf.fit(x_train, encoded_y_train)
 
     y_pred = clf.predict_proba(x_test)
