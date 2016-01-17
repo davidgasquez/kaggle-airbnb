@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 
-"""Generate a submission using a custom one vs one classifier with SMOTE."""
-
 import pandas as pd
 import numpy as np
 import datetime
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from xgboost.sklearn import XGBClassifier
 from sklearn.cross_validation import cross_val_score
 
 import sys
 sys.path.append('..')
-from utils.multiclassification import CustomOneVsOneClassifier
 from utils.metrics import ndcg_scorer
 
 
@@ -30,7 +27,6 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 
 def main():
-    """Generate the submission file calling a XGBClassifier."""
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
     test_users = pd.read_csv(path + 'processed_test_users.csv')
@@ -51,27 +47,22 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    xgb = XGBClassifier(
-        max_depth=2,
-        learning_rate=0.2,
+    clf = RandomForestClassifier(
+        max_depth=3,
+        max_features=None,
         n_estimators=20,
-        gamma=0,
-        min_child_weight=1,
-        max_delta_step=0,
-        subsample=1,
-        colsample_bytree=1,
-        colsample_bylevel=1,
-        reg_alpha=0,
-        reg_lambda=1,
-        scale_pos_weight=1,
-        base_score=0.5,
-        missing=None,
-        silent=False,
-        nthread=-1,
-        seed=42
+        criterion='gini',
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_weight_fraction_leaf=0.0,
+        max_leaf_nodes=None,
+        bootstrap=True,
+        oob_score=False,
+        class_weight=None,
+        n_jobs=-1,
+        random_state=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTEENN', verbose=True)
     clf.fit(x_train, encoded_y_train)
 
     y_pred = clf.predict_proba(x_test)
@@ -85,7 +76,6 @@ def main():
     ndcg = cross_val_score(clf, x_train, encoded_y_train,
                            verbose=10, cv=10, scoring=ndcg_scorer)
 
-    print 'Parameters:', xgb.get_params()
     print 'Score:', ndcg.mean()
 
 
