@@ -40,11 +40,11 @@ def main():
     grid_search = GridSearchCV(
         clf,
         {
-            'max_depth': [None, 10],
-            'n_estimators': [30, 50],
+            'max_depth': [None, 5, 10, 15],
+            'n_estimators': [10, 20, 30],
             'max_features': ['auto', 'log2', None],
         },
-        cv=10,
+        cv=5,
         verbose=10,
         n_jobs=1,
         scoring=ndcg_scorer
