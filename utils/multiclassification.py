@@ -21,6 +21,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     X_values = X[ind[cond]]
     y_values = y_binary
 
+    # TODO: Save X_values, and y_values to speed up calculations
     if sampling:
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
