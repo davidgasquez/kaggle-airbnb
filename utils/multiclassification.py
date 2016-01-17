@@ -30,7 +30,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
             smote = SMOTE(ratio=ratio, verbose=verbose)
 
         if sampling == 'SMOTEENN':
-            ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.5
+            ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.3
             smote = SMOTEENN(ratio=ratio, verbose=verbose)
 
         X_values, y_values = smote.fit_transform(X_values, y_values)
