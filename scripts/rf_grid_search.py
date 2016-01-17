@@ -13,15 +13,13 @@ from utils.metrics import ndcg_scorer
 def main():
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
-    test_users = pd.read_csv(path + 'processed_test_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop('country_destination', axis=1, inplace=True)
     train_users.drop('id', axis=1, inplace=True)
+    train_users = train_users.fillna(-1)
 
     x_train = train_users.values
-
-    test_users.drop('id', axis=1, inplace=True)
 
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
