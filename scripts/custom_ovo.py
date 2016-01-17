@@ -78,6 +78,7 @@ def main():
     ndcg = cross_val_score(clf, x_train, encoded_y_train, n_jobs=-1,
                            cv=10, scoring=ndcg_scorer)
 
+    print 'Parameters:', xgb.get_params()
     print 'Score:', ndcg.mean()
 
     date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
