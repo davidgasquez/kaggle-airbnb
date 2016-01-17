@@ -75,15 +75,15 @@ def main():
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
+    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
+    submission.to_csv('../datasets/submissions/' + name, index=False)
+
     ndcg = cross_val_score(clf, x_train, encoded_y_train, n_jobs=-1,
                            cv=10, scoring=ndcg_scorer)
 
     print 'Parameters:', xgb.get_params()
     print 'Score:', ndcg.mean()
-
-    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
-    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
-    submission.to_csv('../datasets/submissions/' + name, index=False)
 
 
 if __name__ == '__main__':
