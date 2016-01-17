@@ -6,7 +6,12 @@ import pandas as pd
 import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
+from sklearn.cross_validation import cross_val_score
 from xgboost.sklearn import XGBClassifier
+
+import sys
+sys.path.append('..')
+from utils.metrics import ndcg_scorer
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
@@ -45,7 +50,7 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    xgb = XGBClassifier(
+    clf = XGBClassifier(
         max_depth=7,
         learning_rate=0.18,
         n_estimators=80,
@@ -58,19 +63,29 @@ def main():
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
+        objective="multi:softprob",
         base_score=0.5,
+        missing=None,
+        silent=True,
+        nthread=-1,
         seed=42
     )
 
-    xgb.fit(x_train, encoded_y_train)
+    clf.fit(x_train, encoded_y_train)
 
-    y_pred = xgb.predict_proba(x_test)
+    y_pred = clf.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
     date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
     submission.to_csv('../datasets/submissions/' + name, index=False)
+
+    ndcg = cross_val_score(clf, x_train, encoded_y_train, n_jobs=-1,
+                           cv=10, scoring=ndcg_scorer)
+
+    print 'Parameters:', clf.get_params()
+    print 'Score:', ndcg.mean()
 
 
 if __name__ == '__main__':
