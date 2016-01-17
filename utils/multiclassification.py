@@ -6,6 +6,7 @@ from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import _fit_binary
 from sklearn.externals.joblib import Parallel, delayed
 from unbalanced_dataset import SMOTE
+from unbalanced_dataset import SMOTEENN
 
 
 def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
@@ -25,6 +26,13 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
         zeros = np.count_nonzero(y_values == 0)
         ratio = abs(ones - zeros) / min(ones, zeros)
         smote = SMOTE(ratio=ratio, verbose=verbose)
+        X_values, y_values = smote.fit_transform(X_values, y_values)
+
+    if sampling == 'SMOTEENN':
+        ones = np.count_nonzero(y_values == 1)
+        zeros = np.count_nonzero(y_values == 0)
+        ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.5
+        smote = SMOTEENN(ratio=ratio, verbose=verbose)
         X_values, y_values = smote.fit_transform(X_values, y_values)
 
     return _fit_binary(estimator, X_values, y_values, classes=[i, j])
