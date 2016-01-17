@@ -75,7 +75,7 @@ def main():
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
-    ndcg = cross_val_score(clf, x_train, encoded_y_train,
+    ndcg = cross_val_score(clf, x_train, encoded_y_train, n_jobs=-1,
                            cv=10, scoring=ndcg_scorer)
 
     print 'Score:', ndcg.mean()
