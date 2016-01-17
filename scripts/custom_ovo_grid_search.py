@@ -14,7 +14,6 @@ from utils.multiclassification import CustomOneVsOneClassifier
 
 
 def main():
-    """Grid Search to find the best values to OvO"""
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
 
@@ -45,13 +44,13 @@ def main():
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb)
+    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTE')
 
     gs_clf = GridSearchCV(
         clf,
         {
-            'estimator__max_depth': [2],
-            'estimator__n_estimators': [10, 20, 40],
+            'estimator__max_depth': [2, 4, 6],
+            'estimator__n_estimators': [4, 6, 8, 10],
             'estimator__learning_rate': [0.1],
         },
         cv=5,
