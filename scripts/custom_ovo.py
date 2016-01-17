@@ -7,10 +7,12 @@ import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
+from sklearn.cross_validation import cross_val_score
 
 import sys
 sys.path.append('..')
 from utils.multiclassification import CustomOneVsOneClassifier
+from utils.metrics import ndcg_scorer
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
@@ -50,9 +52,9 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     xgb = XGBClassifier(
-        max_depth=7,
-        learning_rate=0.18,
-        n_estimators=54,
+        max_depth=2,
+        learning_rate=0.2,
+        n_estimators=20,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -66,12 +68,17 @@ def main():
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTE')
+    clf = CustomOneVsOneClassifier(xgb, sampling='SMOTEENN')
     clf.fit(x_train, encoded_y_train)
 
     y_pred = clf.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
+
+    ndcg = cross_val_score(clf, x_train, encoded_y_train,
+                           cv=10, scoring=ndcg_scorer)
+
+    print 'Score:', ndcg.mean()
 
     date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
