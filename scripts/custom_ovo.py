@@ -82,8 +82,8 @@ def main():
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
     submission.to_csv('../datasets/submissions/' + name, index=False)
 
-    ndcg = cross_val_score(clf, x_train, encoded_y_train, n_jobs=-1,
-                           cv=10, scoring=ndcg_scorer)
+    ndcg = cross_val_score(clf, x_train, encoded_y_train,
+                           verbose=10, cv=10, scoring=ndcg_scorer)
 
     print 'Parameters:', xgb.get_params()
     print 'Score:', ndcg.mean()
