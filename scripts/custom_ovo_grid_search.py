@@ -28,7 +28,7 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    xgb_model = XGBClassifier(
+    xgb = XGBClassifier(
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -38,18 +38,22 @@ def main():
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
+        objective="multi:softprob",
         base_score=0.5,
+        missing=None,
+        silent=True,
+        nthread=-1,
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb_model, sampling='SMOTE')
+    clf = CustomOneVsOneClassifier(xgb)
 
     gs_clf = GridSearchCV(
         clf,
         {
-            'estimator__max_depth': [2, 5, 10],
+            'estimator__max_depth': [2],
             'estimator__n_estimators': [10, 20, 40],
-            'estimator__learning_rate': [0.1, 0.2, 0.3],
+            'estimator__learning_rate': [0.1],
         },
         cv=5,
         verbose=10,
