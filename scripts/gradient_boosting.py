@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-"""Generate a submission ussing Xtreme Gradient Boosting."""
-
 import pandas as pd
 import numpy as np
 import datetime
@@ -29,7 +27,6 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 
 def main():
-    """Generate the submission file calling a XGBClassifier."""
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
     test_users = pd.read_csv(path + 'processed_test_users.csv')

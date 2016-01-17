@@ -8,6 +8,7 @@ from sklearn.grid_search import GridSearchCV
 import sys
 sys.path.append('..')
 from utils.metrics import ndcg_scorer
+from utils.multiclassification import CustomOneVsOneClassifi
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    clf = RandomForestClassifier(
+    rf = RandomForestClassifier(
         criterion='gini',
         min_samples_split=2,
         min_samples_leaf=1,
@@ -37,12 +38,14 @@ def main():
         random_state=42
     )
 
-    grid_search = GridSearchCV(
+    clf = CustomOneVsOneClassifier(rf)
+
+    gs_clf = GridSearchCV(
         clf,
         {
-            'max_depth': [2, 3, 4],
-            'n_estimators': [15, 20, 25],
-            'max_features': ['auto', 'log2', None],
+            'estimator__max_depth': [2, 3, 4],
+            'estimator__max_features': [None, 10],
+            'estimator__n_estimators': [20, 25],
         },
         cv=5,
         verbose=10,
@@ -50,14 +53,14 @@ def main():
         scoring=ndcg_scorer
     )
 
-    grid_search.fit(x_train, encoded_y_train)
+    gs_clf.fit(x_train, encoded_y_train)
 
     print
-    print(grid_search.grid_scores_)
+    print(gs_clf.grid_scores_)
     print
-    print(grid_search.best_params_)
+    print(gs_clf.best_params_)
     print
-    print(grid_search.best_score_)
+    print(gs_clf.best_score_)
     print
 
 

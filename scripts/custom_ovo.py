@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 
-"""Generate a submission using a custom one vs one classifier with SMOTE."""
-
 import pandas as pd
 import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
-from xgboost.sklearn import XGBClassifier
 from sklearn.cross_validation import cross_val_score
+from xgboost.sklearn import XGBClassifier
 
 import sys
 sys.path.append('..')
-from utils.multiclassification import CustomOneVsOneClassifier
 from utils.metrics import ndcg_scorer
+from utils.multiclassification import CustomOneVsOneClassifier
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
@@ -30,7 +28,6 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 
 def main():
-    """Generate the submission file calling a XGBClassifier."""
     path = '../datasets/processed/'
     train_users = pd.read_csv(path + 'processed_train_users.csv')
     test_users = pd.read_csv(path + 'processed_test_users.csv')

@@ -3,9 +3,9 @@
 import pandas as pd
 import numpy as np
 import datetime
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 
 import sys
 sys.path.append('..')
