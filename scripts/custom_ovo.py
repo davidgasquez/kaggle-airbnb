@@ -64,7 +64,6 @@ def main():
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
-        objective="multi:softprob",
         base_score=0.5,
         missing=None,
         silent=True,
