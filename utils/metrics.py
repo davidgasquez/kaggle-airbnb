@@ -62,7 +62,7 @@ def ndcg_score(ground_truth, predictions, k=5):
 
     scores = []
 
-    # Iterate over each y_true and compute  the DCG score
+    # Iterate over each y_true and compute the DCG score
     for y_true, y_score in zip(T, predictions):
         actual = dcg_score(y_true, y_score, k)
         best = dcg_score(y_true, y_true, k)
