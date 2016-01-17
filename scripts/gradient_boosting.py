@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Gradient Boosting Method."""
+"""Generate a submission ussing Xtreme Gradient Boosting."""
 
 import pandas as pd
 import numpy as np

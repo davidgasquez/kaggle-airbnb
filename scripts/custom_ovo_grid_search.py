@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""GridSearch Method."""
+"""Grid Search using custom one vs one classifier with SMOTE."""
 
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder

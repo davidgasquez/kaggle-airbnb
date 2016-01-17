@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Grid Search using Xtreme Gradient Boosting."""
+
 import pandas as pd
 import xgboost
 from sklearn.preprocessing import LabelEncoder

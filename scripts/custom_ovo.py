@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Gradient Boosting Method."""
+"""Generate a submission using a custom one vs one classifier with SMOTE."""
 
 import pandas as pd
 import numpy as np
