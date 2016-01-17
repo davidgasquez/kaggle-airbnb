@@ -21,18 +21,18 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     X_values = X[ind[cond]]
     y_values = y_binary
 
-    if sampling == 'SMOTE':
+    if sampling:
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
-        ratio = abs(ones - zeros) / min(ones, zeros)
-        smote = SMOTE(ratio=ratio, verbose=verbose)
-        X_values, y_values = smote.fit_transform(X_values, y_values)
 
-    if sampling == 'SMOTEENN':
-        ones = np.count_nonzero(y_values == 1)
-        zeros = np.count_nonzero(y_values == 0)
-        ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.5
-        smote = SMOTEENN(ratio=ratio, verbose=verbose)
+        if sampling == 'SMOTE':
+            ratio = abs(ones - zeros) / min(ones, zeros)
+            smote = SMOTE(ratio=ratio, verbose=verbose)
+
+        if sampling == 'SMOTEENN':
+            ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.5
+            smote = SMOTEENN(ratio=ratio, verbose=verbose)
+
         X_values, y_values = smote.fit_transform(X_values, y_values)
 
     return _fit_binary(estimator, X_values, y_values, classes=[i, j])
