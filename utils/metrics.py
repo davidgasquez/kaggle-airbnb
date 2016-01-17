@@ -51,8 +51,8 @@ def ndcg_score(ground_truth, predictions, k=5):
     -------
     score : float
 
-    Examples
-    --------
+    Example
+    -------
     >>> ground_truth = [1, 0, 2]
     >>> predictions = [[0.15, 0.55, 0.2], [0.7, 0.2, 0.1], [0.06, 0.04, 0.9]]
     >>> score = ndcg_score(ground_truth, predictions)
