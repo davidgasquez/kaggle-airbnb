@@ -8,7 +8,7 @@ from sklearn.grid_search import GridSearchCV
 import sys
 sys.path.append('..')
 from utils.metrics import ndcg_scorer
-from utils.multiclassification import CustomOneVsOneClassifi
+from utils.multiclassification import CustomOneVsOneClassifier
 
 
 def main():
