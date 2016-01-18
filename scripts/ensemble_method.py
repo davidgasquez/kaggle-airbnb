@@ -66,6 +66,13 @@ def main():
     clf.fit(x_train, encoded_y_train)
 
     y_pred = clf.predict_proba(x_test)
+    print 'Fitted', i
+
+    for i in range(5):
+        clf.set_params(seed = i + 1)
+        clf.fit(x_train, encoded_y_train)
+        print 'Fitted', i + 1
+        y_pred += clf.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
