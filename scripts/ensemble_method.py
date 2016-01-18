@@ -48,9 +48,9 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     clf = RandomForestClassifier(
-        max_depth=3,
+        max_depth=2,
         max_features=None,
-        n_estimators=20,
+        n_estimators=30,
         criterion='gini',
         min_samples_split=2,
         min_samples_leaf=1,
