@@ -68,13 +68,14 @@ def main():
     )
 
     xgb.fit(x_train, encoded_y_train)
-
-    preds = xgb.predict_proba(x_train)
+    y_pred = xgb.predict_proba(x_test)
+    print 'Fitted', i
 
     for i in range(5):
         xgb.set_params(seed = i + 1)
         xgb.fit(x_train, encoded_y_train)
-        preds += xgb.predict_proba(x_train)
+        print 'Fitted', i + 1
+        y_pred += xgb.predict_proba(x_test)
 
     # y_pred = clf.predict_proba(x_test)
 
