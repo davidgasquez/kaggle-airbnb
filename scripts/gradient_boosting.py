@@ -64,12 +64,19 @@ def main():
         missing=None,
         silent=True,
         nthread=-1,
-        seed=42
+        # seed=42
     )
 
     clf.fit(x_train, encoded_y_train)
 
-    y_pred = clf.predict_proba(x_test)
+    preds = xgb.predict_proba(x_train)
+
+    for i in range(5):
+        xgb.set_params(seed = i + 1)
+        xgb.fit(x_train, encoded_y_train)
+        preds += xgb.predict_proba(x_train)
+
+    # y_pred = clf.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
