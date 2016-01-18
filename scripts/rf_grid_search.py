@@ -8,7 +8,6 @@ from sklearn.grid_search import GridSearchCV
 import sys
 sys.path.append('..')
 from utils.metrics import ndcg_scorer
-from utils.multiclassification import CustomOneVsOneClassifier
 
 
 def main():
@@ -42,9 +41,9 @@ def main():
     grid = GridSearchCV(
         rf,
         {
-            'max_depth': [2, 3, 4],
-            'max_features': [None, 10],
-            'n_estimators': [20, 25],
+            'max_depth': [None, 2, 3, 4, 5],
+            'max_features': [None, 'log2', 'auto', 10],
+            'n_estimators': [20, 30, 40, 50],
         },
         cv=5,
         verbose=10,

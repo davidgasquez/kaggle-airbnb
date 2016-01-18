@@ -47,9 +47,9 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    clf = XGBClassifier(
+    xgb = XGBClassifier(
         max_depth=7,
-        learning_rate=0.18,
+        learning_rate=0.16,
         n_estimators=80,
         gamma=0,
         min_child_weight=1,
@@ -67,7 +67,7 @@ def main():
         # seed=42
     )
 
-    clf.fit(x_train, encoded_y_train)
+    xgb.fit(x_train, encoded_y_train)
 
     preds = xgb.predict_proba(x_train)
 
