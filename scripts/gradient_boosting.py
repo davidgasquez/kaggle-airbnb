@@ -69,7 +69,7 @@ def main():
 
     xgb.fit(x_train, encoded_y_train)
     y_pred = xgb.predict_proba(x_test)
-    print 'Fitted', i
+    print 'Fitted 1'
 
     for i in range(5):
         xgb.set_params(seed = i + 1)

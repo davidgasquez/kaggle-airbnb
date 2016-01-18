@@ -71,5 +71,6 @@ def ndcg_score(ground_truth, predictions, k=5):
 
     return np.mean(scores)
 
+
 # NDCG Scorer function
 ndcg_scorer = make_scorer(ndcg_score, needs_proba=True)

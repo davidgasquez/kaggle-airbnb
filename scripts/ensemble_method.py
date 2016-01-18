@@ -66,7 +66,7 @@ def main():
     clf.fit(x_train, encoded_y_train)
 
     y_pred = clf.predict_proba(x_test)
-    print 'Fitted', i
+    print 'Fitted 1'
 
     for i in range(5):
         clf.set_params(seed = i + 1)
