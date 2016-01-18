@@ -50,8 +50,8 @@ def main():
 
     xgb = XGBClassifier(
         max_depth=2,
-        learning_rate=0.2,
-        n_estimators=20,
+        learning_rate=0.3,
+        n_estimators=10,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,

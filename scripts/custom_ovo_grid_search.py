@@ -47,9 +47,9 @@ def main():
     gs_clf = GridSearchCV(
         clf,
         {
-            'estimator__max_depth': [2, 4, 6],
-            'estimator__n_estimators': [4, 6, 8, 10],
-            'estimator__learning_rate': [0.1],
+            'estimator__max_depth': [1, 2, 3],
+            'estimator__n_estimators': [10, 15, 20],
+            'estimator__learning_rate': [0.05, 0.1],
         },
         cv=5,
         verbose=10,
