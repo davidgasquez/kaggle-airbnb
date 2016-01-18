@@ -38,14 +38,13 @@ def main():
         random_state=42
     )
 
-    clf = CustomOneVsOneClassifier(rf)
 
-    gs_clf = GridSearchCV(
-        clf,
+    grid = GridSearchCV(
+        rf,
         {
-            'estimator__max_depth': [2, 3, 4],
-            'estimator__max_features': [None, 10],
-            'estimator__n_estimators': [20, 25],
+            'max_depth': [2, 3, 4],
+            'max_features': [None, 10],
+            'n_estimators': [20, 25],
         },
         cv=5,
         verbose=10,
@@ -53,14 +52,14 @@ def main():
         scoring=ndcg_scorer
     )
 
-    gs_clf.fit(x_train, encoded_y_train)
+    grid.fit(x_train, encoded_y_train)
 
     print
-    print(gs_clf.grid_scores_)
+    print(grid.grid_scores_)
     print
-    print(gs_clf.best_params_)
+    print(grid.best_params_)
     print
-    print(gs_clf.best_score_)
+    print(grid.best_score_)
     print
 
 
