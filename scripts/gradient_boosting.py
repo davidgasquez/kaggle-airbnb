@@ -47,7 +47,7 @@ def main():
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
-    xgb = XGBClassifier(
+    clf = XGBClassifier(
         max_depth=7,
         learning_rate=0.16,
         n_estimators=80,
@@ -67,15 +67,15 @@ def main():
         # seed=42
     )
 
-    xgb.fit(x_train, encoded_y_train)
-    y_pred = xgb.predict_proba(x_test)
+    clf.fit(x_train, encoded_y_train)
+    y_pred = clf.predict_proba(x_test)
     print 'Fitted 1'
 
     for i in range(5):
-        xgb.set_params(seed = i + 1)
-        xgb.fit(x_train, encoded_y_train)
+        clf.set_params(seed=i + 1)
+        clf.fit(x_train, encoded_y_train)
         print 'Fitted', i + 1
-        y_pred += xgb.predict_proba(x_test)
+        y_pred += clf.predict_proba(x_test)
 
     # y_pred = clf.predict_proba(x_test)
 

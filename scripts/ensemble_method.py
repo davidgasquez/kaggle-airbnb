@@ -69,7 +69,7 @@ def main():
     print 'Fitted 1'
 
     for i in range(5):
-        clf.set_params(random_state = i + 1)
+        clf.set_params(random_state=i + 1)
         clf.fit(x_train, encoded_y_train)
         print 'Fitted', i + 1
         y_pred += clf.predict_proba(x_test)

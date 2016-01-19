@@ -37,7 +37,6 @@ def main():
         random_state=42
     )
 
-
     grid = GridSearchCV(
         rf,
         {
