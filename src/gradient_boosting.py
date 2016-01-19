@@ -7,8 +7,6 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from xgboost.sklearn import XGBClassifier
 
-import sys
-sys.path.append('../src')
 from utils.metrics import ndcg_scorer
 
 
