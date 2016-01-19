@@ -23,9 +23,6 @@ def process_holidays(df):
     holidays_dates = holidays.US(years=df['year_account_created'])
 
     for holiday_date, name in holidays_dates.iteritems():
-        # if 'observed' in name:
-        #     pass
-
         # Compute difference in days
         days = (holiday_date - user_date).days
 
