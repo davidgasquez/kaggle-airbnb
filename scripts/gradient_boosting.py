@@ -49,7 +49,7 @@ def main():
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.16,
+        learning_rate=0.18,
         n_estimators=80,
         gamma=0,
         min_child_weight=1,
