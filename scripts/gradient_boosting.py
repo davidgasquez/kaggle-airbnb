@@ -64,20 +64,17 @@ def main():
         missing=None,
         silent=True,
         nthread=-1,
-        # seed=42
+        seed=42
     )
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
-    print 'Fitted 1'
 
-    for i in range(5):
-        clf.set_params(seed=i + 1)
-        clf.fit(x_train, encoded_y_train)
-        print 'Fitted', i + 1
-        y_pred += clf.predict_proba(x_test)
-
-    # y_pred = clf.predict_proba(x_test)
+    # for i in range(10):
+    #     clf.set_params(seed=i + 1)
+    #     clf.fit(x_train, encoded_y_train)
+    #     print 'Fitted', i + 1
+    #     y_pred += clf.predict_proba(x_test)
 
     submission = generate_submission(y_pred, test_users_ids, label_encoder)
 
@@ -86,7 +83,7 @@ def main():
     submission.to_csv('../datasets/submissions/' + name, index=False)
 
     ndcg = cross_val_score(clf, x_train, encoded_y_train,
-                           verbose=10, cv=10, scoring=ndcg_scorer)
+                           verbose=10, cv=20, scoring=ndcg_scorer)
 
     print 'Parameters:', clf.get_params()
     print 'Score:', ndcg.mean()
