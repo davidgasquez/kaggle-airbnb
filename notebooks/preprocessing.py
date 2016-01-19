@@ -7,9 +7,10 @@ from utils.preprocessing import one_hot_encoding
 
 
 def get_weekday(date):
+    """Return the weekday of the given date."""
     return date.weekday()
 
-
+# Load raw data
 path = '../data/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
 test_users = pd.read_csv(path + 'test_users.csv')
