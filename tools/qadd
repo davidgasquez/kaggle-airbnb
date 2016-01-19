@@ -8,8 +8,8 @@ import argparse
 TEMPLATE_SERIAL = """
 #$ -cwd
 #$ -N {job_name}
-#$ -e ~/{errfile}
-#$ -o ~/{logfile}
+#$ -e {errfile}
+#$ -o {logfile}
 #$ -q {queue}
 
 echo "Job started on" `date`
