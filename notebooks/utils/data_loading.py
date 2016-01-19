@@ -23,7 +23,7 @@ def load_users_data(path=DEFAULT_PATH, preprocessed=False):
         train_users = pd.read_csv(path + 'train_users.csv')
         test_users = pd.read_csv(path + 'test_users.csv')
     else:
-        path = '../datasets/processed/'
+        path = '../data/processed/'
         train_users = pd.read_csv(path + 'preprocessed_train_users.csv')
         test_users = pd.read_csv(path + 'preprocessed_test_users.csv')
     return train_users, test_users
