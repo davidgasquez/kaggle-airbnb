@@ -8,11 +8,13 @@ from utils.preprocessing import get_weekday
 from utils.preprocessing import process_user_secs_elapsed
 from utils.preprocessing import process_user_session
 
+raw_data_path = '../data/raw/'
+processed_data_path = '../data/processed/'
+
 # Load raw data
-path = '../data/raw/'
-train_users = pd.read_csv(path + 'train_users.csv')
-test_users = pd.read_csv(path + 'test_users.csv')
-sessions = pd.read_csv(path + 'sessions.csv')
+train_users = pd.read_csv(raw_data_path + 'train_users.csv')
+test_users = pd.read_csv(raw_data_path + 'test_users.csv')
+sessions = pd.read_csv(raw_data_path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -87,9 +89,8 @@ processed_train_users = users.loc[train_users.index]
 processed_test_users = users.loc[test_users.index]
 processed_test_users.drop('country_destination', inplace=True, axis=1)
 
-path = '../data/processed/'
-processed_train_users.to_csv(path + 'train_users_without_encoding.csv')
-processed_test_users.to_csv(path + 'test_users_without_encoding.csv')
+processed_train_users.to_csv(processed_data_path + 'processed_train_users.csv')
+processed_test_users.to_csv(processed_data_path + 'processed_test_users.csv')
 
 drop_list = [
     'date_account_created',
@@ -119,5 +120,5 @@ processed_train_users = users.loc[train_users.index]
 processed_test_users = users.loc[test_users.index]
 processed_test_users.drop('country_destination', inplace=True, axis=1)
 
-processed_train_users.to_csv(path + 'processed_train_users.csv')
-processed_test_users.to_csv(path + 'processed_test_users.csv')
+processed_train_users.to_csv(processed_data_path + 'encoded_train_users.csv')
+processed_test_users.to_csv(processed_data_path + 'encoded_test_users.csv')
