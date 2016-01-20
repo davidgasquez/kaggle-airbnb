@@ -74,6 +74,10 @@ users['day_first_active'] = day_first_active
 
 user_sessions = pd.DataFrame()
 
+from __future__ import division
+num_users = len(sessions['user_id'].unique())
+i = 0
+
 for user in sessions['user_id'].unique():
 
     # Get the user session
@@ -118,6 +122,9 @@ for user in sessions['user_id'].unique():
     if user_session['device_type'].value_counts().sum() is not 0:
         most_used_device = user_session['device_type'].value_counts().index[0]
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
+
+    print i / num_users
+    i = i + 1
 
 user_sessions = user_sessions.groupby('id').sum()
 
