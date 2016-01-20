@@ -76,7 +76,6 @@ Resources
 
 - [Unbalanced Dataset](https://github.com/fmfn/UnbalancedDataset) - Library with
 implementation to handle unbalanced datasets.
-
 - [XGBoost Documentation](https://xgboost.readthedocs.org) - A library that is
 designed, and optimized for boosted (tree) algorithms.
 
