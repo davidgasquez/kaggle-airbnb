@@ -8,7 +8,7 @@ from utils.preprocessing import get_weekday
 from utils.preprocessing import process_user_secs_elapsed
 from utils.preprocessing import process_user_session
 
-
+# Load raw data
 path = '../data/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
 test_users = pd.read_csv(path + 'test_users.csv')
@@ -17,7 +17,7 @@ sessions = pd.read_csv(path + 'sessions.csv')
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
 
-# Drop useless column
+# Drop date_first_booking column (empty since competition's restart)
 users = users.drop('date_first_booking', axis=1)
 
 # Replace NaNs
@@ -28,24 +28,6 @@ sessions.replace('-unknown-', np.nan, inplace=True)
 # Remove weird age values
 users.loc[users['age'] > 100, 'age'] = np.nan
 users.loc[users['age'] < 14, 'age'] = np.nan
-
-# List categorical features
-categorical_features = [
-    'affiliate_channel',
-    'affiliate_provider',
-    'country_destination',
-    'first_affiliate_tracked',
-    'first_browser',
-    'first_device_type',
-    'gender',
-    'language',
-    'signup_app',
-    'signup_method'
-]
-
-# Change categorical features
-for categorical_feature in categorical_features:
-    users[categorical_feature] = users[categorical_feature].astype('category')
 
 # Change type to date
 users['date_account_created'] = pd.to_datetime(users['date_account_created'])
@@ -70,7 +52,7 @@ users['month_first_active'] = month_first_active
 day_first_active = pd.DatetimeIndex(users['date_first_active']).day
 users['day_first_active'] = day_first_active
 
-
+# Process session data
 processed_sessions = Parallel(n_jobs=multiprocessing.cpu_count())(
     delayed(process_user_session)(
         user, sessions.loc[sessions['user_id'] == user])
@@ -78,19 +60,16 @@ processed_sessions = Parallel(n_jobs=multiprocessing.cpu_count())(
 )
 user_sessions = pd.DataFrame(processed_sessions).set_index('id')
 
+# Joint the processed data with each user
 users = users.set_index('id')
 users = pd.concat([users, user_sessions], axis=1)
 
-# phones = ['Opera Phone', 'Blackberry', 'Windows Phone',
-# 'Android App Unknown Phone/Tablet']
-# desktop = ['Mac Desktop', 'Windows Desktop', 'Linux Desktop', 'Chromebook']
-# sessions.device_type.replace(phones, 'Mobile Phone').value_counts()
+# TODO: Classify by dispositive
 
-# # Get the count of general session information
-# user_sessions = sessions.groupby('user_id')
-# general_session_info = user_sessions.count()
-# general_session_info.rename(columns=lambda x: x + '_count', inplace=True)
-# users = pd.concat([users, general_session_info], axis=1)
+# Get the count of general session information
+user_sessions = sessions.groupby('user_id').count()
+user_sessions.rename(columns=lambda x: x + '_count', inplace=True)
+users = pd.concat([users, user_sessions], axis=1)
 
 processed_secs_elapsed = Parallel(n_jobs=multiprocessing.cpu_count())(
     delayed(process_user_secs_elapsed)(user, sessions.loc[
@@ -121,6 +100,11 @@ drop_list = [
 # Drop columns
 users = users.drop(drop_list, axis=1)
 
+# TODO: Try with StandardScaler
+# from sklearn.preprocessing import StandardScaler
+# scaler = StandardScaler()
+# scaler.fit_transform(users)
+
 # Encode categorical features
 categorical_features = [
     'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',
@@ -129,10 +113,6 @@ categorical_features = [
 ]
 
 users = one_hot_encoding(users, categorical_features)
-
-# from sklearn.preprocessing import StandardScaler
-# scaler = StandardScaler()
-# scaler.fit_transform(users)
 
 users.index.name = 'id'
 processed_train_users = users.loc[train_users.index]
