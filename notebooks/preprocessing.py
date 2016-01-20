@@ -12,9 +12,9 @@ def get_weekday(date):
 
 # Load raw data
 path = '../data/raw/'
-train_users = pd.read_csv(path + 'train_users.csv')
-test_users = pd.read_csv(path + 'test_users.csv')
-sessions = pd.read_csv(path + 'sessions.csv')
+train_users = pd.read_csv(path + 'train_users.csv', nrows=200000)
+test_users = pd.read_csv(path + 'test_users.csv', nrows=200000)
+sessions = pd.read_csv(path + 'sessions.csv', nrows=200000)
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -74,10 +74,6 @@ users['day_first_active'] = day_first_active
 
 user_sessions = pd.DataFrame()
 
-from __future__ import division
-num_users = len(sessions['user_id'].unique())
-i = 0
-
 for user in sessions['user_id'].unique():
 
     # Get the user session
@@ -122,9 +118,6 @@ for user in sessions['user_id'].unique():
     if user_session['device_type'].value_counts().sum() is not 0:
         most_used_device = user_session['device_type'].value_counts().index[0]
         users.loc[users['id'] == user, 'most_used_device'] = most_used_device
-
-    print i / num_users
-    i = i + 1
 
 user_sessions = user_sessions.groupby('id').sum()
 

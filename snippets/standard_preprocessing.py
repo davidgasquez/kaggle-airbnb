@@ -4,7 +4,7 @@ import sys
 sys.path.append('..')
 from utils.preprocessing import one_hot_encoding
 
-path = '../datasets/raw/'
+path = '../data/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
 test_users = pd.read_csv(path + 'test_users.csv')
 sessions = pd.read_csv(path + 'sessions.csv')
@@ -55,7 +55,7 @@ users['weekday_account_created'] = pd.Series(weekdays)
 
 # Compute weekday_first_active weekday
 weekdays = []
-for date in users.date_account_created:
+for date in users.date_first_active:
     weekdays.append(date.weekday())
 users['weekday_first_active'] = pd.Series(weekdays)
 
@@ -203,7 +203,7 @@ processed_train_users = users.loc[train_users.index]
 processed_test_users = users.loc[test_users.index]
 processed_test_users.drop('country_destination', inplace=True, axis=1)
 
-path = '../datasets/processed/'
+path = '../data/processed/'
 
 processed_train_users.to_csv(path + 'train_users_without_encoding.csv')
 processed_test_users.to_csv(path + 'test_users_without_encoding.csv')
