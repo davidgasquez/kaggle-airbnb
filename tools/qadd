@@ -22,7 +22,7 @@ echo "Job ended on" `date`
 
 
 def send_code(python_file, job_name=None, cleanup=True, queue='larga'):
-    """Puts a Python script into an OGE queue.
+    """Put a Python script into an OGE queue.
 
     Parameters
     ----------
@@ -35,7 +35,6 @@ def send_code(python_file, job_name=None, cleanup=True, queue='larga'):
     queue: str
         Name of the queue to append the job.
     """
-
     script = 'python -u ' + python_file
 
     logfile = '$JOB_NAME_$JOB_ID.out'
