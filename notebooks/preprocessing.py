@@ -12,9 +12,9 @@ def get_weekday(date):
 
 # Load raw data
 path = '../data/raw/'
-train_users = pd.read_csv(path + 'train_users.csv', nrows=200000)
-test_users = pd.read_csv(path + 'test_users.csv', nrows=200000)
-sessions = pd.read_csv(path + 'sessions.csv', nrows=200000)
+train_users = pd.read_csv(path + 'train_users.csv')
+test_users = pd.read_csv(path + 'test_users.csv')
+sessions = pd.read_csv(path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
