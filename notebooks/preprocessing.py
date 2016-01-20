@@ -4,76 +4,15 @@ from joblib import Parallel, delayed
 import multiprocessing
 
 from utils.preprocessing import one_hot_encoding
+from utils.preprocessing import get_weekday
+from utils.preprocessing import process_user_secs_elapsed
+from utils.preprocessing import process_user_session
 
-
-def get_weekday(date):
-    return date.weekday()
-
-
-def summarize_secs_elapsed(user, secs_elapsed_by_user):
-    user_secs_elapsed = pd.Series()
-    user_secs_elapsed['id'] = user
-
-    user_secs_elapsed['secs_elapsed_sum'] = secs_elapsed_by_user.sum()
-    user_secs_elapsed['secs_elapsed_mean'] = secs_elapsed_by_user.mean()
-    user_secs_elapsed['secs_elapsed_min'] = secs_elapsed_by_user.min()
-    user_secs_elapsed['secs_elapsed_max'] = secs_elapsed_by_user.max()
-    user_secs_elapsed[
-        'secs_elapsed_fitst_quantile'] = secs_elapsed_by_user.quantile(0.25)
-    user_secs_elapsed[
-        'secs_elapsed_third_quantile'] = secs_elapsed_by_user.quantile(0.75)
-    user_secs_elapsed['secs_elapsed_median'] = secs_elapsed_by_user.median()
-    user_secs_elapsed['secs_elapsed_std'] = secs_elapsed_by_user.std()
-    user_secs_elapsed['secs_elapsed_var'] = secs_elapsed_by_user.var()
-    user_secs_elapsed['secs_elapsed_skew'] = secs_elapsed_by_user.skew()
-
-    return user_secs_elapsed
-
-
-def process_user_with_session(user, user_session):
-    # Get the user session
-    user_session_data = pd.Series()
-
-    # Length of the session
-    user_session_data['session_lenght'] = len(user_session)
-    user_session_data['id'] = user
-
-    action = user_session.groupby('action')
-    action_secs_elapsed = action.secs_elapsed.sum()
-    action_secs_elapsed.rename(lambda x: x + '_secs_elapsed', inplace=True)
-
-    user_session_data = user_session_data.append(action_secs_elapsed)
-
-    action_type = user_session.groupby('action_type')
-    action_type_secs_elapsed = action_type.secs_elapsed.sum()
-    action_type_secs_elapsed.rename(
-        lambda x: x + '_secs_elapsed', inplace=True)
-
-    user_session_data = user_session_data.append(action_type_secs_elapsed)
-
-    action_detail = user_session.groupby('action_detail')
-    action_detail_secs_elapsed = action_detail.secs_elapsed.sum()
-    action_detail_secs_elapsed.rename(
-        lambda x: x + '_secs_elapsed', inplace=True)
-
-    user_session_data = user_session_data.append(action_detail_secs_elapsed)
-
-    device_type = user_session.groupby('device_type')
-    device_type_secs_elapsed = device_type.secs_elapsed.sum()
-    device_type_secs_elapsed.rename(
-        lambda x: x + '_secs_elapsed', inplace=True)
-
-    user_session_data = user_session_data.append(device_type_secs_elapsed)
-
-    # Get the most used device
-    user_session_data['most_used_device'] = user_session['device_type'].max()
-
-    return user_session_data.groupby(level=0).sum()
 
 path = '../data/raw/'
 train_users = pd.read_csv(path + 'train_users.csv')
 test_users = pd.read_csv(path + 'test_users.csv')
-sessions = pd.read_csv(path + 'sessions.csv', nrows=10000)
+sessions = pd.read_csv(path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -133,7 +72,7 @@ users['day_first_active'] = day_first_active
 
 
 processed_sessions = Parallel(n_jobs=multiprocessing.cpu_count())(
-    delayed(process_user_with_session)(
+    delayed(process_user_session)(
         user, sessions.loc[sessions['user_id'] == user])
     for user in sessions['user_id'].unique()
 )
@@ -154,7 +93,7 @@ users = pd.concat([users, user_sessions], axis=1)
 # users = pd.concat([users, general_session_info], axis=1)
 
 processed_secs_elapsed = Parallel(n_jobs=multiprocessing.cpu_count())(
-    delayed(summarize_secs_elapsed)(user, sessions.loc[
+    delayed(process_user_secs_elapsed)(user, sessions.loc[
         sessions['user_id'] == user, 'secs_elapsed'])
     for user in sessions['user_id'].unique()
 )

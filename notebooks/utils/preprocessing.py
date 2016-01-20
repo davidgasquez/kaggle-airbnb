@@ -24,3 +24,75 @@ def one_hot_encoding(data, categorical_features):
         data = pd.concat((data, data_dummy), axis=1)
 
     return data
+
+
+def get_weekday(date):
+    """Compute the weekday of the given date."""
+    return date.weekday()
+
+
+def process_user_secs_elapsed(user, user_secs):
+    """Compute statistical values of the elapsed seconds of a given user.
+
+    Parameters
+    ----------
+    user : str
+        User ID.
+    user_secs : array
+        Seconds elapsed by each action.
+
+    Returns
+    -------
+    user_processed_secs : Series
+        Returns a pandas Series with the statistical values.
+    """
+    user_processed_secs = pd.Series()
+    user_processed_secs['id'] = user
+
+    user_processed_secs['secs_elapsed_sum'] = user_secs.sum()
+    user_processed_secs['secs_elapsed_mean'] = user_secs.mean()
+    user_processed_secs['secs_elapsed_min'] = user_secs.min()
+    user_processed_secs['secs_elapsed_max'] = user_secs.max()
+    user_processed_secs['secs_elapsed_quantile_1'] = user_secs.quantile(0.25)
+    user_processed_secs['secs_elapsed_quantile_3'] = user_secs.quantile(0.75)
+    user_processed_secs['secs_elapsed_median'] = user_secs.median()
+    user_processed_secs['secs_elapsed_std'] = user_secs.std()
+    user_processed_secs['secs_elapsed_var'] = user_secs.var()
+    user_processed_secs['secs_elapsed_skew'] = user_secs.skew()
+
+    return user_processed_secs
+
+
+def process_user_session(user, user_session):
+    """Count the elapsed seconds per action.
+
+    Parameters
+    ----------
+    user : str
+        User ID.
+    user_session : Pandas DataFrame
+        Session of the user.
+
+    Returns
+    -------
+    user_session_data : Series
+        Returns a pandas Series with the elapsed second per each action.
+    """
+    # Get the user session
+    user_session_data = pd.Series()
+
+    # Length of the session
+    user_session_data['session_lenght'] = len(user_session)
+    user_session_data['id'] = user
+
+    suffix = '_secs_elapsed'
+
+    for column in ['action', 'action_type', 'action_detail', 'device_type']:
+        column_data = user_session.groupby(column).secs_elapsed.sum()
+        column_data.rename(lambda x: x + suffix, inplace=True)
+        user_session_data = user_session_data.append(column_data)
+
+    # Get the most used device
+    user_session_data['most_used_device'] = user_session['device_type'].max()
+
+    return user_session_data.groupby(level=0).sum()
