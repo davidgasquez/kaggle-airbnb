@@ -7,14 +7,12 @@ import xgboost
 from sklearn.preprocessing import LabelEncoder
 from sklearn.grid_search import GridSearchCV
 
-import sys
-sys.path.append('..')
 from utils.metrics import ndcg_scorer
 
 
 def main():
-    path = '../datasets/processed/'
-    train_users = pd.read_csv(path + 'processed_train_users.csv')
+    path = '../data/processed/'
+    train_users = pd.read_csv(path + '_encoded_train_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop('country_destination', axis=1, inplace=True)
@@ -45,8 +43,8 @@ def main():
     clf = GridSearchCV(
         xgb_model,
         {
-            'max_depth': [4, 6],
-            'n_estimators': [40, 50],
+            'max_depth': [4, 6, 8],
+            'n_estimators': [40, 50, 60],
             'learning_rate': [0.15, 0.2],
         },
         cv=10,
@@ -57,8 +55,6 @@ def main():
 
     clf.fit(x_train, encoded_y_train)
 
-    print
-    print(clf.grid_scores_)
     print
     print(clf.best_params_)
     print
