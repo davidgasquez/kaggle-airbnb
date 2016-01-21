@@ -46,8 +46,8 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     clf = XGBClassifier(
-        max_depth=15,
-        learning_rate=0.2,
+        max_depth=8,
+        learning_rate=0.3,
         n_estimators=55,
         gamma=0,
         min_child_weight=1,
