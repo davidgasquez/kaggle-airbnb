@@ -55,7 +55,7 @@ global sessions
 # Load raw data
 train_users = pd.read_csv(raw_data_path + 'train_users.csv')
 test_users = pd.read_csv(raw_data_path + 'test_users.csv')
-sessions = pd.read_csv(raw_data_path + 'sessions.csv', nrows=10000)
+sessions = pd.read_csv(raw_data_path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
