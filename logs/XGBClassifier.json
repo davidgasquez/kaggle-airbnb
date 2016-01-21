@@ -19,7 +19,8 @@
         "nthread": -1,
         "seed": 42
     },
-    "Score": 0.87964
+    "Cross Validation Score": TODO,
+    "Leaderboard Score": 0.87964
 },
 {
     "ID": 75580,
@@ -42,6 +43,7 @@
         "nthread": -1,
         "seed": 42
     },
+    "Cross Validation Score": TODO,
     "Score": 0.87969
 },
 {
@@ -65,6 +67,7 @@
         "nthread": -1,
         "seed": 42
     },
+    "Cross Validation Score": TODO,
     "Score": 0.87591
 },
 {
@@ -88,5 +91,6 @@
         "nthread": -1,
         "seed": 42
     },
+    "Cross Validation Score": TODO,
     "Score": 0.87758
 },

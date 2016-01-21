@@ -17,6 +17,7 @@ echo
 
 {script}
 
+echo
 echo "Job ended on" `date`
 """
 
