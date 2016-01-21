@@ -46,7 +46,7 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     clf = XGBClassifier(
-        max_depth=8,
+        max_depth=15,
         learning_rate=0.2,
         n_estimators=55,
         gamma=0,
@@ -75,7 +75,7 @@ def main():
     submission.to_csv('../data/submissions/' + name, index=False)
 
     ndcg = cross_val_score(clf, x_train, encoded_y_train,
-                           verbose=10, cv=20, scoring=ndcg_scorer)
+                           verbose=10, cv=10, scoring=ndcg_scorer)
 
     print 'Parameters:', clf.get_params()
     print 'Score:', ndcg.mean()
