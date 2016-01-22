@@ -67,7 +67,7 @@
         "nthread": -1,
         "seed": 42
     },
-    "Cross Validation Score": TODO,
+    "Cross Validation Score": 0.82750,
     "Score": 0.87591
 },
 {
