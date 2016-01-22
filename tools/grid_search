@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+import argparse
+from sklearn.grid_search import ParameterGrid
+
+
+TEMPLATE_SERIAL = """
+#$ -cwd
+#$ -N Test
+#$ -e {errfile}
+#$ -o {logfile}
+#$ -q {queue}
+
+echo "Job started on" `date`
+echo
+
+{script}
+
+echo
+echo "Job ended on" `date`
+"""
+
+
+def send_code(python_file, queue='larga', **gb_params):
+    """Put a Python script into an OGE queue.
+
+    Parameters
+    ----------
+    python_file : str
+        Script containing the code to run.
+    job_name : str
+        Name of the job.
+    cleanup : Boolean
+        Indicates to remove the temporary file.
+    queue: str
+        Name of the queue to append the job.
+    """
+
+    script = 'python -u ' + python_file
+    parameters = ''
+    for key, value in gb_params.iteritems():
+        parameters += ' --' + key + ' ' + str(value)
+    print script + parameters
+
+    # parameters = '--max_depth %s', gb_params['max_depth']
+    logfile = '$JOB_NAME_$JOB_ID.out'
+    errfile = '$JOB_NAME_$JOB_ID.error'
+
+    # Fill template
+    template = TEMPLATE_SERIAL.format(
+        script=script,
+        logfile=logfile,
+        errfile=errfile,
+        queue=queue
+    )
+
+    # Write temporary file
+    open('job.qsub', 'wb').write(template)
+
+    # Make the call to qsub and remove temporary file
+    try:
+        subprocess.call('qsub < job.qsub', shell=True)
+    finally:
+        os.remove('job.qsub')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('script', help='Script name')
+    parser.add_argument('-q', '--queue', default='larga', help='Queue to add')
+    parser.add_argument('-d', '--max_depth', default=8, type=int)
+    parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
+    parser.add_argument('-n', '--n_estimators', default=30, type=int)
+    args = parser.parse_args()
+
+    param_grid = {
+        'max_depth': [1, 2],
+        'learning_rate': [0.1, 0.5],
+        'n_estimators': [10, 20]
+    }
+
+    grid = ParameterGrid(param_grid)
+
+    for params in grid:
+        send_code(args.script, queue=args.queue, **params)
