@@ -70,15 +70,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('script', help='Script name')
     parser.add_argument('-q', '--queue', default='larga', help='Queue to add')
-    parser.add_argument('-d', '--max_depth', default=8, type=int)
-    parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
-    parser.add_argument('-n', '--n_estimators', default=30, type=int)
+    parser.add_argument('-d', '--max_depth', nargs='+', type=int)
+    parser.add_argument('-lr', '--learning_rate', nargs='+', type=int)
+    parser.add_argument('-n', '--n_estimators', nargs='+', type=int)
     args = parser.parse_args()
 
     param_grid = {
-        'max_depth': [1, 2],
-        'learning_rate': [0.1, 0.5],
-        'n_estimators': [10, 20]
+        'max_depth': args.max_depth,
+        'learning_rate': args.learning_rate,
+        'n_estimators': args.n_estimators
     }
 
     grid = ParameterGrid(param_grid)
