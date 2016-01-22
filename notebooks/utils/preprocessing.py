@@ -31,6 +31,11 @@ def get_weekday(date):
     return date.weekday()
 
 
+def process_secs_elapsed(user_session):
+    """Wrapper for process_user_secs_elapsed."""
+    return process_user_secs_elapsed(*user_session)
+
+
 def process_user_secs_elapsed(user, sessions):
     """Compute statistical values of the elapsed seconds of a given user.
 
@@ -62,6 +67,11 @@ def process_user_secs_elapsed(user, sessions):
     user_processed_secs['secs_elapsed_skew'] = user_secs.skew()
 
     return user_processed_secs
+
+
+def process_sessions(user_session):
+    """Wrapper for process_user_session."""
+    return process_user_session(*user_session)
 
 
 def process_user_session(user, sessions):
