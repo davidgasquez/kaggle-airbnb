@@ -19,7 +19,7 @@
         "nthread": -1,
         "seed": 42
     },
-    "Cross Validation Score": TODO,
+    "Cross Validation Score": 0.83062,
     "Leaderboard Score": 0.87964
 },
 {
@@ -43,7 +43,7 @@
         "nthread": -1,
         "seed": 42
     },
-    "Cross Validation Score": TODO,
+    "Cross Validation Score": 0.62165,
     "Score": 0.87969
 },
 {
@@ -91,6 +91,6 @@
         "nthread": -1,
         "seed": 42
     },
-    "Cross Validation Score": TODO,
+    "Cross Validation Score": 0.82998,
     "Score": 0.87758
 },
