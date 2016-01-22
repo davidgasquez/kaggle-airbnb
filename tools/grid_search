@@ -16,7 +16,7 @@ TEMPLATE_SERIAL = """
 echo "Job started on" `date`
 echo
 
-{script} >> grid_search.output
+{script} >> ~/grid_search.output
 
 echo
 echo "Job ended on" `date`
