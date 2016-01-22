@@ -31,7 +31,7 @@ def get_weekday(date):
     return date.weekday()
 
 
-def process_user_secs_elapsed(user, user_secs):
+def process_user_secs_elapsed(user, sessions):
     """Compute statistical values of the elapsed seconds of a given user.
 
     Parameters
@@ -46,6 +46,7 @@ def process_user_secs_elapsed(user, user_secs):
     user_processed_secs : Series
         Returns a pandas Series with the statistical values.
     """
+    user_secs = sessions.loc[sessions['user_id'] == user, 'secs_elapsed']
     user_processed_secs = pd.Series()
     user_processed_secs['id'] = user
 
@@ -63,7 +64,7 @@ def process_user_secs_elapsed(user, user_secs):
     return user_processed_secs
 
 
-def process_user_session(user, user_session):
+def process_user_session(user, sessions):
     """Count the elapsed seconds per action.
 
     Parameters
@@ -79,6 +80,7 @@ def process_user_session(user, user_session):
         Returns a pandas Series with the elapsed second per each action.
     """
     # Get the user session
+    user_session = sessions.loc[sessions['user_id'] == user]
     user_session_data = pd.Series()
 
     # Length of the session
