@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""Utility to run a Grid Search over an Open Grid Scheduler/Grid Engine queue.
+
+Usage: grid_search script.py -lr [learning_rate] ...
+"""
 
 import os
 import subprocess
@@ -8,15 +12,15 @@ from sklearn.grid_search import ParameterGrid
 
 TEMPLATE_SERIAL = """
 #$ -cwd
-#$ -N gs
-#$ -e /home/dgasquez/null/{errfile}
-#$ -o /home/dgasquez/null/{logfile}
+#$ -N {job_name}
+#$ -e /home/dgasquez/grid_search/{errfile}
+#$ -o /home/dgasquez/grid_search/{logfile}
 #$ -q {queue}
-{script}
+python -u {script} {flags}
 """
 
 
-def send_code(python_file, queue='larga', **parameters):
+def send_code(python_file, queue='larga', suffix=None, **parameter_grid):
     """Put a Python script into an OGE queue.
 
     Parameters
@@ -30,23 +34,27 @@ def send_code(python_file, queue='larga', **parameters):
     queue: str
         Name of the queue to append the job.
     """
-
-    script = 'python -u ' + python_file
-    flags = ''
-    for key, value in parameters.iteritems():
-        flags += ' --' + key + ' ' + str(value)
-
-    # parameters = '--max_depth %s', parameters['max_depth']
     logfile = '$JOB_NAME_$JOB_ID.out'
     errfile = '$JOB_NAME_$JOB_ID.error'
 
+    job_name = python_file.split('.')[0]
+
+    if suffix is not None:
+        job_name = job_name + '(' + str(suffix) + ')'
+
+    # Process flags
+    flags = ''
+    for key, value in parameter_grid.iteritems():
+        flags += '--' + key + ' ' + str(value) + ' '
+
     # Fill template
     template = TEMPLATE_SERIAL.format(
-        script=script,
+        script=python_file,
+        flags=flags,
         logfile=logfile,
         errfile=errfile,
-        queue=queue
-    )
+        queue=queue,
+        job_name=job_name)
 
     # Write temporary file
     open('job.qsub', 'wb').write(template)
@@ -77,5 +85,5 @@ if __name__ == '__main__':
 
     grid = ParameterGrid(param_grid)
 
-    for params in grid:
-        send_code(args.script, queue=args.queue, **params)
+    for i, params in enumerate(grid):
+        send_code(args.script, queue=args.queue, suffix=i + 1, **params)
