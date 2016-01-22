@@ -44,7 +44,7 @@
         "seed": 42
     },
     "Cross Validation Score": 0.62165,
-    "Score": 0.87969
+    "Leaderboard Score": 0.87969
 },
 {
     "ID": 75585,
@@ -68,7 +68,7 @@
         "seed": 42
     },
     "Cross Validation Score": 0.82750,
-    "Score": 0.87591
+    "Leaderboard Score": 0.87591
 },
 {
     "ID": 75586,
@@ -92,5 +92,5 @@
         "seed": 42
     },
     "Cross Validation Score": 0.82998,
-    "Score": 0.87758
+    "Leaderboard Score": 0.87758
 },
