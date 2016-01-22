@@ -12,14 +12,7 @@ TEMPLATE_SERIAL = """
 #$ -e /home/dgasquez/null/{errfile}
 #$ -o /home/dgasquez/null/{logfile}
 #$ -q {queue}
-
-echo "Job started on" `date`
-echo
-
 {script}
-
-echo
-echo "Job ended on" `date`
 """
 
 
