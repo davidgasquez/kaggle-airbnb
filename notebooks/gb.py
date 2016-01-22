@@ -18,7 +18,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = '../data/processed/'
-    train_users = pd.read_csv(path + '_encoded_train_users.csv', nrows=10000)
+    train_users = pd.read_csv(path + '_encoded_train_users.csv')
 
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
