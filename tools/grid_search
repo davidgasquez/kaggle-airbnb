@@ -9,8 +9,8 @@ from sklearn.grid_search import ParameterGrid
 TEMPLATE_SERIAL = """
 #$ -cwd
 #$ -N gs
-#$ -e {errfile}
-#$ -o {logfile}
+#$ -e /dev/null/{errfile}
+#$ -o /dev/null/{logfile}
 #$ -q {queue}
 
 echo "Job started on" `date`
