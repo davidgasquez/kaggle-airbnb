@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+"""Utility to add Python scripts into an Open Grid Scheduler/Grid Engine queue.
+
+Usage: script.py
+
+This describes the script.
+"""
 
 import os
 import subprocess
@@ -12,13 +18,13 @@ TEMPLATE_SERIAL = """
 #$ -o {logfile}
 #$ -q {queue}
 
-echo "Job started on" `date`
-echo "-------------------------------------------"
+echo "Job started on" `date +%Y-%m-%d' '%H:%M:%S`
+echo "----------------------------------"
 
-{script}
+python -u {script}
 
-echo "-----------------------------------------"
-echo "Job ended on" `date`
+echo "--------------------------------"
+echo "Job ended on" `date +%Y-%m-%d' '%H:%M:%S`
 """
 
 
@@ -36,8 +42,6 @@ def send_code(python_file, job_name=None, cleanup=True, queue='larga'):
     queue: str
         Name of the queue to append the job.
     """
-    script = 'python -u ' + python_file
-
     logfile = '$JOB_NAME_$JOB_ID.out'
     errfile = '$JOB_NAME_$JOB_ID.error'
 
@@ -47,7 +51,7 @@ def send_code(python_file, job_name=None, cleanup=True, queue='larga'):
 
     # Fill template
     template = TEMPLATE_SERIAL.format(
-        script=script, job_name=job_name,
+        script_name=python_file, job_name=job_name,
         logfile=logfile, errfile=errfile, queue=queue
     )
 
