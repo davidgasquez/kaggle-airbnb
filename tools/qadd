@@ -13,11 +13,11 @@ TEMPLATE_SERIAL = """
 #$ -q {queue}
 
 echo "Job started on" `date`
-echo
+echo "-------------------------------------------"
 
 {script}
 
-echo
+echo "-----------------------------------------"
 echo "Job ended on" `date`
 """
 
