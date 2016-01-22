@@ -42,7 +42,6 @@ def send_code(python_file, queue='larga', **parameters):
     flags = ''
     for key, value in parameters.iteritems():
         flags += ' --' + key + ' ' + str(value)
-    print script + flags
 
     # parameters = '--max_depth %s', parameters['max_depth']
     logfile = '$JOB_NAME_$JOB_ID.out'
