@@ -5,6 +5,8 @@ import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.feature_selection import SelectFromModel
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
@@ -43,9 +45,9 @@ def main():
     encoded_y_train = label_encoder.fit_transform(y_train)
 
     clf = XGBClassifier(
-        max_depth=8,
-        learning_rate=0.3,
-        n_estimators=55,
+        max_depth=7,
+        learning_rate=0.18,
+        n_estimators=80,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -61,6 +63,10 @@ def main():
         nthread=-1,
         seed=42
     )
+
+    model = SelectFromModel(ExtraTreesClassifier())
+    model.fit(x_train, encoded_y_train)
+    x_train = model.transform(x_train)
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
