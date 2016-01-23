@@ -12,8 +12,6 @@ from utils.metrics import ndcg_scorer
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('-p', '--max_depth', default=8, type=int)
     parser.add_argument('-d', '--max_depth', default=8, type=int)
     parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
