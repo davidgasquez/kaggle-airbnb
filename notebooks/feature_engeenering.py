@@ -31,6 +31,7 @@ def process_user_actions(user):
 
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
+        # TODO: Normalize?
         column_data = user_session[column].value_counts()
         column_data.index = column_data.index + '_count'
         user_session_data = user_session_data.append(column_data)
@@ -62,7 +63,7 @@ def process_user_secs_elapsed(user):
     user_processed_secs = pd.Series()
     user_processed_secs['id'] = user
 
-    # Some interesting values
+    # TODO: Add more values
     user_processed_secs['secs_elapsed_sum'] = user_secs.sum()
     user_processed_secs['secs_elapsed_mean'] = user_secs.mean()
     user_processed_secs['secs_elapsed_min'] = user_secs.min()
