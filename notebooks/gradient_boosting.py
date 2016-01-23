@@ -4,10 +4,7 @@ import pandas as pd
 import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
-from sklearn.cross_validation import cross_val_score
 from xgboost.sklearn import XGBClassifier
-
-from utils.metrics import ndcg_scorer
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
@@ -73,12 +70,6 @@ def main():
     date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
     name = __file__.split('.')[0] + '_' + str(date) + '.csv'
     submission.to_csv('../data/submissions/' + name, index=False)
-
-    ndcg = cross_val_score(clf, x_train, encoded_y_train,
-                           verbose=10, cv=10, scoring=ndcg_scorer)
-
-    print 'Parameters:', clf.get_params()
-    print 'Score:', ndcg.mean()
 
 
 if __name__ == '__main__':
