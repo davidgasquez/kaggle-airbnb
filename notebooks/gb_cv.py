@@ -12,13 +12,15 @@ from utils.metrics import ndcg_scorer
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('-p', '--max_depth', default=8, type=int)
     parser.add_argument('-d', '--max_depth', default=8, type=int)
     parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
     args = parser.parse_args()
 
     path = '../data/processed/'
-    train_users = pd.read_csv(path + '_encoded_train_users.csv')
+    train_users = pd.read_csv(path + 'processed_train_users.csv')
 
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
