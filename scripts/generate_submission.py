@@ -19,8 +19,13 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
         sorted_countries = np.argsort(y_pred[i])[::-1]
         cts += label_encoder.inverse_transform(sorted_countries)[:5].tolist()
 
-    sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id', 'country'])
-    return sub
+    id_stacks = np.column_stack((ids, cts))
+    submission = pd.DataFrame(id_stacks, columns=['id', 'country'])
+
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
+    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
+
+    return submission.to_csv('../data/submissions/' + name, index=False)
 
 
 def main():
@@ -29,20 +34,16 @@ def main():
     test_users = pd.read_csv(path + '_encoded_test_users.csv')
 
     y_train = train_users['country_destination']
-    train_users.drop('country_destination', axis=1, inplace=True)
-    train_users.drop('id', axis=1, inplace=True)
+    train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
     train_users = train_users.fillna(-1)
-
     x_train = train_users.values
+    label_encoder = LabelEncoder()
+    encoded_y_train = label_encoder.fit_transform(y_train)
 
     test_users_ids = test_users['id']
     test_users.drop('id', axis=1, inplace=True)
     test_users = test_users.fillna(-1)
-
     x_test = test_users.values
-
-    label_encoder = LabelEncoder()
-    encoded_y_train = label_encoder.fit_transform(y_train)
 
     clf = XGBClassifier(
         max_depth=7,
@@ -71,11 +72,7 @@ def main():
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    submission = generate_submission(y_pred, test_users_ids, label_encoder)
-
-    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
-    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
-    submission.to_csv('../data/submissions/' + name, index=False)
+    generate_submission(y_pred, test_users_ids, label_encoder)
 
 
 if __name__ == '__main__':
