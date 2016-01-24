@@ -8,10 +8,30 @@ from __future__ import division
 import numpy as np
 
 from sklearn.multiclass import OneVsOneClassifier
-from sklearn.multiclass import _fit_binary
+from sklearn.multiclass import _fit_binary, check_is_fitted
+from sklearn.multiclass import _ovr_decision_function, _predict_binary
 from sklearn.externals.joblib import Parallel, delayed
 from unbalanced_dataset import SMOTE
 from unbalanced_dataset import SMOTEENN
+
+
+def _confidence_matrix(confidences, n_classes):
+    """Create a probability matrix of confidences."""
+    confidence_matrix = np.zeros((n_classes, n_classes))
+    # TODO
+    return confidence_matrix
+
+
+def _sample_values(X, y, method=None, ratio=1, verbose=False):
+    """Performs any kind of sampling(over and under) with X and y."""
+    if method == 'SMOTE':
+        sampler = SMOTE(ratio=ratio, verbose=verbose)
+
+    if method == 'SMOTEENN':
+        ratio = ratio * 0.3
+        sampler = SMOTEENN(ratio=ratio, verbose=verbose)
+
+    return sampler.fit_transform(X, y)
 
 
 def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
@@ -29,16 +49,9 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     if sampling:
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
-
-        if sampling == 'SMOTE':
-            ratio = abs(ones - zeros) / min(ones, zeros)
-            smote = SMOTE(ratio=ratio, verbose=verbose)
-
-        if sampling == 'SMOTEENN':
-            ratio = (abs(ones - zeros) / min(ones, zeros)) * 0.3
-            smote = SMOTEENN(ratio=ratio, verbose=verbose)
-
-        X_values, y_values = smote.fit_transform(X_values, y_values)
+        ratio = abs(ones - zeros) / min(ones, zeros)
+        X_values, y_values = _sample_values(
+            X_values, y_values, method=sampling, ratio=ratio)
 
     return _fit_binary(estimator, X_values, y_values, classes=[i, j])
 
@@ -59,7 +72,8 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         Array containing labels.
     """
 
-    def __init__(self, estimator, n_jobs=1, sampling=None, verbose=False):
+    def __init__(self, estimator, n_jobs=1, sampling=None,
+                 strategy='vote', verbose=False):
         """Init method.
 
         Parameters
@@ -80,6 +94,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         self.n_jobs = n_jobs
         self.sampling = sampling
         self.verbose = verbose
+        self.strategy = strategy
 
     def predict_proba(self, X):
         """Predict class probabilities for X.
@@ -97,7 +112,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             such arrays if n_outputs > 1.
             The class probabilities of the input samples.
         """
-        return super(CustomOneVsOneClassifier, self).decision_function(X)
+        return self.decision_function(X)
 
     def fit(self, X, y):
         """Fit underlying estimators.
@@ -113,6 +128,19 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         -------
         self
         """
+
+        valid_strategies = ('vote', 'weighted_vote',
+                            'dynamic_vote', 'relative_competence')
+        if self.strategy not in valid_strategies:
+            raise ValueError('Strategy %s is not valid. '
+                             'Allowed values are: vote, weighted_vote,'
+                             ' dynamic_vote and relative_competence.'
+                             % (self.strategy))
+
+        if self.sampling not in ('SMOTE', 'SMOTEENN', None):
+            raise ValueError('Sampling %s is not valid. '
+                             'Allowed values are: SMOTE, SMOTEENN.'
+                             % (self.sampling))
         y = np.asarray(y)
 
         self.classes_ = np.unique(y)
@@ -125,3 +153,44 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             ) for i in range(n_classes) for j in range(i + 1, n_classes))
 
         return self
+
+    def decision_function(self, X):
+        """Decision function for the CustomOneVsOneClassifier.
+
+        By default, the decision values for the samples are computed by adding
+        the normalized sum of pair-wise classification confidence levels to the
+        votes in order to disambiguate between the decision values when the
+        votes for all the classes are equal leading to a tie.
+
+        Parameters
+        ----------
+        X : array-like, shape = [n_samples, n_features]
+
+        Returns
+        -------
+        Y : array-like, shape = [n_samples, n_classes]
+        """
+        check_is_fitted(self, 'estimators_')
+
+        predictions = np.vstack([est.predict(X) for est in self.estimators_]).T
+        confidences = np.vstack([_predict_binary(est, X)
+                                 for est in self.estimators_]).T
+
+        if self.strategy == 'weighted_vote':
+            # Compute matrix for each confidence
+            # Flatten confidences in axis 1 with sum
+            # return confidences_sum
+            raise NotImplementedError(
+                'Strategy weighted_vote not implemented.')
+
+        elif self.strategy == 'dynamic_vote':
+            # _dinamic_ovo(score_matrix, X, y)
+            raise NotImplementedError('Strategy dynamic_vote not implemented.')
+
+        elif self.strategy == 'relative_competence':
+            raise NotImplementedError(
+                'Strategy relative_competence not implemented.')
+
+        elif self.strategy == 'vote':
+            return _ovr_decision_function(predictions, confidences,
+                                          len(self.classes_))
