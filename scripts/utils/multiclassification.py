@@ -11,8 +11,8 @@ from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import _fit_binary, check_is_fitted
 from sklearn.multiclass import _ovr_decision_function, _predict_binary
 from sklearn.externals.joblib import Parallel, delayed
-from unbalanced_dataset import SMOTE
-from unbalanced_dataset import SMOTEENN
+from unbalanced_dataset import SMOTE, SMOTEENN, OverSampler
+from unbalanced_dataset import UnderSampler, TomekLinks
 
 
 def _score_matrix(confidences, n_classes):
@@ -35,12 +35,23 @@ def _score_matrix(confidences, n_classes):
 
 def _sample_values(X, y, method=None, ratio=1, verbose=False):
     """Performs any kind of sampling(over and under) with X and y."""
+
+    # TODO: Add kwargs
     if method == 'SMOTE':
         sampler = SMOTE(ratio=ratio, verbose=verbose)
 
-    if method == 'SMOTEENN':
+    elif method == 'SMOTEENN':
         ratio = ratio * 0.3
         sampler = SMOTEENN(ratio=ratio, verbose=verbose)
+
+    elif method == 'random_over_sample':
+        sampler = OverSampler(ratio=ratio, verbose=verbose)
+
+    elif method == 'random_under_sample':
+        sampler = UnderSampler(verbose=verbose)
+
+    elif method == 'random_over_sample':
+        sampler = TomekLinks(ratio=ratio, verbose=verbose)
 
     return sampler.fit_transform(X, y)
 
@@ -148,12 +159,16 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
                              ' dynamic_vote and relative_competence.'
                              % (self.strategy))
 
-        if self.sampling not in ('SMOTE', 'SMOTEENN', None):
+        if self.sampling not in ('SMOTE', 'SMOTEENN', 'OverSampler',
+                                 'UnderSampler', 'TomekLinks', None):
             raise ValueError('Sampling %s is not valid. '
-                             'Allowed values are: SMOTE, SMOTEENN.'
+                             'Allowed values are: SMOTE, SMOTEENN, '
+                             'OverSampler, UnderSampler, TomekLinks and None'
                              % (self.sampling))
         y = np.asarray(y)
 
+        self.X = X
+        self.y = y
         self.classes_ = np.unique(y)
         n_classes = self.classes_.shape[0]
 
@@ -192,10 +207,11 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         if self.strategy in ('weighted_vote', 'dynamic_vote',
                              'relative_competence'):
 
-            score_matrices = [_score_matrix(c, n_clases) for c in confidences]
+            scores = [_score_matrix(c, n_clases) for c in confidences]
 
             if self.strategy == 'dynamic_vote':
-                # _dinamic_ovo(score_matrix, X, y)
+                # scores = [_dinamic_ovo(m, x, y)
+                #           for m, x, y in zip(scores, X, self.y)]
                 raise NotImplementedError(
                     'Strategy dynamic_vote not implemented.')
 
@@ -203,7 +219,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
                 raise NotImplementedError(
                     'Strategy relative_competence not implemented.')
 
-            votes = np.vstack([np.sum(m, axis=0) for m in score_matrices])
+            votes = np.vstack([np.sum(m, axis=0) for m in scores])
 
             return votes
 
