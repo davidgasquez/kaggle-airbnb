@@ -5,8 +5,6 @@ import numpy as np
 import datetime
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.feature_selection import SelectFromModel
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder):
