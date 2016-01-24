@@ -15,26 +15,68 @@ from unbalanced_dataset import SMOTE, SMOTEENN, OverSampler
 from unbalanced_dataset import UnderSampler, TomekLinks
 
 
-def _score_matrix(confidences, n_classes):
-    """Create a probability matrix of confidences."""
+def _score_matrix(probabilities, n_classes):
+    """Create a probability matrix representing the probability of each class.
+
+    Parameters
+    ----------
+    probabilities : array, shape = [n_classifiers]
+        Vector containing the predicted probabilities for the positive class
+        for each classifier.
+    n_classes : int
+        Number of classes.
+
+    Returns
+    -------
+    probability_matrix : array of shape = [n_classes, n_classes]
+        The class probabilities of the input sample as an antisymetric matrix.
+
+    Example
+    -------
+    >>> probabilities = [0.9, 0.8, 0.2, 0.5, 0.3, 0.1]
+    >>> _score_matrix(probabilities, 4)
+    array([[ 0. ,  0.9,  0.8,  0.2],
+           [ 0.1,  0. ,  0.5,  0.3],
+           [ 0.2,  0.5,  0. ,  0.1],
+           [ 0.8,  0.7,  0.9,  0. ]])
+    """
     # Make empty matrix
     matrix = np.zeros((n_classes, n_classes))
 
-    # Fill upper triangle with v
-    matrix[np.triu_indices(n_classes, 1)] = confidences
+    # Fill upper triangle with the vector
+    matrix[np.triu_indices(n_classes, 1)] = probabilities
 
-    # Fill lower triangle with the inverse of v
+    # Fill lower triangle with the difference to one of the upper one
     for i in range(n_classes):
         for j in range(i, n_classes):
             matrix[j][i] = 1 - matrix[i][j]
 
+    # Set diagonal to zero
     np.fill_diagonal(matrix, 0)
 
     return matrix
 
 
 def _sample_values(X, y, method=None, ratio=1, verbose=False):
-    """Performs any kind of sampling(over and under) with X and y."""
+    """Performs any kind of sampling(over and under).
+
+    Parameters
+    ----------
+    X : array, shape = [n_samples, n_features]
+        Data.
+    y : array, shape = [n_samples]
+        Target.
+    method : str, optional default: None
+        Over or under smapling method.
+    ratio: float
+        Unbalanced class ratio.
+
+    Returns
+    -------
+    X, y : tuple
+        Sampled X and y.
+
+    """
 
     # TODO: Add kwargs
     if method == 'SMOTE':
@@ -108,9 +150,8 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             If 1 is given, no parallel computing code is used at all, which is
             useful for debugging. For n_jobs below -1, (n_cpus + 1 + n_jobs)
             are used. Thus for n_jobs = -2, all CPUs but one are used.
-        sampling : str, optional default:None
+        sampling : str, optional default: None
             Samplig method to use when fitting each estimator.
-            Can be 'SMOTE' or SMOTEENN'.
         """
         self.estimator = estimator
         self.n_jobs = n_jobs
