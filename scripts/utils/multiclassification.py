@@ -1,7 +1,7 @@
 """Multiclass and multilabel classification strategies.
 
-This module implements an one-vs-one multiclass learning algorithm that uses
-SMOTE algorithm to over sample the minority class in each fit.
+This file implements an one-vs-one multiclass learning algorithm that uses
+over sampling algorithms and variances of the decision function.
 """
 from __future__ import division
 
