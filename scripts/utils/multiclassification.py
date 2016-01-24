@@ -17,9 +17,20 @@ from unbalanced_dataset import SMOTEENN
 
 def _confidence_matrix(confidences, n_classes):
     """Create a probability matrix of confidences."""
-    confidence_matrix = np.zeros((n_classes, n_classes))
-    # TODO
-    return confidence_matrix
+    # Make empty matrix
+    matrix = np.zeros((n_classes, n_classes))
+
+    # Fill upper triangle with v
+    matrix[np.triu_indices(n_classes, 1)] = confidences
+
+    # Fill lower triangle with the inverse of v
+    for i in range(n_classes):
+        for j in range(i, n_classes):
+            matrix[j][i] = 1 - matrix[i][j]
+
+    np.fill_diagonal(matrix, 0)
+
+    return matrix
 
 
 def _sample_values(X, y, method=None, ratio=1, verbose=False):
