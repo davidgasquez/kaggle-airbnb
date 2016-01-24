@@ -15,7 +15,7 @@ from unbalanced_dataset import SMOTE
 from unbalanced_dataset import SMOTEENN
 
 
-def _confidence_matrix(confidences, n_classes):
+def _score_matrix(confidences, n_classes):
     """Create a probability matrix of confidences."""
     # Make empty matrix
     matrix = np.zeros((n_classes, n_classes))
@@ -190,7 +190,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         n_clases = len(self.classes_)
 
         if self.strategy == 'weighted_vote':
-            matrices = [_confidence_matrix(c, n_clases) for c in confidences]
+            matrices = [_score_matrix(c, n_clases) for c in confidences]
             weighted_votes = np.vstack([np.sum(m, axis=0) for m in matrices])
             return weighted_votes
 
