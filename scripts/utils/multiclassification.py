@@ -187,12 +187,12 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         confidences = np.vstack([_predict_binary(est, X)
                                  for est in self.estimators_]).T
 
+        n_clases = len(self.classes_)
+
         if self.strategy == 'weighted_vote':
-            # Compute matrix for each confidence
-            # Flatten confidences in axis 1 with sum
-            # return confidences_sum
-            raise NotImplementedError(
-                'Strategy weighted_vote not implemented.')
+            matrices = [_confidence_matrix(c, n_clases) for c in confidences]
+            weighted_votes = np.vstack([np.sum(m, axis=0) for m in matrices])
+            return weighted_votes
 
         elif self.strategy == 'dynamic_vote':
             # _dinamic_ovo(score_matrix, X, y)
@@ -204,4 +204,4 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
 
         elif self.strategy == 'vote':
             return _ovr_decision_function(predictions, confidences,
-                                          len(self.classes_))
+                                          n_clases)
