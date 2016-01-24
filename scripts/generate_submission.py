@@ -30,8 +30,8 @@ def generate_submission(y_pred, test_users_ids, label_encoder):
 
 def main():
     path = '../data/processed/'
-    train_users = pd.read_csv(path + '_encoded_train_users.csv')
-    test_users = pd.read_csv(path + '_encoded_test_users.csv')
+    train_users = pd.read_csv(path + 'ohe_count_processed_train_users.csv')
+    test_users = pd.read_csv(path + 'ohe_count_processed_test_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -64,10 +64,6 @@ def main():
         nthread=-1,
         seed=42
     )
-
-    model = SelectFromModel(ExtraTreesClassifier())
-    model.fit(x_train, encoded_y_train)
-    x_train = model.transform(x_train)
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
