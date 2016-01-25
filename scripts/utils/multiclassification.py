@@ -91,8 +91,8 @@ def _sample_values(X, y, method=None, ratio=1, verbose=False):
     elif method == 'random_under_sample':
         sampler = UnderSampler(verbose=verbose)
 
-    elif method == 'random_over_sample':
-        sampler = TomekLinks(ratio=ratio, verbose=verbose)
+    elif method == 'TomekLinks':
+        sampler = TomekLinks(verbose=verbose)
 
     return sampler.fit_transform(X, y)
 
@@ -199,11 +199,11 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
                              ' dynamic_vote and relative_competence.'
                              % (self.strategy))
 
-        if self.sampling not in ('SMOTE', 'SMOTEENN', 'OverSampler',
-                                 'UnderSampler', 'TomekLinks', None):
+        if self.sampling not in ('SMOTE', 'SMOTEENN', 'random_over_sample',
+                                 'random_under_sample', 'TomekLinks', None):
             raise ValueError('Sampling %s is not valid. '
                              'Allowed values are: SMOTE, SMOTEENN, '
-                             'OverSampler, UnderSampler, TomekLinks and None'
+                             'random_over_sample, random_under_sample, TomekLinks and None'
                              % (self.sampling))
         y = np.asarray(y)
 
@@ -293,6 +293,11 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
 
         # Select the column classes in the score matrices that appears into
         # the neighborhood.
+        for i, score in enumerate(scores):
+            # TODO: Check c lenghts(return with 1)
+            mask = np.ones(n_classes, dtype=bool)
+            mask[c[i]] = False
+            score[:, mask] = score[:, mask] * 0.1
 
         return scores
 
