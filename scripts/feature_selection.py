@@ -6,6 +6,34 @@ from sklearn.feature_selection import SelectFromModel
 import datetime
 
 
+class CustomXGB(XGBClassifier):
+    """A custom XGBClassifier with feature importances computation.
+
+    This class implements XGBClassifier and also computes feature importances
+    based on the fscores. Implementing feature_importances_ property allow us
+    to use `SelectFromModel` with XGBClassifier.
+    """
+
+    @property
+    def feature_importances_(self):
+        """Return the feature importances.
+
+        Returns
+        -------
+        feature_importances_ : array, shape = [n_features]
+        """
+        booster = self.booster()
+        fscores = booster.get_fscore()
+
+        # TODO: Number of features?
+        importances = np.zeros(x_train.shape[1])
+
+        for k, v in fscores.iteritems():
+            importances[int(k[1:])] = v
+
+        return importances
+
+
 def generate_submission(y_pred, test_users_ids, label_encoder):
     """Create a valid submission file given the predictions."""
     ids = []
@@ -39,20 +67,6 @@ test_users_ids = test_users['id']
 test_users.drop('id', axis=1, inplace=True)
 test_users = test_users.fillna(-1)
 x_test = test_users.values
-
-
-class CustomXGB(XGBClassifier):
-
-    @property
-    def feature_importances_(self):
-        booster = self.booster()
-        fscores = booster.get_fscore()
-        importances = np.zeros(x_train.shape[1])
-
-        for k, v in fscores.iteritems():
-            importances[int(k[1:])] = v
-
-        return importances
 
 
 custom = CustomXGB(
