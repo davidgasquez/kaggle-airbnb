@@ -18,12 +18,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = '../data/processed/'
-    train_users = pd.read_csv(path + 'ohe_count_processed_train_users.csv')
+    prefix = 'full_processed_'
+    train_users = pd.read_csv(path + prefix + 'train_users.csv')
 
-    train_users.fillna(-1, inplace=True)
+    # train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
-    train_users.drop('country_destination', axis=1, inplace=True)
-    train_users.drop('id', axis=1, inplace=True)
+    train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
 
     x_train = train_users.values
     label_encoder = LabelEncoder()
