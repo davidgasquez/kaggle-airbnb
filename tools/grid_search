@@ -79,9 +79,9 @@ if __name__ == '__main__':
     parser.add_argument('-lr', '--learning_rate', nargs='+', type=float)
     parser.add_argument('-n', '--n_estimators', nargs='+', type=int)
     parser.add_argument('-ct', '--colsample_bytree',
-                        nargs='*', type=float, default=1)
+                        nargs='*', type=float, default=[1])
     parser.add_argument('-cl', '--colsample_bylevel',
-                        nargs='*', type=float, default=1)
+                        nargs='*', type=float, default=[1])
 
     args = parser.parse_args()
 
