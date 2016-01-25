@@ -74,6 +74,15 @@ def process_user_secs_elapsed(user):
     user_processed_secs['secs_elapsed_var'] = user_secs.var()
     user_processed_secs['secs_elapsed_skew'] = user_secs.skew()
 
+    # Number of elapsed seconds greater than 1 day
+    user_processed_secs['day_pauses'] = user_secs[user_secs > 86400].count()
+
+    # Clicks with less than one hour of differences
+    user_processed_secs['short_sessions'] = user_secs[user_secs < 3600].count()
+
+    # Long breaks
+    user_processed_secs['long_pauses'] = user_secs[user_secs > 300000].count()
+
     return user_processed_secs
 
 # Define data path
