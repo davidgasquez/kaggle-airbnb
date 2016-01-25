@@ -1,29 +1,9 @@
 #!/usr/bin/env python
 
 import pandas as pd
-import numpy as np
-import datetime
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
-
-
-def generate_submission(y_pred, test_users_ids, label_encoder):
-    """Create a valid submission file given the predictions."""
-    ids = []
-    cts = []
-    for i in range(len(test_users_ids)):
-        idx = test_users_ids[i]
-        ids += [idx] * 5
-        sorted_countries = np.argsort(y_pred[i])[::-1]
-        cts += label_encoder.inverse_transform(sorted_countries)[:5].tolist()
-
-    id_stacks = np.column_stack((ids, cts))
-    submission = pd.DataFrame(id_stacks, columns=['id', 'country'])
-
-    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
-    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
-
-    return submission.to_csv('../data/submissions/' + name, index=False)
+from utils.io import generate_submission
 
 
 def main():
