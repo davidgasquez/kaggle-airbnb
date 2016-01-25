@@ -251,8 +251,6 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
 
             if self.strategy == 'dynamic_vote':
                 scores = self._dynamic_ovo(scores, X, n_clases)
-                raise NotImplementedError(
-                    'Strategy dynamic_vote not implemented.')
 
             elif self.strategy == 'relative_competence':
                 raise NotImplementedError(
@@ -280,7 +278,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         and Francisco Herrera. Dynamic classifier selection for One-vs-One
         strategy: Avoiding non-competent classifiers. 2013.
         """
-        # Select close neighborhood
+        # Select all the neighborhood
         k = n_classes * 6
 
         # Fit the training data
@@ -291,11 +289,22 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         n = neigh.kneighbors(x, return_distance=False)
 
         # Get the unique classes of each neighbors
-        print 'Unique classes:', [len(np.unique(i)) for i in self.y[n]]
-
-        # Expand the neighborhood of those with only one class while k < 6 * n
+        c = map(self._classes, n)
 
         # Select the column classes in the score matrices that appears into
         # the neighborhood.
 
         return scores
+
+    def _classes(self, n):
+        n_classes = len(self.classes_)
+        lower_bound = n_classes * 3
+        upper_bound = n_classes * 6
+
+        for x in range(lower_bound, upper_bound):
+            neighbors_classes = np.unique(self.y[n[:x]])
+
+            if len(neighbors_classes) > 1:
+                return neighbors_classes
+        else:
+            return neighbors_classes
