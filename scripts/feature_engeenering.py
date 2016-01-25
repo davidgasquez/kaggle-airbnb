@@ -3,8 +3,6 @@ import pandas as pd
 import multiprocessing
 from multiprocessing import Pool
 
-from utils.preprocessing import get_weekday
-
 
 def process_user_actions(user):
     """Count the elapsed seconds per action.
@@ -63,13 +61,14 @@ def process_user_secs_elapsed(user):
     user_processed_secs = pd.Series()
     user_processed_secs['id'] = user
 
-    # TODO: Add more values
     user_processed_secs['secs_elapsed_sum'] = user_secs.sum()
     user_processed_secs['secs_elapsed_mean'] = user_secs.mean()
     user_processed_secs['secs_elapsed_min'] = user_secs.min()
     user_processed_secs['secs_elapsed_max'] = user_secs.max()
-    user_processed_secs['secs_elapsed_quantile_1'] = user_secs.quantile(0.25)
+    user_processed_secs['secs_elapsed_quantile_1'] = user_secs.quantile(0.1)
+    user_processed_secs['secs_elapsed_quantile_2'] = user_secs.quantile(0.25)
     user_processed_secs['secs_elapsed_quantile_3'] = user_secs.quantile(0.75)
+    user_processed_secs['secs_elapsed_quantile_3'] = user_secs.quantile(0.9)
     user_processed_secs['secs_elapsed_median'] = user_secs.median()
     user_processed_secs['secs_elapsed_std'] = user_secs.std()
     user_processed_secs['secs_elapsed_var'] = user_secs.var()
@@ -107,24 +106,23 @@ users['date_account_created'] = pd.to_datetime(users['date_account_created'])
 users['date_first_active'] = pd.to_datetime(users['timestamp_first_active'],
                                             format='%Y%m%d%H%M%S')
 
-# Get weekday based on the date
-users['weekday_account_created'] = users[
-    'date_account_created'].apply(get_weekday)
-users['weekday_first_active'] = users['date_first_active'].apply(get_weekday)
+# Convert to DatetimeIndex
+date_account_created = pd.DatetimeIndex(users['date_account_created'])
+date_first_active = pd.DatetimeIndex(users['date_first_active'])
 
-# Split dates into day, month, year
-year_account_created = pd.DatetimeIndex(users['date_account_created']).year
-users['year_account_created'] = year_account_created
-month_account_created = pd.DatetimeIndex(users['date_account_created']).month
-users['month_account_created'] = month_account_created
-day_account_created = pd.DatetimeIndex(users['date_account_created']).day
-users['day_account_created'] = day_account_created
-year_first_active = pd.DatetimeIndex(users['date_first_active']).year
-users['year_first_active'] = year_first_active
-month_first_active = pd.DatetimeIndex(users['date_first_active']).month
-users['month_first_active'] = month_first_active
-day_first_active = pd.DatetimeIndex(users['date_first_active']).day
-users['day_first_active'] = day_first_active
+# Get weekday based on the date
+users['weekday_account_created'] = date_account_created.weekday
+users['weekday_first_active'] = date_first_active.weekday
+
+# Split dates into day, week, month, year
+users['year_account_created'] = date_account_created.year
+users['month_account_created'] = date_account_created.month
+users['day_account_created'] = date_account_created.day
+users['week_account_created'] = date_account_created.week
+users['year_first_active'] = date_first_active.year
+users['month_first_active'] = date_first_active.month
+users['day_first_active'] = date_first_active.day
+users['week_first_active'] = date_first_active.week
 
 # Get the count of general session information
 result = sessions.groupby('user_id').count()

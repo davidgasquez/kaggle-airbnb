@@ -28,12 +28,6 @@ def one_hot_encoding(data, categorical_features):
     return data
 
 
-def get_weekday(date):
-    """Compute the weekday of the given date."""
-    # TODO: Use operator getter
-    return date.weekday()
-
-
 class XGBFeatureSelection(XGBClassifier):
     """A custom XGBClassifier with feature importances computation.
 
