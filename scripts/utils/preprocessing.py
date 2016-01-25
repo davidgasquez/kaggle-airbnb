@@ -28,4 +28,5 @@ def one_hot_encoding(data, categorical_features):
 
 def get_weekday(date):
     """Compute the weekday of the given date."""
+    # TODO: Use operator getter
     return date.weekday()
