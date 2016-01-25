@@ -58,7 +58,7 @@ def _score_matrix(probabilities, n_classes):
 
 
 def _sample_values(X, y, method=None, ratio=1, verbose=False):
-    """Performs any kind of sampling(over and under).
+    """Perform any kind of sampling(over and under).
 
     Parameters
     ----------
@@ -75,9 +75,7 @@ def _sample_values(X, y, method=None, ratio=1, verbose=False):
     -------
     X, y : tuple
         Sampled X and y.
-
     """
-
     # TODO: Add kwargs
     if method == 'SMOTE':
         sampler = SMOTE(ratio=ratio, verbose=verbose)
@@ -121,7 +119,8 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
 
 
 class CustomOneVsOneClassifier(OneVsOneClassifier):
-    """One-vs-one multiclass strategy.
+    """
+    One-vs-one multiclass strategy.
 
     This strategy consists in fitting one classifier per class pair.
     At prediction time, the class which received the most votes is selected.
@@ -191,7 +190,6 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         -------
         self
         """
-
         valid_strategies = ('vote', 'weighted_vote',
                             'dynamic_vote', 'relative_competence')
         if self.strategy not in valid_strategies:
