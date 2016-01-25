@@ -15,6 +15,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--max_depth', default=8, type=int)
     parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
+    parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
+    parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
     args = parser.parse_args()
 
     path = '../data/processed/'
@@ -37,8 +39,8 @@ if __name__ == '__main__':
         min_child_weight=1,
         max_delta_step=0,
         subsample=1,
-        colsample_bytree=1,
-        colsample_bylevel=1,
+        colsample_bytree=args.colsample_bytree,
+        colsample_bylevel=args.colsample_bylevel,
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,

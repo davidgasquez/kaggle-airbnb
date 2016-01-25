@@ -78,13 +78,17 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--max_depth', nargs='+', type=int)
     parser.add_argument('-lr', '--learning_rate', nargs='+', type=float)
     parser.add_argument('-n', '--n_estimators', nargs='+', type=int)
+    parser.add_argument('-ct', '--colsample_bytree', nargs='*', type=float)
+    parser.add_argument('-cl', '--colsample_bylevel', nargs='*', type=float)
 
     args = parser.parse_args()
 
     param_grid = {
         'max_depth': args.max_depth,
         'learning_rate': args.learning_rate,
-        'n_estimators': args.n_estimators
+        'n_estimators': args.n_estimators,
+        'colsample_bytree': args.colsample_bytree,
+        'colsample_bylevel': args.colsample_bylevel
     }
 
     grid = ParameterGrid(param_grid)
