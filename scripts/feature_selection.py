@@ -46,12 +46,12 @@ class CustomXGB(XGBClassifier):
     @property
     def feature_importances_(self):
         booster = self.booster()
-        scores = booster.get_fscore()
-        all_scores = pd.Series(np.zeros(x_train.shape[1]))
-        scores = pd.Series(scores)
-        scores.index = scores.index.map(lambda x: x[1:]).astype(int)
-        final_scores = all_scores + scores
-        importances = final_scores.fillna(0).values
+        fscores = booster.get_fscore()
+        importances = np.zeros(x_train.shape[1])
+
+        for k, v in fscores.iteritems():
+            importances[int(k[1:])] = v
+
         return importances
 
 
