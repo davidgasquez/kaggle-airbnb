@@ -1,6 +1,8 @@
 """Utils used in the preprocessing stage."""
 
 import pandas as pd
+import numpy as np
+from xgboost.sklearn import XGBClassifier
 
 
 def one_hot_encoding(data, categorical_features):
@@ -30,3 +32,44 @@ def get_weekday(date):
     """Compute the weekday of the given date."""
     # TODO: Use operator getter
     return date.weekday()
+
+
+class XGBFeatureSelector(XGBClassifier):
+    """A custom XGBClassifier with feature importances computation.
+
+    This class implements XGBClassifier and also computes feature importances
+    based on the fscores. Implementing feature_importances_ property allow us
+    to use `SelectFromModel` with XGBClassifier.
+    """
+
+    def __init__(self, n_classes, *args, **kwargs):
+        """Init method adding n_classes."""
+        super(XGBFeatureSelector, self).__init__(*args, **kwargs)
+        self._n_classes = n_classes
+
+    @property
+    def n_classes(self):
+        """Number of classes to predict."""
+        return self._n_classes
+
+    @n_classes.setter
+    def n_classes(self, value):
+        self._n_classes = value
+
+    @property
+    def feature_importances_(self):
+        """Return the feature importances.
+
+        Returns
+        -------
+        feature_importances_ : array, shape = [n_features]
+        """
+        booster = self.booster()
+        fscores = booster.get_fscore()
+
+        importances = np.zeros(self.n_classes)
+
+        for k, v in fscores.iteritems():
+            importances[int(k[1:])] = v
+
+        return importances
