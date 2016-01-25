@@ -269,16 +269,16 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
     def _dynamic_ovo(self, scores, x, n_classes):
         """Dinamic One vs One classifier selection strategy.
 
-         Dynamic classifier selection strategy for One vs One scheme tries to
-         avoid the non-competent classifiers  when their output is probably not
-         of interest considering the neighborhood of each instance to decide
-         whether a classifier may be competent or not.
+        Dynamic classifier selection strategy for One vs One scheme tries to
+        avoid the non-competent classifiers  when their output is probably not
+        of interest considering the neighborhood of each instance to decide
+        whether a classifier may be competent or not.
 
-         References
-         ----------
-         Mikel Galar, Alberto Fernández, Edurne Barrenechea, Humberto Bustince,
-         and Francisco Herrera. Dynamic classifier selection for One-vs-One
-         strategy: Avoiding non-competent classifiers. 2013.
+        References
+        ----------
+        Mikel Galar, Alberto Fernandez, Edurne Barrenechea, Humberto Bustince,
+        and Francisco Herrera. Dynamic classifier selection for One-vs-One
+        strategy: Avoiding non-competent classifiers. 2013.
         """
         k = n_classes * 6
         neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
