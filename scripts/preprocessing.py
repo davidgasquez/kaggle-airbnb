@@ -1,6 +1,8 @@
 import pandas as pd
 
 from utils.preprocessing import one_hot_encoding
+from sklearn.preprocessing import LabelEncoder
+from xgboost.sklearn import XGBClassifier
 
 # Define data path and suffix
 processed_data_path = '../data/processed/'
@@ -49,7 +51,25 @@ train_users = users.loc[train_users.index]
 test_users = users.loc[test_users.index]
 test_users.drop('country_destination', inplace=True, axis=1)
 
+# Get important features XGBClassifier
+y_train = train_users['country_destination']
+train_users.drop(['country_destination'], axis=1, inplace=True)
+label_encoder = LabelEncoder()
+encoded_y_train = label_encoder.fit_transform(y_train)
+
+
+clf = XGBClassifier(max_depth=7, learning_rate=0.18, n_estimators=80,
+                    nthread=-1, seed=42)
+
+clf.fit(train_users, encoded_y_train)
+booster = clf.booster()
+
+train_users = train_users[booster.get_fscore().keys()]
+test_users = test_users[booster.get_fscore().keys()]
+
+train_users = pd.concat([train_users, y_train], axis=1)
+
 # Save to csv
-suffix = 'ohe_count_processed_'
+suffix = 'full_processed_'
 train_users.to_csv(processed_data_path + suffix + 'train_users.csv')
 test_users.to_csv(processed_data_path + suffix + 'test_users.csv')
