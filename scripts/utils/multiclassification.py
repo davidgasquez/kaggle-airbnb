@@ -280,9 +280,22 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         and Francisco Herrera. Dynamic classifier selection for One-vs-One
         strategy: Avoiding non-competent classifiers. 2013.
         """
-        k = n_classes * 6
+        # Select cole neighborhood
+        k = n_classes * 3
+
+        # Fit the training data
         neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
         neigh.fit(self.X)
+
+        # Compute the indices of the k neighbors for x
         n = neigh.kneighbors(x, return_distance=False)
+
+        # Get the unique classes of each neighbors
         print 'Unique classes:', [len(np.unique(i)) for i in self.y[n]]
+
+        # Expand the neighborhood of those with only one class while k < 6 * n
+
+        # Select the column classes in the score matrices that appears into
+        # the neighborhood.
+
         return scores
