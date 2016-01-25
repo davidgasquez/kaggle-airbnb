@@ -34,7 +34,7 @@ def get_weekday(date):
     return date.weekday()
 
 
-class XGBFeatureSelector(XGBClassifier):
+class XGBFeatureSelection(XGBClassifier):
     """A custom XGBClassifier with feature importances computation.
 
     This class implements XGBClassifier and also computes feature importances
@@ -42,19 +42,19 @@ class XGBFeatureSelector(XGBClassifier):
     to use `SelectFromModel` with XGBClassifier.
     """
 
-    def __init__(self, n_classes, *args, **kwargs):
-        """Init method adding n_classes."""
-        super(XGBFeatureSelector, self).__init__(*args, **kwargs)
-        self._n_classes = n_classes
+    def __init__(self, n_features, *args, **kwargs):
+        """Init method adding n_features."""
+        super(XGBFeatureSelection, self).__init__(*args, **kwargs)
+        self._n_features = n_features
 
     @property
-    def n_classes(self):
+    def n_features(self):
         """Number of classes to predict."""
-        return self._n_classes
+        return self._n_features
 
-    @n_classes.setter
-    def n_classes(self, value):
-        self._n_classes = value
+    @n_features.setter
+    def n_features(self, value):
+        self._n_features = value
 
     @property
     def feature_importances_(self):
@@ -67,7 +67,7 @@ class XGBFeatureSelector(XGBClassifier):
         booster = self.booster()
         fscores = booster.get_fscore()
 
-        importances = np.zeros(self.n_classes)
+        importances = np.zeros(self.n_features)
 
         for k, v in fscores.iteritems():
             importances[int(k[1:])] = v
