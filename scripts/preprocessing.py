@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from utils.preprocessing import one_hot_encoding
 from sklearn.preprocessing import LabelEncoder
@@ -44,7 +45,7 @@ categorical_features = [
 users = one_hot_encoding(users, categorical_features)
 
 # Fill NaN
-# users.fillna(-1, inplace=True)
+users.fillna(-1, inplace=True)
 
 # Split into train and test users
 train_users = users.loc[train_users.index]
@@ -68,6 +69,9 @@ train_users = train_users[booster.get_fscore().keys()]
 test_users = test_users[booster.get_fscore().keys()]
 
 train_users = pd.concat([train_users, y_train], axis=1)
+
+train_users.replace(-1, np.nan)
+test_users.replace(-1, np.nan)
 
 # Save to csv
 suffix = 'full_processed_'
