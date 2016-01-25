@@ -8,7 +8,7 @@ from utils.io import generate_submission
 
 def main():
     path = '../data/processed/'
-    prefix = 'full_processed_'
+    prefix = 'processed_'
     train_users = pd.read_csv(path + prefix + 'train_users.csv')
     test_users = pd.read_csv(path + prefix + 'test_users.csv')
 
@@ -41,7 +41,7 @@ def main():
         missing=None,
         silent=True,
         nthread=-1,
-        seed=42
+        seed=43
     )
 
     clf.fit(x_train, encoded_y_train)
