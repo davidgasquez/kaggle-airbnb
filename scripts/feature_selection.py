@@ -2,14 +2,31 @@ import pandas as pd
 import numpy as np
 from xgboost.sklearn import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.cross_validation import cross_val_score
-from sklearn.cross_validation import KFold
 from sklearn.feature_selection import SelectFromModel
+import datetime
 
-from utils.metrics import ndcg_scorer
+
+def generate_submission(y_pred, test_users_ids, label_encoder):
+    """Create a valid submission file given the predictions."""
+    ids = []
+    cts = []
+    for i in range(len(test_users_ids)):
+        idx = test_users_ids[i]
+        ids += [idx] * 5
+        sorted_countries = np.argsort(y_pred[i])[::-1]
+        cts += label_encoder.inverse_transform(sorted_countries)[:5].tolist()
+
+    id_stacks = np.column_stack((ids, cts))
+    submission = pd.DataFrame(id_stacks, columns=['id', 'country'])
+
+    date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
+    name = __file__.split('.')[0] + '_' + str(date) + '.csv'
+
+    return submission.to_csv('../data/submissions/' + name, index=False)
 
 path = '../data/processed/'
-train_users = pd.read_csv(path + 'ohe_count_processed_train_users.csv')
+train_users = pd.read_csv(path + 'processed_train_users.csv')
+test_users = pd.read_csv(path + 'processed_test_users.csv')
 y_train = train_users['country_destination']
 train_users.drop('country_destination', axis=1, inplace=True)
 train_users.drop('id', axis=1, inplace=True)
@@ -18,24 +35,16 @@ x_train = train_users.values
 label_encoder = LabelEncoder()
 encoded_y_train = label_encoder.fit_transform(y_train)
 
-clf = XGBClassifier(n_estimators=1, nthread=-1, seed=42)
-kf = KFold(len(x_train), n_folds=5, random_state=42)
-
-score = cross_val_score(clf, x_train, encoded_y_train,
-                        cv=kf, scoring=ndcg_scorer)
-print 'Score:', score.mean()
+test_users_ids = test_users['id']
+test_users.drop('id', axis=1, inplace=True)
+test_users = test_users.fillna(-1)
+x_test = test_users.values
 
 
 class CustomXGB(XGBClassifier):
 
     @property
     def feature_importances_(self):
-        """Return the feature importances (the higher, the more important the
-           feature).
-        Returns
-        -------
-        feature_importances_ : array, shape = [n_features]
-        """
         booster = self.booster()
         scores = booster.get_fscore()
         all_scores = pd.Series(np.zeros(x_train.shape[1]))
@@ -46,10 +55,33 @@ class CustomXGB(XGBClassifier):
         return importances
 
 
-custom = CustomXGB(n_estimators=1, seed=42, nthread=-1)
-model = SelectFromModel(custom)
-X_new = model.fit_transform(x_train, encoded_y_train)
+custom = CustomXGB(
+    max_depth=7,
+    learning_rate=0.18,
+    n_estimators=80,
+    gamma=0,
+    min_child_weight=1,
+    max_delta_step=0,
+    subsample=1,
+    colsample_bytree=1,
+    colsample_bylevel=1,
+    reg_alpha=0,
+    reg_lambda=1,
+    scale_pos_weight=1,
+    base_score=0.5,
+    missing=None,
+    silent=True,
+    nthread=-1,
+    seed=42
+)
 
-score = cross_val_score(clf, X_new, encoded_y_train,
-                        cv=kf, scoring=ndcg_scorer)
-print 'Score:', score.mean()
+model = SelectFromModel(custom)
+model.fit(x_train, encoded_y_train)
+
+x_new = model.transform(x_train)
+x_test = model.transform(x_test)
+
+custom.fit(x_new, encoded_y_train)
+y_pred = custom.predict_proba(x_test)
+
+generate_submission(y_pred, test_users_ids, label_encoder)
