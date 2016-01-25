@@ -20,7 +20,8 @@ python -u {script} {flags}
 """
 
 
-def send_code(python_file, queue='larga', suffix=None, **parameter_grid):
+def send_code(python_file, queue='larga',
+              job_name=None, suffix=None, **parameter_grid):
     """Put a Python script into an OGE queue.
 
     Parameters
@@ -37,7 +38,8 @@ def send_code(python_file, queue='larga', suffix=None, **parameter_grid):
     logfile = '$JOB_NAME_$JOB_ID.out'
     errfile = '$JOB_NAME_$JOB_ID.error'
 
-    job_name = python_file.split('.')[0]
+    if not job_name:
+        job_name = python_file.split('.')[0]
 
     if suffix is not None:
         job_name = job_name + '(' + str(suffix) + ')'
@@ -70,6 +72,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('script', help='Script name')
     parser.add_argument('-q', '--queue', default='larga', help='Queue to add')
+    parser.add_argument('-jn', '--job_name', default=None,
+                        help='Job name')
 
     parser.add_argument('-d', '--max_depth', nargs='+', type=int)
     parser.add_argument('-lr', '--learning_rate', nargs='+', type=float)
@@ -86,4 +90,5 @@ if __name__ == '__main__':
     grid = ParameterGrid(param_grid)
 
     for i, params in enumerate(grid):
-        send_code(args.script, queue=args.queue, suffix=i + 1, **params)
+        send_code(args.script, queue=args.queue, job_name=args.job_name,
+                  suffix=i + 1, **params)
