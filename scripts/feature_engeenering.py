@@ -99,7 +99,7 @@ sessions.replace('-unknown-', np.nan, inplace=True)
 
 # Remove weird age values
 users.loc[users['age'] > 100, 'age'] = np.nan
-users.loc[users['age'] < 14, 'age'] = np.nan
+users.loc[users['age'] < 13, 'age'] = np.nan
 
 # Change type to date
 users['date_account_created'] = pd.to_datetime(users['date_account_created'])
@@ -124,6 +124,8 @@ users['month_first_active'] = date_first_active.month
 users['day_first_active'] = date_first_active.day
 users['week_first_active'] = date_first_active.week
 
+# TODO: Add interaction features
+
 # Get the count of general session information
 result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
@@ -135,13 +137,15 @@ result = p.map(process_user_actions, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
 users = pd.concat([users, result], axis=1)
 
-# TODO: Classify by dispositive
+# TODO: Classify and group by dispositive
 
 # Process seconds elapsed statistics in parallel
 p = Pool(multiprocessing.cpu_count())
 result = p.map(process_user_secs_elapsed, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
 users = pd.concat([users, result], axis=1)
+
+# TODO: Add distance to holidays
 
 # Set ID as index
 train_users = train_users.set_index('id')
