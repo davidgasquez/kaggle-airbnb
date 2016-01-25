@@ -5,10 +5,8 @@ import pandas as pd
 # Set default path
 DEFAULT_PATH = '../data/'
 
-train_users = pd.read_csv('../data/processed/_encoded_train_users.csv')
 
-
-def load_users(path=DEFAULT_PATH, preprocessed=False):
+def load_users_data(path=DEFAULT_PATH, preprocessed=False, prefix=''):
     """Load users data into train and test users.
 
     Parameters
@@ -27,8 +25,8 @@ def load_users(path=DEFAULT_PATH, preprocessed=False):
         test_users = pd.read_csv(path + 'test_users.csv')
     else:
         path += 'processed/'
-        train_users = pd.read_csv(path + 'processed_train_users.csv')
-        test_users = pd.read_csv(path + 'processed_test_users.csv')
+        train_users = pd.read_csv(path + prefix + 'train_users.csv')
+        test_users = pd.read_csv(path + prefix + 'test_users.csv')
     return train_users, test_users
 
 

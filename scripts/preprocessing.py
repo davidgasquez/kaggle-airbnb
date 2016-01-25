@@ -41,6 +41,9 @@ categorical_features = [
 
 users = one_hot_encoding(users, categorical_features)
 
+# Fill NaN
+users.fillna(-1, inplace=True)
+
 # Split into train and test users
 train_users = users.loc[train_users.index]
 test_users = users.loc[test_users.index]
