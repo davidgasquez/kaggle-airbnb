@@ -13,6 +13,7 @@ from sklearn.multiclass import _ovr_decision_function, _predict_binary
 from sklearn.externals.joblib import Parallel, delayed
 from unbalanced_dataset import SMOTE, SMOTEENN, OverSampler
 from unbalanced_dataset import UnderSampler, TomekLinks
+from sklearn.neighbors import NearestNeighbors
 
 
 def _score_matrix(probabilities, n_classes):
@@ -249,8 +250,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             scores = [_score_matrix(c, n_clases) for c in confidences]
 
             if self.strategy == 'dynamic_vote':
-                # scores = [_dinamic_ovo(m, x, y)
-                #           for m, x, y in zip(scores, X, self.y)]
+                scores = self._dinamic_ovo(scores, X, n_clases)
                 raise NotImplementedError(
                     'Strategy dynamic_vote not implemented.')
 
@@ -265,3 +265,24 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         elif self.strategy == 'vote':
             return _ovr_decision_function(predictions, confidences,
                                           n_clases)
+
+    def _dynamic_ovo(self, scores, x, n_classes):
+        """Dinamic One vs One classifier selection strategy.
+
+         Dynamic classifier selection strategy for One vs One scheme tries to
+         avoid the non-competent classifiers  when their output is probably not
+         of interest considering the neighborhood of each instance to decide
+         whether a classifier may be competent or not.
+
+         References
+         ----------
+         Mikel Galar, Alberto Fernández, Edurne Barrenechea, Humberto Bustince,
+         and Francisco Herrera. Dynamic classifier selection for One-vs-One
+         strategy: Avoiding non-competent classifiers. 2013.
+        """
+        k = n_classes * 6
+        neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
+        neigh.fit(self.X)
+        n = neigh.kneighbors(x, return_distance=False)
+        print 'Unique classes:', [len(np.unique(i)) for i in self.y[n]]
+        return scores
