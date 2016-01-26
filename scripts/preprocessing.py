@@ -52,15 +52,20 @@ train_users = users.loc[train_users.index]
 test_users = users.loc[test_users.index]
 test_users.drop('country_destination', inplace=True, axis=1)
 
-# Get important features XGBClassifier
+# Get important features from XGBClassifier
 y_train = train_users['country_destination']
 train_users.drop(['country_destination'], axis=1, inplace=True)
 label_encoder = LabelEncoder()
 encoded_y_train = label_encoder.fit_transform(y_train)
 
 
-clf = XGBClassifier(max_depth=7, learning_rate=0.18, n_estimators=80,
-                    nthread=-1, seed=42)
+clf = XGBClassifier(
+    max_depth=7,
+    learning_rate=0.18,
+    n_estimators=100,
+    nthread=-1,
+    seed=42
+)
 
 clf.fit(train_users, encoded_y_train)
 booster = clf.booster()
@@ -70,6 +75,7 @@ test_users = test_users[booster.get_fscore().keys()]
 
 train_users = pd.concat([train_users, y_train], axis=1)
 
+# Set -1 to NaNs to save disk space
 train_users.replace(-1, np.nan)
 test_users.replace(-1, np.nan)
 
