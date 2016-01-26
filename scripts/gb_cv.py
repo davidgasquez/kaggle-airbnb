@@ -6,6 +6,7 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
+from utils.multiclassification import CustomOneVsOneClassifier
 
 from utils.metrics import ndcg_scorer
 
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = '../data/processed/'
-    prefix = 'full_processed_'
+    prefix = 'processed_'
     train_users = pd.read_csv(path + prefix + 'train_users.csv')
 
     train_users.fillna(-1, inplace=True)
@@ -51,9 +52,11 @@ if __name__ == '__main__':
         seed=42
     )
 
-    kf = KFold(len(x_train), n_folds=10, random_state=42)
+    clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote', verbose=True)
 
-    score = cross_val_score(xgb, x_train, encoded_y_train,
+    kf = KFold(len(x_train), n_folds=5, random_state=42)
+
+    score = cross_val_score(clf, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
     print args.max_depth, args.learning_rate, args.n_estimators, np.mean(score)
