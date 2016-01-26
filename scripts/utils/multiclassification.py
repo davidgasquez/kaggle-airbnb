@@ -295,13 +295,15 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         # that appears into the neighborhood.
         for i, score in enumerate(scores):
 
+            # If there is only one class, return the same score
+            # matrix as this sample will be properly classified
             if len(c[i]) == 1:
                 continue
 
             mask = np.ones(n_classes, dtype=bool)
             mask[c[i]] = False
 
-            # Apply mask to score matrix
+            # Apply mask to score matrix rows and columns
             score[:, mask] = score[:, mask] * 0.1
             score[mask, :] = score[mask, :] * 0.1
 
