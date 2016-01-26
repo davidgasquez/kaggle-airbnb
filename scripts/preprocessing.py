@@ -76,8 +76,8 @@ test_users = test_users[booster.get_fscore().keys()]
 train_users = pd.concat([train_users, y_train], axis=1)
 
 # Set -1 to NaNs to save disk space
-train_users.replace(-1, np.nan)
-test_users.replace(-1, np.nan)
+train_users.replace(-1, np.nan, inplace=True)
+test_users.replace(-1, np.nan, inplace=True)
 
 # Save to csv
 suffix = 'full_processed_'
