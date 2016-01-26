@@ -41,7 +41,7 @@ def main():
         missing=None,
         silent=True,
         nthread=-1,
-        seed=43
+        seed=42
     )
 
     clf.fit(x_train, encoded_y_train)
