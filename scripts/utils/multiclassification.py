@@ -268,7 +268,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         """Dynamic One vs One classifier selection strategy.
 
         Dynamic classifier selection strategy for One vs One scheme tries to
-        avoid the non-competent classifiers  when their output is probably not
+        avoid the non-competent classifiers when their output is probably not
         of interest considering the neighborhood of each instance to decide
         whether a classifier may be competent or not.
 
