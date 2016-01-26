@@ -112,7 +112,11 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     if sampling:
         ones = np.count_nonzero(y_values == 1)
         zeros = np.count_nonzero(y_values == 0)
+
+        # Class inbalancing ratio
         ratio = abs(ones - zeros) / min(ones, zeros)
+
+        # Sample X and y
         X_values, y_values = _sample_values(
             X_values, y_values, method=sampling, ratio=ratio)
 
@@ -120,8 +124,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
 
 
 class CustomOneVsOneClassifier(OneVsOneClassifier):
-    """
-    One-vs-one multiclass strategy.
+    """One-vs-one multiclass strategy.
 
     This strategy consists in fitting one classifier per class pair.
     At prediction time, the class which received the most votes is selected.
@@ -194,17 +197,13 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         valid_strategies = ('vote', 'weighted_vote',
                             'dynamic_vote', 'relative_competence')
         if self.strategy not in valid_strategies:
-            raise ValueError('Strategy %s is not valid. '
-                             'Allowed values are: vote, weighted_vote,'
-                             ' dynamic_vote and relative_competence.'
-                             % (self.strategy))
+            raise ValueError('Strategy %s is not valid.' % (self.strategy))
 
-        if self.sampling not in ('SMOTE', 'SMOTEENN', 'random_over_sample',
-                                 'random_under_sample', 'TomekLinks', None):
-            raise ValueError('Sampling %s is not valid. '
-                             'Allowed values are: SMOTE, SMOTEENN, '
-                             'random_over_sample, random_under_sample, TomekLinks and None'
-                             % (self.sampling))
+        valid_sampling_methods = ('SMOTE', 'SMOTEENN', 'random_over_sample',
+                                  'random_under_sample', 'TomekLinks', None)
+        if self.sampling not in valid_sampling_methods:
+            raise ValueError('Sampling %s is not valid.' % (self.sampling))
+
         y = np.asarray(y)
 
         self.X = X
@@ -246,16 +245,17 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
 
         if self.strategy in ('weighted_vote', 'dynamic_vote',
                              'relative_competence'):
-
+            # Compute matrix with classes probabilities
             scores = [_score_matrix(c, n_clases) for c in confidences]
 
             if self.strategy == 'dynamic_vote':
                 scores = self._dynamic_ovo(scores, X, n_clases)
 
             elif self.strategy == 'relative_competence':
-                raise NotImplementedError(
-                    'Strategy relative_competence not implemented.')
+                raise NotImplementedError('Strategy %s not implemented.'
+                                          % (self.strategy))
 
+            # Sum of each probability column representing each class
             votes = np.vstack([np.sum(m, axis=0) for m in scores])
 
             return votes
@@ -289,26 +289,39 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         n = neigh.kneighbors(x, return_distance=False)
 
         # Get the unique classes of each neighbors
-        c = map(self._classes, n)
+        c = map(self._get_neighbors_classes, n)
 
-        # Select the column classes in the score matrices that appears into
-        # the neighborhood.
+        # Select the column classes in the score matrices
+        # that appears into the neighborhood.
         for i, score in enumerate(scores):
             # TODO: Check c lenghts(return with 1)
             mask = np.ones(n_classes, dtype=bool)
             mask[c[i]] = False
             score[:, mask] = score[:, mask] * 0.1
+            # TODO: Apply mask also horizontally
 
         return scores
 
-    def _classes(self, n):
+    def _get_neighbors_classes(self, n):
+        """Extract unique classes for the heighborhood.
+
+        Parameters
+        ----------
+        n : array-like, shape = [n_samples, n_neighbors]
+            Indices of the instance neighbors
+        """
         n_classes = len(self.classes_)
+
+        # Set limits to explore the neighborhood
         lower_bound = n_classes * 3
         upper_bound = n_classes * 6
 
+        # Go throught the neighborhood while there is only one class or the
+        # upper limit is not reached
         for x in range(lower_bound, upper_bound):
             neighbors_classes = np.unique(self.y[n[:x]])
 
+            # Exit the loop if we have found more classes in the neighborhood
             if len(neighbors_classes) > 1:
                 return neighbors_classes
         else:
