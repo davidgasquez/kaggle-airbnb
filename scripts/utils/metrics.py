@@ -73,4 +73,4 @@ def ndcg_score(ground_truth, predictions, k=5):
 
 
 # NDCG Scorer function
-ndcg_scorer = make_scorer(ndcg_score, needs_proba=True)
+ndcg_scorer = make_scorer(ndcg_score, needs_proba=True, k=5)
