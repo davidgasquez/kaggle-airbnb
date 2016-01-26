@@ -19,6 +19,6 @@
         "nthread": -1,
         "seed": 42
     },
-    "Train File": "preprocessed_train_users.csv",
+    "Train File": "processed_train_users.csv",
     "Score": 0.88088
 }
