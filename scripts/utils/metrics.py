@@ -55,10 +55,15 @@ def ndcg_score(ground_truth, predictions, k=5):
     -------
     >>> ground_truth = [1, 0, 2]
     >>> predictions = [[0.15, 0.55, 0.2], [0.7, 0.2, 0.1], [0.06, 0.04, 0.9]]
-    >>> score = ndcg_score(ground_truth, predictions)
+    >>> score = ndcg_score(ground_truth, predictions, k=2)
+    1.0
+    >>> predictions = [[0.9, 0.5, 0.8], [0.7, 0.2, 0.1], [0.06, 0.04, 0.9]]
+    >>> score = ndcg_score(ground_truth, predictions, k=2)
+    0.6666666666
     """
     lb = LabelBinarizer()
-    T = lb.fit_transform(ground_truth)
+    lb.fit(range(len(predictions) + 1))
+    T = lb.transform(ground_truth)
 
     scores = []
 
