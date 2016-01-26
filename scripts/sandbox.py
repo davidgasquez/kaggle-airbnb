@@ -44,8 +44,9 @@ xgb = XGBClassifier(
     seed=42
 )
 
-clf = CustomOneVsOneClassifier(xgb, strategy='vote', verbose=True)
+clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote', verbose=True)
 clf.fit(x_train, encoded_y_train)
 y_pred = clf.predict_proba(x_test)
 
-generate_submission(y_pred, test_users_ids, label_encoder, name='ovo')
+generate_submission(y_pred, test_users_ids, label_encoder,
+                    name='processed_dynamic_ovo')
