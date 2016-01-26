@@ -294,11 +294,16 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         # Select the column classes in the score matrices
         # that appears into the neighborhood.
         for i, score in enumerate(scores):
-            # TODO: Check c lenghts(return with 1)
+
+            if len(c[i]) == 1:
+                continue
+
             mask = np.ones(n_classes, dtype=bool)
             mask[c[i]] = False
+
+            # Apply mask to score matrix
             score[:, mask] = score[:, mask] * 0.1
-            # TODO: Apply mask also horizontally
+            score[mask, :] = score[mask, :] * 0.1
 
         return scores
 
