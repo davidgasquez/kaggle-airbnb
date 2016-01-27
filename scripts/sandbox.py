@@ -8,7 +8,7 @@ from utils.io import generate_submission
 from utils.multiclassification import CustomOneVsOneClassifier
 
 path = '../data/processed/'
-prefix = 'processed_'
+prefix = 'full_processed_'
 train_users = pd.read_csv(path + prefix + 'train_users.csv')
 test_users = pd.read_csv(path + prefix + 'test_users.csv')
 
