@@ -3,9 +3,11 @@ processed -> 0.88088
 processed_ovo_vote -> 0.88002
 processed_dynamic_ovo ->  0.87813 - 0.87810
 
-full_processed ->
+full_processed -> 0.87932
+full_processed_ovo_vote ->
+full_processed_ovo_dynamic ->
 
 GS:
 processed -> 0.830870
 processed_ovo ->
-processsed_dynamic_ovo ->
+processsed_dynamic_ovo -> 
