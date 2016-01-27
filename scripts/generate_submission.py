@@ -9,8 +9,8 @@ from utils.io import generate_submission
 def main():
     path = '../data/processed/'
     prefix = 'full_processed_'
-    train_users = pd.read_csv(path + prefix + 'train_users.csv')
-    test_users = pd.read_csv(path + prefix + 'test_users.csv')
+    train_users = pd.read_csv(path + prefix + 'train_users.csv.v1')
+    test_users = pd.read_csv(path + prefix + 'test_users.csv.v1')
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
