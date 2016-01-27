@@ -29,6 +29,7 @@ def process_user_actions(user):
 
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
+        # IDEA: Limit with head()
         column_data = user_session[column].value_counts()
         column_data.index = column_data.index + '_count'
         user_session_data = user_session_data.append(column_data)
