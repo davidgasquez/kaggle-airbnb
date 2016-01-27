@@ -52,7 +52,7 @@ if __name__ == '__main__':
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, strategy='vote', verbose=True)
+    clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote', verbose=True)
 
     kf = KFold(len(x_train), n_folds=5, random_state=42)
 
