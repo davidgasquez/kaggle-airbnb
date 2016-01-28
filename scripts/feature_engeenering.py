@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 from multiprocessing import Pool
+from utils.preprocessing import distance_to_holidays
 
 
 def process_user_actions(user):
@@ -153,9 +154,7 @@ users = pd.concat([users, result], axis=1)
 
 # IDEA: Classify and group by dispositive
 
-# IDEA: Add distance to holidays
-
-from utils.preprocessing import distance_to_holidays
+# Add distance to holidays
 users = users.apply(distance_to_holidays, axis=1)
 
 # Add number of NaNs per row
