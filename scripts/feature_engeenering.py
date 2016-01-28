@@ -29,8 +29,7 @@ def process_user_actions(user):
 
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
-        # IDEA: Limit with head()
-        column_data = user_session[column].value_counts()
+        column_data = user_session[column].value_counts().head()
         column_data.index = column_data.index + '_count'
         user_session_data = user_session_data.append(column_data)
 
@@ -133,8 +132,6 @@ users['month_first_active'] = date_first_active.month
 users['day_first_active'] = date_first_active.day
 users['week_first_active'] = date_first_active.week
 
-# TODO: Add interaction features
-
 # Get the count of general session information
 result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
@@ -146,15 +143,23 @@ result = p.map(process_user_actions, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
 users = pd.concat([users, result], axis=1)
 
-# TODO: Classify and group by dispositive
-
 # Process seconds elapsed statistics in parallel
 p = Pool(multiprocessing.cpu_count())
 result = p.map(process_user_secs_elapsed, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
 users = pd.concat([users, result], axis=1)
 
-# TODO: Add distance to holidays
+# IDEA: Add interaction features
+
+# IDEA: Classify and group by dispositive
+
+# IDEA: Add distance to holidays
+
+# IDEA: Add number of NaNs per row
+
+# IDEA: Add cluster
+
+# IDEA: Average distance to N neighbors of each class
 
 # Set ID as index
 train_users = train_users.set_index('id')
