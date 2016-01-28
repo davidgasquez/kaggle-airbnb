@@ -25,7 +25,7 @@ def main():
     test_users = test_users.fillna(-1)
     x_test = test_users.values
 
-    clf = XGBClassifier(
+    xgb = XGBClassifier(
         max_depth=6,
         learning_rate=0.18,
         n_estimators=50,
@@ -45,8 +45,7 @@ def main():
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote',
-                                   sampling='TomekLinks', verbose=True)
+    clf = CustomOneVsOneClassifier(xgb, strategy='relative_competence', sampling='TomekLinks', verbose=True)
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)

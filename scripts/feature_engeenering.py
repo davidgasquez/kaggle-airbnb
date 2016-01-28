@@ -171,6 +171,6 @@ processed_test_users = users.loc[test_users.index]
 processed_test_users.drop(['country_destination'], inplace=True, axis=1)
 
 # Save to csv
-suffix = 'count_processed_'
+suffix = 'processed_2_'
 processed_train_users.to_csv(processed_data_path + suffix + 'train_users.csv')
 processed_test_users.to_csv(processed_data_path + suffix + 'test_users.csv')
