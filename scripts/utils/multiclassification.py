@@ -16,6 +16,46 @@ from unbalanced_dataset import UnderSampler, TomekLinks
 from sklearn.neighbors import NearestNeighbors
 
 
+def _get_weight_matrix(distances):
+    """Create a weight metrix based on mean distances to each class.
+
+    Parameters
+    ----------
+    distances : array, shape = [n_classes]
+        Vector containing the mean distance to each class.
+
+    Returns
+    -------
+    weighted_matrix : array of shape = [n_classes, n_classes]
+        Computed class weight.
+
+    Example
+    -------
+    >>> distances = [0.9, 0.8, 0.2, 0.5, 0.3, 0.1]
+    >>> _get_weight_matrix(distances)
+    array([[ 0.  ,  0.44,  0.64,  0.31,  0.2 ],
+           [ 0.56,  0.  ,  0.69,  0.36,  0.24],
+           [ 0.36,  0.31,  0.  ,  0.2 ,  0.12],
+           [ 0.69,  0.64,  0.8 ,  0.  ,  0.36],
+           [ 0.8 ,  0.76,  0.88,  0.64,  0.  ]])
+
+    """
+    n_classes = len(distances)
+    matrix = np.zeros((n_classes, n_classes))
+
+    for i in range(n_classes):
+        for j in range(n_classes):
+            if i == j:
+                continue
+
+            # Formula to compute the weight W_i_j
+            numerator = distances[i] * distances[i]
+            denominator = numerator + (distances[j] * distances[j])
+            matrix[i][j] = numerator / denominator
+
+    return matrix
+
+
 def _score_matrix(probabilities, n_classes):
     """Create a probability matrix representing the probability of each class.
 
@@ -252,8 +292,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
                 scores = self._dynamic_ovo(scores, X, n_clases)
 
             elif self.strategy == 'relative_competence':
-                raise NotImplementedError('Strategy %s not implemented.'
-                                          % (self.strategy))
+                scores = self._relative_competence(scores, X, n_clases)
 
             # Sum of each probability column representing each class
             votes = np.vstack([np.sum(m, axis=0) for m in scores])
@@ -271,6 +310,8 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         avoid the non-competent classifiers when their output is probably not
         of interest considering the neighborhood of each instance to decide
         whether a classifier may be competent or not.
+
+        # TODO: Better documentation
 
         References
         ----------
@@ -333,3 +374,31 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
                 return neighbors_classes
         else:
             return neighbors_classes
+
+    def _relative_competence(self, scores, x, n_classes):
+        """Extract the weighted vote matrix for the samples.
+
+        # TODO: Better documentation
+
+        References
+        ----------
+        Mikel Galar, Alberto Fernandez, Edurne Barrenechea, Humberto Bustince,
+        and Francisco Herrera. Dynamic classifier selection for One-vs-One
+        strategy: Avoiding non-competent classifiers. 2013.
+        """
+        # Select all the neighborhood
+        k = len(self.y)
+
+        # Fit the training data
+        neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
+        neigh.fit(self.X)
+
+        d, i = neigh.kneighbors(x)
+
+        mean_distances = np.zeros(n_classes)
+        for class_n in range(n_classes):
+            mean_distances[class_n] = d[self.y[i] == class_n][:5].mean()
+
+        w = _get_weight_matrix(mean_distances)
+
+        return scores * w
