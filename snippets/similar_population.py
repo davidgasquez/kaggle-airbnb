@@ -12,7 +12,6 @@ def country_probabilities(df):
     for index, row in similar_population.iterrows():
         country = row['country_destination']
         df['similar_population_in_' + country] = row['population_in_thousands']
-        # TODO: Maybe trying with  row['popul..'] / country_population[country]
 
     return df
 

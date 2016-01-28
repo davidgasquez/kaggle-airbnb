@@ -89,9 +89,9 @@ raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
 
 # Load raw data
-train_users = pd.read_csv(raw_data_path + 'train_users.csv')
-test_users = pd.read_csv(raw_data_path + 'test_users.csv')
-sessions = pd.read_csv(raw_data_path + 'sessions.csv')
+train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=50)
+test_users = pd.read_csv(raw_data_path + 'test_users.csv', nrows=50)
+sessions = pd.read_csv(raw_data_path + 'sessions.csv', nrows=50)
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -154,6 +154,9 @@ users = pd.concat([users, result], axis=1)
 # IDEA: Classify and group by dispositive
 
 # IDEA: Add distance to holidays
+
+from utils.preprocessing import distance_to_holidays
+users = users.apply(distance_to_holidays, axis=1)
 
 # Add number of NaNs per row
 users['nan_sum'] = users.isnull().sum(axis=1)

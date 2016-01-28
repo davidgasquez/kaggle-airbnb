@@ -2,7 +2,7 @@
 
 import pandas as pd
 import numpy as np
-from datetime import date
+from datetime import datetime
 import holidays
 from xgboost.sklearn import XGBClassifier
 
@@ -77,37 +77,37 @@ def _sanitize_holiday_name(name):
     return new_name
 
 
-def process_holidays(df):
+def distance_to_holidays(user):
     """Append the distance of several holidays in days to the users DataFrame.
 
     Parameters
     ----------
-    df : Pandas DataFrame
-        DataFrame containing the dates.
+    user : Pandas Series
+        User containing the dates.
 
     Returns
     -------
-    df : DataFrame
-        Returns the original pandas DataFrame with the new features.
+    user : Series
+        Returns the original pandas Series with the new features.
     """
-    # Create a date object
-    user_date = date(
-        df['year_account_created'],
-        df['month_account_created'],
-        df['day_account_created']
-    )
+    user_date = user.date_account_created
+
+    if isinstance(user_date, pd.tslib.NaTType):
+        return user
 
     # Get US holidays for this year
-    holidays_dates = holidays.US(years=df['year_account_created'])
+    holidays_dates = holidays.US(years=2015,
+                                 observed=False)
 
     for holiday_date, name in holidays_dates.iteritems():
         # Compute difference in days
+        holiday_date = datetime.combine(holiday_date, datetime.min.time())
         days = (holiday_date - user_date).days
 
         # Clean holiday name
         name = _sanitize_holiday_name(name)
 
         # Add the computed days to holiday into our DataFrame
-        df['days_to_' + name] = days
+        user['days_to_' + name] = days
 
-    return df
+    return user
