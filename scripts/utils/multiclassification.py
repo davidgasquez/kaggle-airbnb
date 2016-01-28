@@ -375,7 +375,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         else:
             return neighbors_classes
 
-    def _relative_competence(self, scores, x, n_classes):
+    def _relative_competence(self, scores, x, n_classes, neighbors=5):
         """Extract the weighted vote matrix for the samples.
 
         # TODO: Better documentation
@@ -393,12 +393,21 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
         neigh.fit(self.X)
 
-        d, i = neigh.kneighbors(x)
+        # Get the distances and neighbors indices
+        distances, indices = neigh.kneighbors(x)
+        weighted_matrices = []
 
-        mean_distances = np.zeros(n_classes)
-        for class_n in range(n_classes):
-            mean_distances[class_n] = d[self.y[i] == class_n][:5].mean()
+        for d, i in distances, indices:
 
-        w = _get_weight_matrix(mean_distances)
+            mean_distances = np.zeros(n_classes)
 
-        return scores * w
+            for class_n in range(n_classes):
+                mask = self.y[indices] == class_n
+                mean_distances[class_n] = distances[mask][:5].mean()
+
+            weighted_matrix = _get_weight_matrix(mean_distances)
+            weighted_matrices.append(weighted_matrix)
+
+        R_w = [r * w for r, w in zip(scores, weighted_matrices)]
+
+        return R_w
