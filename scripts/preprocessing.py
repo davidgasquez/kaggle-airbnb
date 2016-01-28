@@ -30,10 +30,10 @@ drop_list = [
 
 users.drop(drop_list, axis=1, inplace=True)
 
-# TODO: Try normalizing with StandardScaler
-# from sklearn.preprocessing import StandardScaler
-# scaler = StandardScaler()
-# scaler.fit_transform(users)
+# Normalizing with StandardScaler
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit_transform(users)
 
 # Encode categorical features
 categorical_features = [
@@ -45,39 +45,40 @@ categorical_features = [
 users = one_hot_encoding(users, categorical_features)
 
 # Fill NaN
-users.fillna(-1, inplace=True)
+# users.fillna(-1, inplace=True)
 
 # Split into train and test users
 train_users = users.loc[train_users.index]
 test_users = users.loc[test_users.index]
 test_users.drop('country_destination', inplace=True, axis=1)
 
+# TODO: Move this to select_features function
 # Get important features from XGBClassifier
-y_train = train_users['country_destination']
-train_users.drop(['country_destination'], axis=1, inplace=True)
-label_encoder = LabelEncoder()
-encoded_y_train = label_encoder.fit_transform(y_train)
-
-
-clf = XGBClassifier(
-    max_depth=6,
-    learning_rate=0.2,
-    n_estimators=100,
-    nthread=-1,
-    seed=42
-)
-
-clf.fit(train_users, encoded_y_train)
-booster = clf.booster()
-
-train_users = train_users[booster.get_fscore().keys()]
-test_users = test_users[booster.get_fscore().keys()]
-
-train_users = pd.concat([train_users, y_train], axis=1)
+# y_train = train_users['country_destination']
+# train_users.drop(['country_destination'], axis=1, inplace=True)
+# label_encoder = LabelEncoder()
+# encoded_y_train = label_encoder.fit_transform(y_train)
+#
+#
+# clf = XGBClassifier(
+#     max_depth=6,
+#     learning_rate=0.2,
+#     n_estimators=100,
+#     nthread=-1,
+#     seed=42
+# )
+#
+# clf.fit(train_users, encoded_y_train)
+# booster = clf.booster()
+#
+# train_users = train_users[booster.get_fscore().keys()]
+# test_users = test_users[booster.get_fscore().keys()]
+#
+# train_users = pd.concat([train_users, y_train], axis=1)
 
 # Set -1 to NaNs to save disk space
-train_users.replace(-1, np.nan, inplace=True)
-test_users.replace(-1, np.nan, inplace=True)
+# train_users.replace(-1, np.nan, inplace=True)
+# test_users.replace(-1, np.nan, inplace=True)
 
 # Save to csv
 suffix = 'full_processed_'
