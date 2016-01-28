@@ -3,6 +3,7 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
+from utils.preprocessing import CustomOneVsOneClassifier
 from utils.io import generate_submission
 
 
@@ -25,9 +26,9 @@ def main():
     x_test = test_users.values
 
     clf = XGBClassifier(
-        max_depth=7,
+        max_depth=6,
         learning_rate=0.18,
-        n_estimators=80,
+        n_estimators=50,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -43,6 +44,9 @@ def main():
         nthread=-1,
         seed=42
     )
+
+    clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote',
+                                   sampling='TomekLinks', verbose=True)
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)

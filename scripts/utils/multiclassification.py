@@ -387,7 +387,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         strategy: Avoiding non-competent classifiers. 2013.
         """
         # Select all the neighborhood
-        k = len(self.y)
+        k = n_classes * 200
 
         # Fit the training data
         neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
@@ -397,13 +397,12 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         distances, indices = neigh.kneighbors(x)
         weighted_matrices = []
 
-        for d, i in distances, indices:
-
+        for d, i in zip(distances, indices):
             mean_distances = np.zeros(n_classes)
 
             for class_n in range(n_classes):
-                mask = self.y[indices] == class_n
-                mean_distances[class_n] = distances[mask][:5].mean()
+                mask = self.y[i] == class_n
+                mean_distances[class_n] = d[mask][:5].mean()
 
             weighted_matrix = _get_weight_matrix(mean_distances)
             weighted_matrices.append(weighted_matrix)
