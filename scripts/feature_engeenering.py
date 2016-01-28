@@ -29,6 +29,7 @@ def process_user_actions(user):
 
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
+        # IDEA: Limit with head()
         column_data = user_session[column].value_counts()
         column_data.index = column_data.index + '_count'
         user_session_data = user_session_data.append(column_data)
@@ -89,9 +90,9 @@ raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
 
 # Load raw data
-train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=1000)
-test_users = pd.read_csv(raw_data_path + 'test_users.csv', nrows=1000)
-sessions = pd.read_csv(raw_data_path + 'sessions.csv', nrows=1000)
+train_users = pd.read_csv(raw_data_path + 'train_users.csv')
+test_users = pd.read_csv(raw_data_path + 'test_users.csv')
+sessions = pd.read_csv(raw_data_path + 'sessions.csv')
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)

@@ -9,8 +9,8 @@ from utils.io import generate_submission
 def main():
     path = '../data/processed/'
     prefix = 'full_processed_'
-    train_users = pd.read_csv(path + prefix + 'train_users.csv.v1')
-    test_users = pd.read_csv(path + prefix + 'test_users.csv.v1')
+    train_users = pd.read_csv(path + prefix + 'train_users.csv')
+    test_users = pd.read_csv(path + prefix + 'test_users.csv')
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -27,7 +27,7 @@ def main():
     clf = XGBClassifier(
         max_depth=7,
         learning_rate=0.18,
-        n_estimators=100,
+        n_estimators=80,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
