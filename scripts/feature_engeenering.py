@@ -155,11 +155,8 @@ users = pd.concat([users, result], axis=1)
 
 # IDEA: Add distance to holidays
 
-# IDEA: Add number of NaNs per row
-
-# IDEA: Add cluster
-
-# IDEA: Average distance to N neighbors of each class
+# Add number of NaNs per row
+users['nan_sum'] = users.isnull().sum(axis=1)
 
 # Set ID as index
 train_users = train_users.set_index('id')

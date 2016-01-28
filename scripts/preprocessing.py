@@ -80,6 +80,16 @@ test_users.drop('country_destination', inplace=True, axis=1)
 # train_users.replace(-1, np.nan, inplace=True)
 # test_users.replace(-1, np.nan, inplace=True)
 
+# IDEA: Add cluster
+# from sklearn.cluster import KMeans
+#
+# m = KMeans(12, n_jobs=-2)
+# m.fit_predict(train_users)
+#
+# print m
+
+# IDEA: Average distance to N neighbors of each class
+
 # Save to csv
 suffix = 'full_processed_'
 train_users.to_csv(processed_data_path + suffix + 'train_users.csv')
