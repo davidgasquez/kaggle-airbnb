@@ -3,7 +3,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
-from utils.multiclassification import CustomOneVsOneClassifier
 from utils.io import generate_submission
 
 
@@ -26,16 +25,16 @@ def main():
     test_users = test_users.fillna(-1)
     x_test = test_users.values
 
-    xgb = XGBClassifier(
-        max_depth=6,
-        learning_rate=0.2,
-        n_estimators=23,
+    clf = XGBClassifier(
+        max_depth=7,
+        learning_rate=0.18,
+        n_estimators=70,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
         subsample=1,
-        colsample_bytree=0.8,
-        colsample_bylevel=0.8,
+        colsample_bytree=1,
+        colsample_bylevel=1,
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
@@ -45,11 +44,11 @@ def main():
         nthread=-1,
         seed=42
     )
-    clf = CustomOneVsOneClassifier(xgb, strategy='vote')
+
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='OvO-6-23')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='gb')
 
 
 if __name__ == '__main__':
