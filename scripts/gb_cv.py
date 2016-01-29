@@ -59,8 +59,9 @@ if __name__ == '__main__':
         seed=42
     )
 
-    vo = CustomOneVsOneClassifier(xgb, strategy='vote')
-    dyn = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote')
+    vo = CustomOneVsOneClassifier(xgb, strategy='vote', sampling='TomekLinks')
+    dyn = CustomOneVsOneClassifier(
+        xgb, strategy='dynamic_vote', sampling='TomekLinks')
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
