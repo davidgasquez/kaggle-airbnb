@@ -34,7 +34,7 @@ def main():
         max_delta_step=0,
         subsample=1,
         colsample_bytree=1,
-        colsample_bylevel=1,
+        colsample_bylevel=0.8,
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
