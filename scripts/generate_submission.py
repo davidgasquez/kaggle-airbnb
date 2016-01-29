@@ -9,7 +9,7 @@ from utils.io import generate_submission
 
 def main():
     path = '../data/processed/'
-    prefix = 'full_processed_'
+    prefix = 'full_processed_2_'
     train_users = pd.read_csv(path + prefix + 'train_users.csv')
     test_users = pd.read_csv(path + prefix + 'test_users.csv')
 
@@ -25,10 +25,10 @@ def main():
     test_users = test_users.fillna(-1)
     x_test = test_users.values
 
-    xgb = XGBClassifier(
-        max_depth=6,
+    clf = XGBClassifier(
+        max_depth=7,
         learning_rate=0.18,
-        n_estimators=50,
+        n_estimators=70,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -45,12 +45,10 @@ def main():
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, strategy='relative_competence', sampling='TomekLinks', verbose=True)
-
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='gb')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='gb2')
 
 
 if __name__ == '__main__':

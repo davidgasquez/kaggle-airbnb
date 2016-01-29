@@ -7,7 +7,7 @@ from xgboost.sklearn import XGBClassifier
 
 # Define data path and suffix
 processed_data_path = '../data/processed/'
-suffix = 'count_processed_'
+suffix = 'processed_2_'
 
 # Load raw data
 train_users = pd.read_csv(processed_data_path + suffix + 'train_users.csv')
@@ -30,11 +30,6 @@ drop_list = [
 
 users.drop(drop_list, axis=1, inplace=True)
 
-# Normalizing with StandardScaler
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-scaler.fit_transform(users)
-
 # Encode categorical features
 categorical_features = [
     'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',
@@ -43,6 +38,11 @@ categorical_features = [
 ]
 
 users = one_hot_encoding(users, categorical_features)
+
+# Normalizing with StandardScaler
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit_transform(users)
 
 # Fill NaN
 # users.fillna(-1, inplace=True)
@@ -91,6 +91,6 @@ test_users.drop('country_destination', inplace=True, axis=1)
 # IDEA: Average distance to N neighbors of each class
 
 # Save to csv
-suffix = 'full_processed_'
+suffix = 'full_processed_2_'
 train_users.to_csv(processed_data_path + suffix + 'train_users.csv')
 test_users.to_csv(processed_data_path + suffix + 'test_users.csv')
