@@ -14,8 +14,8 @@ from utils.metrics import ndcg_scorer
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--max_depth', default=8, type=int)
-    parser.add_argument('-lr', '--learning_rate', default=0.3, type=float)
+    parser.add_argument('-d', '--max_depth', default=7, type=int)
+    parser.add_argument('-lr', '--learning_rate', default=0.2, type=float)
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '3'
+    suffix = '1'
     scale = False
 
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
@@ -59,15 +59,16 @@ if __name__ == '__main__':
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(
-        xgb,
-        strategy='vote',
-        verbose=True
-    )
+    vo = CustomOneVsOneClassifier(xgb, strategy='vote')
+    dyn = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote')
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    score = cross_val_score(clf, x_train, encoded_y_train,
-                            cv=kf, scoring=ndcg_scorer)
+    for model in [vo, dyn]:
+        score = cross_val_score(model, x_train, encoded_y_train,
+                                cv=kf, scoring=ndcg_scorer)
 
-    print args.max_depth, args.learning_rate, args.n_estimators, np.mean(score)
+        print model.get_params(), np.mean(score)
+        print
+        print '--------------------------------'
+        print
