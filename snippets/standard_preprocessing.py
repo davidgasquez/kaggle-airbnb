@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
+
 import sys
-sys.path.append('..')
+sys.path.append('../scripts')
 from utils.preprocessing import one_hot_encoding
 
 path = '../data/raw/'
