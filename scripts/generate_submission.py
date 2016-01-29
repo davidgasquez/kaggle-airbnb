@@ -27,9 +27,9 @@ def main():
     x_test = test_users.values
 
     xgb = XGBClassifier(
-        max_depth=7,
+        max_depth=6,
         learning_rate=0.2,
-        n_estimators=30,
+        n_estimators=23,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -49,7 +49,7 @@ def main():
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='OvO')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='OvO-6-23')
 
 
 if __name__ == '__main__':

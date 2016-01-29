@@ -1,7 +1,6 @@
 import pandas as pd
 
 from utils.preprocessing import one_hot_encoding
-from utils.preprocessing import select_features
 
 # Define data path and suffix
 processed_data_path = '../data/processed/'
