@@ -8,9 +8,10 @@ from utils.io import generate_submission
 
 def main():
     path = '../data/processed/'
-    prefix = 'full_processed_2_'
-    train_users = pd.read_csv(path + prefix + 'train_users.csv')
-    test_users = pd.read_csv(path + prefix + 'test_users.csv')
+    prefix = 'processed_'
+    suffix = '3'
+    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
+    test_users = pd.read_csv(path + prefix + 'test_users.csv' + suffix)
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -47,7 +48,7 @@ def main():
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='gb2')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='GB')
 
 
 if __name__ == '__main__':

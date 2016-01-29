@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
 from utils.multiclassification import CustomOneVsOneClassifier
+from sklearn.preprocessing import StandardScaler
 
 from utils.metrics import ndcg_scorer
 
@@ -21,14 +22,20 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = '../data/processed/'
-    prefix = 'full_processed_'
-    train_users = pd.read_csv(path + prefix + 'train_users.csv')
+    prefix = 'processed_'
+    suffix = '3'
+    scale = True
 
+    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
 
     x_train = train_users.values
+    if scale:
+        scaler = StandardScaler()
+        x_train = scaler.fit_transform(x_train)
+
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
 
@@ -54,7 +61,7 @@ if __name__ == '__main__':
 
     clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote', verbose=True)
 
-    kf = KFold(len(x_train), n_folds=5, random_state=42)
+    kf = KFold(len(x_train), n_folds=10, random_state=42)
 
     score = cross_val_score(clf, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
