@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import argparse
 
 from xgboost.sklearn import XGBClassifier
@@ -26,12 +25,14 @@ if __name__ == '__main__':
     suffix = '1'
     scale = False
 
-    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
+    train_users = pd.read_csv(
+        path + prefix + 'train_users.csv' + suffix, nrows=10000)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
 
-    x_train = train_users.values
+    x_train = train_users.astype('int32').values
+
     if scale:
         scaler = StandardScaler()
         x_train = scaler.fit_transform(x_train)
@@ -59,17 +60,11 @@ if __name__ == '__main__':
         seed=42
     )
 
-    vo = CustomOneVsOneClassifier(xgb, strategy='vote', sampling='TomekLinks')
-    dyn = CustomOneVsOneClassifier(
-        xgb, strategy='dynamic_vote', sampling='TomekLinks')
+    clf = CustomOneVsOneClassifier(xgb, strategy='vote')
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    for model in [vo, dyn]:
-        score = cross_val_score(model, x_train, encoded_y_train,
-                                cv=kf, scoring=ndcg_scorer)
+    score = cross_val_score(clf, x_train, encoded_y_train,
+                            cv=kf, scoring=ndcg_scorer)
 
-        print model.get_params(), np.mean(score)
-        print
-        print '--------------------------------'
-        print
+    print clf.get_params(), score.mean()
