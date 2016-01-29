@@ -39,18 +39,13 @@ categorical_features = [
 
 users = one_hot_encoding(users, categorical_features)
 
-# Normalizing with StandardScaler
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-scaler.fit_transform(users)
-
-# Fill NaN
-# users.fillna(-1, inplace=True)
-
 # Split into train and test users
 train_users = users.loc[train_users.index]
 test_users = users.loc[test_users.index]
 test_users.drop('country_destination', inplace=True, axis=1)
+
+# Fill NaN
+# users.fillna(-1, inplace=True)
 
 # TODO: Move this to select_features function
 # Get important features from XGBClassifier

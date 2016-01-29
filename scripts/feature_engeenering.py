@@ -28,6 +28,12 @@ def process_user_actions(user):
     user_session_data['session_lenght'] = len(user_session)
     user_session_data['id'] = user
 
+    # Add number of NaNs per row
+    user_session_data['nan_sum'] = user_session_data.isnull().sum()
+
+    # TODO: Add distance to holidays
+    # users = users.apply(distance_to_holidays, axis=1)
+
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
         column_data = user_session[column].value_counts().head()
@@ -88,11 +94,12 @@ def process_user_secs_elapsed(user):
 # Define data path
 raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
+rows = 10000
 
 # Load raw data
-train_users = pd.read_csv(raw_data_path + 'train_users.csv')
-test_users = pd.read_csv(raw_data_path + 'test_users.csv')
-sessions = pd.read_csv(raw_data_path + 'sessions.csv')
+train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=rows)
+test_users = pd.read_csv(raw_data_path + 'test_users.csv', nrows=rows)
+sessions = pd.read_csv(raw_data_path + 'sessions.csv', nrows=rows)
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -153,12 +160,6 @@ users = pd.concat([users, result], axis=1)
 # IDEA: Add interaction features
 
 # IDEA: Classify and group by dispositive
-
-# Add distance to holidays
-users = users.apply(distance_to_holidays, axis=1)
-
-# Add number of NaNs per row
-users['nan_sum'] = users.isnull().sum(axis=1)
 
 # Set ID as index
 train_users = train_users.set_index('id')
