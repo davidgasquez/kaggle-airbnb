@@ -94,7 +94,7 @@ def process_user_secs_elapsed(user):
 # Define data path
 raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
-rows = 10000
+rows = None
 
 # Load raw data
 train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=rows)
