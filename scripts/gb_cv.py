@@ -25,8 +25,7 @@ if __name__ == '__main__':
     suffix = '1'
     scale = False
 
-    train_users = pd.read_csv(
-        path + prefix + 'train_users.csv' + suffix, nrows=10000)
+    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
