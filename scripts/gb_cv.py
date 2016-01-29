@@ -24,7 +24,7 @@ if __name__ == '__main__':
     path = '../data/processed/'
     prefix = 'processed_'
     suffix = '3'
-    scale = True
+    scale = False
 
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
@@ -59,7 +59,11 @@ if __name__ == '__main__':
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, strategy='dynamic_vote', verbose=True)
+    clf = CustomOneVsOneClassifier(
+        xgb,
+        strategy='vote',
+        verbose=True
+    )
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
