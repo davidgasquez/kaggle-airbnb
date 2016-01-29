@@ -1,4 +1,4 @@
-"""Wrappers to simplify data loading."""
+"""Wrappers to simplify data input and output."""
 
 import pandas as pd
 import numpy as np
@@ -30,22 +30,6 @@ def load_users_data(path=DEFAULT_PATH, preprocessed=False, prefix=''):
         train_users = pd.read_csv(path + prefix + 'train_users.csv')
         test_users = pd.read_csv(path + prefix + 'test_users.csv')
     return train_users, test_users
-
-
-def load_sessions_data(path=DEFAULT_PATH):
-    """Load the users sessions data.
-
-    Parameters
-    ----------
-    path: str
-        Path of the folder containing the data.
-
-    Returns
-    -------
-    sessions: DataFrame
-        Loaded DataFrame.
-    """
-    return pd.read_csv(path + 'raw/' + 'sessions.csv')
 
 
 def generate_submission(y_pred, test_users_ids, label_encoder,
