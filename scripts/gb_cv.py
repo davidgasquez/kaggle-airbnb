@@ -18,11 +18,12 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
+    # TODO: Add more arguments
     args = parser.parse_args()
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '1'
+    suffix = '3'
     scale = False
 
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
@@ -59,11 +60,11 @@ if __name__ == '__main__':
         seed=42
     )
 
-    clf = CustomOneVsOneClassifier(xgb, strategy='vote')
+    # clf = CustomOneVsOneClassifier(xgb, strategy='vote')
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    score = cross_val_score(clf, x_train, encoded_y_train,
+    score = cross_val_score(xgb, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
-    print clf.get_params(), score.mean()
+    print xgb.get_params(), score.mean()
