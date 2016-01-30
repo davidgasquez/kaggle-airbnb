@@ -10,7 +10,7 @@ from utils.io import generate_submission
 def main():
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '1'
+    suffix = '3'
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     test_users = pd.read_csv(path + prefix + 'test_users.csv' + suffix)
 
@@ -26,10 +26,10 @@ def main():
     test_users = test_users.fillna(-1)
     x_test = test_users.values
 
-    xgb = XGBClassifier(
-        max_depth=5,
-        learning_rate=0.3,
-        n_estimators=10,
+    clf = XGBClassifier(
+        max_depth=7,
+        learning_rate=0.18,
+        n_estimators=80,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
@@ -46,11 +46,10 @@ def main():
         seed=42
     )
 
-    clf = BaggingClassifier(xgb, random_state=42)
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='bagging')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='latest_gb')
 
 
 if __name__ == '__main__':
