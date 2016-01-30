@@ -6,6 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import BaggingClassifier
 
 from utils.metrics import ndcg_scorer
 
@@ -23,10 +24,11 @@ if __name__ == '__main__':
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '3'
+    suffix = ''
     scale = False
 
-    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
+    train_users = pd.read_csv(
+        path + prefix + 'train_users.csv' + suffix, nrows=20000)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -62,7 +64,9 @@ if __name__ == '__main__':
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    score = cross_val_score(xgb, x_train, encoded_y_train,
+    clf = BaggingClassifier(xgb, random_state=42)
+
+    score = cross_val_score(clf, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
     print xgb.get_params(), score.mean()
