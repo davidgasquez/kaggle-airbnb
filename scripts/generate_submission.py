@@ -9,7 +9,7 @@ from utils.io import generate_submission
 def main():
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '1'
+    suffix = '3'
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     test_users = pd.read_csv(path + prefix + 'test_users.csv' + suffix)
 
@@ -34,7 +34,7 @@ def main():
         max_delta_step=0,
         subsample=1,
         colsample_bytree=1,
-        colsample_bylevel=0.8,
+        colsample_bylevel=1,
         reg_alpha=0,
         reg_lambda=1,
         scale_pos_weight=1,
