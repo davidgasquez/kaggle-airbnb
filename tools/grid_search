@@ -83,6 +83,8 @@ if __name__ == '__main__':
                         nargs='*', type=float, default=[1])
     parser.add_argument('-cl', '--colsample_bylevel',
                         nargs='*', type=float, default=[1])
+    parser.add_argument('-sub', '--subsample',
+                        nargs='*', type=float, default=[1])
 
     args = parser.parse_args()
 
@@ -91,7 +93,8 @@ if __name__ == '__main__':
         'learning_rate': args.learning_rate,
         'n_estimators': args.n_estimators,
         'colsample_bytree': args.colsample_bytree,
-        'colsample_bylevel': args.colsample_bylevel
+        'colsample_bylevel': args.colsample_bylevel,
+        'subsample': args.subsample
     }
 
     grid = ParameterGrid(param_grid)

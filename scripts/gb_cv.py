@@ -5,7 +5,6 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
-from utils.multiclassification import CustomOneVsOneClassifier
 from sklearn.preprocessing import StandardScaler
 
 from utils.metrics import ndcg_scorer
@@ -18,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
+    parser.add_argument('-sub', '--subsample', default=1, type=float)
     # TODO: Add more arguments
     args = parser.parse_args()
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=1,
+        subsample=args.subsample,
         colsample_bytree=args.colsample_bytree,
         colsample_bylevel=args.colsample_bylevel,
         reg_alpha=0,
@@ -59,8 +59,6 @@ if __name__ == '__main__':
         nthread=-1,
         seed=42
     )
-
-    # clf = CustomOneVsOneClassifier(xgb, strategy='vote')
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
