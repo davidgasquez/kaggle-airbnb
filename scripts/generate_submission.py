@@ -46,6 +46,7 @@ def main():
         seed=42
     )
 
+    # TODO: Fit bagging with different datasets and warm start True
     clf = BaggingClassifier(xgb, random_state=42)
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
