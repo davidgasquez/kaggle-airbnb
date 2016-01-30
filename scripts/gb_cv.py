@@ -5,8 +5,8 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
-from utils.multiclassification import CustomOneVsOneClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import BaggingClassifier
 
 from utils.metrics import ndcg_scorer
 
@@ -18,15 +18,17 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--n_estimators', default=30, type=int)
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
+    parser.add_argument('-sub', '--subsample', default=1, type=float)
     # TODO: Add more arguments
     args = parser.parse_args()
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '3'
+    suffix = ''
     scale = False
 
-    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
+    train_users = pd.read_csv(
+        path + prefix + 'train_users.csv' + suffix, nrows=20000)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -47,7 +49,7 @@ if __name__ == '__main__':
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=1,
+        subsample=args.subsample,
         colsample_bytree=args.colsample_bytree,
         colsample_bylevel=args.colsample_bylevel,
         reg_alpha=0,
@@ -60,11 +62,11 @@ if __name__ == '__main__':
         seed=42
     )
 
-    # clf = CustomOneVsOneClassifier(xgb, strategy='vote')
-
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    score = cross_val_score(xgb, x_train, encoded_y_train,
+    clf = BaggingClassifier(xgb, random_state=42)
+
+    score = cross_val_score(clf, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
     print xgb.get_params(), score.mean()
