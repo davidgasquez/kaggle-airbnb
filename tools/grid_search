@@ -103,4 +103,3 @@ if __name__ == '__main__':
         send_code(args.script, queue=args.queue, job_name=args.job_name,
                   suffix=i + 1, **params)
 
-        time.sleep(5)
