@@ -3,7 +3,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
-from sklearn.ensemble import BaggingClassifier
 from utils.io import generate_submission
 
 
