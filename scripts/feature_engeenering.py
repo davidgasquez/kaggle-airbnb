@@ -31,9 +31,6 @@ def process_user_actions(user):
     # Add number of NaNs per row
     user_session_data['nan_sum'] = user_session_data.isnull().sum()
 
-    # TODO: Add distance to holidays
-    # users = users.apply(distance_to_holidays, axis=1)
-
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
         column_data = user_session[column].value_counts()
@@ -160,6 +157,9 @@ users = pd.concat([users, result], axis=1)
 # IDEA: Add interaction features
 
 # IDEA: Classify and group by dispositive
+
+# IDEA: Add distance to holidays
+# users = users.apply(distance_to_holidays, axis=1)
 
 # Set ID as index
 train_users = train_users.set_index('id')
