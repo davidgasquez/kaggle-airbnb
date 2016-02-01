@@ -9,7 +9,7 @@ from utils.io import generate_submission
 def main():
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '3'
+    suffix = '1'
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     test_users = pd.read_csv(path + prefix + 'test_users.csv' + suffix)
 
@@ -27,12 +27,12 @@ def main():
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.18,
-        n_estimators=80,
+        learning_rate=0.1,
+        n_estimators=140,
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=1,
+        subsample=0.5,
         colsample_bytree=1,
         colsample_bylevel=1,
         reg_alpha=0,

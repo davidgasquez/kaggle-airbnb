@@ -24,11 +24,10 @@ if __name__ == '__main__':
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = ''
+    suffix = '3'
     scale = False
 
-    train_users = pd.read_csv(
-        path + prefix + 'train_users.csv' + suffix, nrows=20000)
+    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -64,9 +63,7 @@ if __name__ == '__main__':
 
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
-    clf = BaggingClassifier(xgb, random_state=42)
-
-    score = cross_val_score(clf, x_train, encoded_y_train,
+    score = cross_val_score(xgb, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
     print xgb.get_params(), score.mean()
