@@ -48,7 +48,7 @@ def main():
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='latest_gb')
+    generate_submission(y_pred, test_users_ids, label_encoder, name='gb')
 
 
 if __name__ == '__main__':
