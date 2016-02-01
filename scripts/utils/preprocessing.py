@@ -96,7 +96,7 @@ def distance_to_holidays(user):
         return user
 
     # Get US holidays for this year
-    holidays_dates = holidays.US(years=2015,
+    holidays_dates = holidays.US(years=[int(user.year_account_created)],
                                  observed=False)
 
     for holiday_date, name in holidays_dates.iteritems():
