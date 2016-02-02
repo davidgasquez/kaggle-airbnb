@@ -3,6 +3,7 @@ import pandas as pd
 import multiprocessing
 from multiprocessing import Pool
 from sklearn.preprocessing import LabelEncoder
+from utils.preprocessing import distance_to_holidays
 
 
 def process_user_actions(user):
@@ -88,7 +89,7 @@ def process_user_secs_elapsed(user):
 # Define data path
 raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
-rows = None
+rows = 1000
 
 # Load raw data
 train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=rows)
@@ -164,7 +165,7 @@ users = pd.concat([users, result], axis=1)
 # IDEA: Classify and group by dispositive
 
 # IDEA: Add distance to holidays
-# users = users.apply(distance_to_holidays, axis=1)
+# [distance_to_holidays(d) for d in users['date_account_created']]
 
 # Set ID as index
 train_users = train_users.set_index('id')

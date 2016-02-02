@@ -77,7 +77,7 @@ def _sanitize_holiday_name(name):
     return new_name
 
 
-def distance_to_holidays(user):
+def distance_to_holidays(date):
     """Append the distance of several holidays in days to the users DataFrame.
 
     Parameters
@@ -90,24 +90,22 @@ def distance_to_holidays(user):
     user : Series
         Returns the original pandas Series with the new features.
     """
-    user_date = user.date_account_created
+    if not isinstance(date, pd.tslib.Timestamp):
+        return
 
-    if isinstance(user_date, pd.tslib.NaTType):
-        return user
-
+    distances = pd.Series()
     # Get US holidays for this year
-    holidays_dates = holidays.US(years=[int(user.year_account_created)],
+    holidays_dates = holidays.US(years=[date.year],
                                  observed=False)
 
-    for holiday_date, name in holidays_dates.iteritems():
+    for holiday_date, name in holidays_dates.items():
         # Compute difference in days
         holiday_date = datetime.combine(holiday_date, datetime.min.time())
-        days = (holiday_date - user_date).days
+        days = (holiday_date - date).days
 
         # Clean holiday name
         name = _sanitize_holiday_name(name)
 
-        # Add the computed days to holiday into our DataFrame
-        user['days_to_' + name] = days
+        distances['days_to_' + name] = days
 
-    return user
+    return distances
