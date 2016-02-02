@@ -38,7 +38,7 @@ def process_user_actions(user):
         user_session_data = user_session_data.append(column_data)
 
     # Get the most used device
-    user_session_data['most_used_device'] = user_session['device_type'].max()
+    user_session_data['most_used_device'] = user_session['device_type'].mode()
 
     # Grouby ID and add values
     return user_session_data.groupby(user_session_data.index).sum()
@@ -142,16 +142,22 @@ result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
 users = pd.concat([users, result], axis=1)
 
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
+
 # Process user actions in parallel
 p = Pool(multiprocessing.cpu_count())
 result = p.map(process_user_actions, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
+result.index = le.inverse_transform(result.index)
 users = pd.concat([users, result], axis=1)
 
 # Process seconds elapsed statistics in parallel
 p = Pool(multiprocessing.cpu_count())
 result = p.map(process_user_secs_elapsed, sessions['user_id'].unique())
 result = pd.DataFrame(result).set_index('id')
+result.index = le.inverse_transform(result.index.values.astype(int))
 users = pd.concat([users, result], axis=1)
 
 # IDEA: Add interaction features
