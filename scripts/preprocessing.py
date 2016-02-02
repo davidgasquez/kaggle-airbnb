@@ -28,6 +28,7 @@ drop_list = [
 users.drop(drop_list, axis=1, inplace=True)
 
 # TODO: add singup flow to categorical features
+
 # Encode categorical features
 categorical_features = [
     'gender', 'signup_method', 'signup_flow', 'language', 'affiliate_channel',

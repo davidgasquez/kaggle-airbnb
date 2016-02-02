@@ -5,8 +5,6 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import BaggingClassifier
 
 from utils.metrics import ndcg_scorer
 
@@ -19,13 +17,11 @@ if __name__ == '__main__':
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
     parser.add_argument('-sub', '--subsample', default=1, type=float)
-    # TODO: Add more arguments
     args = parser.parse_args()
 
     path = '../data/processed/'
     prefix = 'processed_'
     suffix = '3'
-    scale = False
 
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
@@ -33,10 +29,6 @@ if __name__ == '__main__':
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
 
     x_train = train_users.astype('int32').values
-
-    if scale:
-        scaler = StandardScaler()
-        x_train = scaler.fit_transform(x_train)
 
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
