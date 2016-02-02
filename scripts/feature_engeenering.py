@@ -28,9 +28,6 @@ def process_user_actions(user):
     user_session_data['session_lenght'] = len(user_session)
     user_session_data['id'] = user
 
-    # Add number of NaNs per row
-    user_session_data['nan_sum'] = user_session_data.isnull().sum()
-
     # Take the count of each value per column
     for column in ['action', 'action_type', 'action_detail', 'device_type']:
         column_data = user_session[column].value_counts()
@@ -141,6 +138,9 @@ users['week_first_active'] = date_first_active.week
 result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
 users = pd.concat([users, result], axis=1)
+
+# IDEA: Add number of NaNs per row
+# users['nan_sum'] = users.isnull().sum()
 
 le = LabelEncoder()
 sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
