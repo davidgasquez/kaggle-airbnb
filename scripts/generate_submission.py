@@ -29,6 +29,7 @@ def main():
         max_depth=7,
         learning_rate=0.1,
         n_estimators=140,
+        objective="multi:softprob",
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,

@@ -45,6 +45,7 @@ if __name__ == '__main__':
         max_depth=args.max_depth,
         learning_rate=args.learning_rate,
         n_estimators=args.n_estimators,
+        objective="multi:softprob",
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
