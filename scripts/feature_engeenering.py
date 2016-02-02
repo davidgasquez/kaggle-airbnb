@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 from multiprocessing import Pool
-from utils.preprocessing import distance_to_holidays
+from sklearn.preprocessing import LabelEncoder
 
 
 def process_user_actions(user):
@@ -142,7 +142,6 @@ result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
 users = pd.concat([users, result], axis=1)
 
-from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
 sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
 
