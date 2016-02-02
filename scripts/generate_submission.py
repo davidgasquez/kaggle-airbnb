@@ -27,13 +27,13 @@ def main():
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.1,
-        n_estimators=140,
+        learning_rate=0.18,
+        n_estimators=80,
         objective="multi:softprob",
         gamma=0,
         min_child_weight=1,
         max_delta_step=0,
-        subsample=0.5,
+        subsample=1,
         colsample_bytree=1,
         colsample_bylevel=1,
         reg_alpha=0,
