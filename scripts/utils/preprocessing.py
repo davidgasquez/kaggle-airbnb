@@ -90,8 +90,6 @@ def distance_to_holidays(date):
     user : Series
         Returns the original pandas Series with the new features.
     """
-    if not isinstance(date, pd.tslib.Timestamp):
-        return
 
     distances = pd.Series()
     # Get US holidays for this year

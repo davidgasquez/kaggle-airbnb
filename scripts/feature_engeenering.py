@@ -89,7 +89,7 @@ def process_user_secs_elapsed(user):
 # Define data path
 raw_data_path = '../data/raw/'
 processed_data_path = '../data/processed/'
-rows = 1000
+rows = None
 
 # Load raw data
 train_users = pd.read_csv(raw_data_path + 'train_users.csv', nrows=rows)
@@ -113,7 +113,8 @@ users.loc[users['age'] > 100, 'age'] = np.nan
 users.loc[users['age'] < 13, 'age'] = np.nan
 
 # Change type to date
-users['date_account_created'] = pd.to_datetime(users['date_account_created'])
+users['date_account_created'] = pd.to_datetime(users['date_account_created'],
+                                               errors='ignore')
 users['date_first_active'] = pd.to_datetime(users['timestamp_first_active'],
                                             format='%Y%m%d%H%M%S')
 
@@ -164,8 +165,8 @@ users = pd.concat([users, result], axis=1)
 
 # IDEA: Classify and group by dispositive
 
-# IDEA: Add distance to holidays
-# [distance_to_holidays(d) for d in users['date_account_created']]
+# Add distance to holidays
+users['date_account_created'].apply(distance_to_holidays)
 
 # Set ID as index
 train_users = train_users.set_index('id')
