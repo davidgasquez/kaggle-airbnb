@@ -139,8 +139,8 @@ result = sessions.groupby('user_id').count()
 result.rename(columns=lambda x: x + '_count', inplace=True)
 users = pd.concat([users, result], axis=1)
 
-# IDEA: Add number of NaNs per row
-# users['nan_sum'] = users.isnull().sum()
+# Add number of NaNs per row
+users['nan_sum'] = users.isnull().sum(axis=1)
 
 le = LabelEncoder()
 sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
