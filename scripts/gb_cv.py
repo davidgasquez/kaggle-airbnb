@@ -12,8 +12,8 @@ from utils.metrics import ndcg_scorer
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--max_depth', default=7, type=int)
-    parser.add_argument('-lr', '--learning_rate', default=0.2, type=float)
-    parser.add_argument('-n', '--n_estimators', default=30, type=int)
+    parser.add_argument('-lr', '--learning_rate', default=0.18, type=float)
+    parser.add_argument('-n', '--n_estimators', default=80, type=int)
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
     parser.add_argument('-sub', '--subsample', default=1, type=float)
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     path = '../data/processed/'
     prefix = 'processed_'
-    suffix = '3'
+    suffix = '4'
 
     train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
     train_users.fillna(-1, inplace=True)
