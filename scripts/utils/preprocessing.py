@@ -90,11 +90,9 @@ def distance_to_holidays(date):
     user : Series
         Returns the original pandas Series with the new features.
     """
-
     distances = pd.Series()
     # Get US holidays for this year
-    holidays_dates = holidays.US(years=[date.year],
-                                 observed=False)
+    holidays_dates = holidays.US(years=[date.year], observed=False)
 
     for holiday_date, name in holidays_dates.items():
         # Compute difference in days
@@ -107,3 +105,84 @@ def distance_to_holidays(date):
         distances['days_to_' + name] = days
 
     return distances
+
+
+def process_user_actions(sessions, user):
+    """Count the elapsed seconds per action.
+
+    Parameters
+    ----------
+    sessions : Pandas DataFrame
+        Sessions of the users.
+    user : int or str
+        User ID.
+
+    Returns
+    -------
+    user_session_data : Series
+        Returns a pandas Series with the count of each action.
+    """
+    # Get the user session
+    user_session = sessions.loc[sessions['user_id'] == user]
+    user_session_data = pd.Series()
+
+    # Length of the session
+    user_session_data['session_lenght'] = len(user_session)
+    user_session_data['id'] = user
+
+    # Take the count of each value per column
+    for column in ['action', 'action_type', 'action_detail', 'device_type']:
+        column_data = user_session[column].value_counts()
+        column_data.index = column_data.index + '_count'
+        user_session_data = user_session_data.append(column_data)
+
+    # Get the most used device
+    user_session_data['most_used_device'] = user_session['device_type'].mode()
+
+    # Grouby ID and add values
+    return user_session_data.groupby(user_session_data.index).sum()
+
+
+def process_user_secs_elapsed(sessions, user):
+    """Compute some statistical values of the elapsed seconds of a given user.
+
+    Parameters
+    ----------
+    sessions : Pandas DataFrame
+        Sessions of the users.
+    user : int or str
+        User ID.
+
+    Returns
+    -------
+    user_processed_secs : Series
+        Returns a pandas Series with the statistical values.
+    """
+    # Locate user in sessions file
+    user_secs = sessions.loc[sessions['user_id'] == user, 'secs_elapsed']
+    user_processed_secs = pd.Series()
+    user_processed_secs['id'] = user
+
+    user_processed_secs['secs_elapsed_sum'] = user_secs.sum()
+    user_processed_secs['secs_elapsed_mean'] = user_secs.mean()
+    user_processed_secs['secs_elapsed_min'] = user_secs.min()
+    user_processed_secs['secs_elapsed_max'] = user_secs.max()
+    user_processed_secs['secs_elapsed_quantile_1'] = user_secs.quantile(0.1)
+    user_processed_secs['secs_elapsed_quantile_2'] = user_secs.quantile(0.25)
+    user_processed_secs['secs_elapsed_quantile_3'] = user_secs.quantile(0.75)
+    user_processed_secs['secs_elapsed_quantile_3'] = user_secs.quantile(0.9)
+    user_processed_secs['secs_elapsed_median'] = user_secs.median()
+    user_processed_secs['secs_elapsed_std'] = user_secs.std()
+    user_processed_secs['secs_elapsed_var'] = user_secs.var()
+    user_processed_secs['secs_elapsed_skew'] = user_secs.skew()
+
+    # Number of elapsed seconds greater than 1 day
+    user_processed_secs['day_pauses'] = user_secs[user_secs > 86400].count()
+
+    # Clicks with less than one hour of differences
+    user_processed_secs['short_sessions'] = user_secs[user_secs < 3600].count()
+
+    # Long breaks
+    user_processed_secs['long_pauses'] = user_secs[user_secs > 300000].count()
+
+    return user_processed_secs

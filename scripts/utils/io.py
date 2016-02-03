@@ -5,6 +5,23 @@ import numpy as np
 import datetime
 
 
+def load_users(version='', nrows=None, na_values='-unknown-'):
+    """Load user data."""
+    path = '../data/'
+    if version:
+        path += 'processed/processed_'
+    else:
+        path += 'raw/'
+
+    train_users = path + 'train_users.csv' + version
+    test_users = path + 'test_users.csv' + version
+
+    train_users = pd.read_csv(train_users, nrows=nrows, na_values=na_values)
+    test_users = pd.read_csv(test_users, nrows=nrows, na_values=na_values)
+
+    return train_users, test_users
+
+
 def generate_submission(y_pred, test_users_ids, label_encoder,
                         name='submission'):
     """Create a valid submission file given the predictions.
