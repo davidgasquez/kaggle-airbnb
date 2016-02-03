@@ -2,13 +2,13 @@ import pandas as pd
 
 from utils.preprocessing import one_hot_encoding
 
-# Define data path and suffix
+# Define data path and VERSION
 processed_data_path = '../data/processed/'
-suffix = '4'
+VERSION = '4'
 
 # Load raw data
-train_users = pd.read_csv(processed_data_path + 'train_users.csv' + suffix)
-test_users = pd.read_csv(processed_data_path + 'test_users.csv' + suffix)
+train_users = pd.read_csv(processed_data_path + 'train_users.csv' + VERSION)
+test_users = pd.read_csv(processed_data_path + 'test_users.csv' + VERSION)
 
 # Join users
 users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -26,6 +26,8 @@ drop_list = [
 ]
 
 users.drop(drop_list, axis=1, inplace=True)
+
+# IDEA: Add interaction features
 
 # TODO: add singup flow to categorical features
 
@@ -47,5 +49,5 @@ test_users.drop('country_destination', inplace=True, axis=1)
 
 # Save to csv
 prefix = 'processed_'
-train_users.to_csv(processed_data_path + prefix + 'train_users.csv' + suffix)
-test_users.to_csv(processed_data_path + prefix + 'test_users.csv' + suffix)
+train_users.to_csv(processed_data_path + prefix + 'train_users.csv' + VERSION)
+test_users.to_csv(processed_data_path + prefix + 'test_users.csv' + VERSION)
