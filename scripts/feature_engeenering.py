@@ -142,7 +142,7 @@ result.rename(columns=lambda x: x + '_count', inplace=True)
 users = pd.concat([users, result], axis=1)
 
 # Add number of NaNs per row
-# users['nan_sum'] = users.isnull().sum(axis=1)
+users['nan_sum'] = users.isnull().sum(axis=1)
 
 le = LabelEncoder()
 sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
@@ -166,7 +166,7 @@ users = pd.concat([users, result], axis=1)
 # IDEA: Classify and group by dispositive
 
 # Add distance to holidays
-# users['date_account_created'].apply(distance_to_holidays)
+users['date_account_created'].apply(distance_to_holidays)
 
 # Set ID as index
 train_users = train_users.set_index('id')
@@ -179,6 +179,6 @@ processed_test_users = users.loc[test_users.index]
 processed_test_users.drop(['country_destination'], inplace=True, axis=1)
 
 # Save to csv
-suffix = '2'
+suffix = '4'
 processed_train_users.to_csv(processed_data_path + 'train_users.csv' + suffix)
 processed_test_users.to_csv(processed_data_path + 'test_users.csv' + suffix)

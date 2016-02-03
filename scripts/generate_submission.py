@@ -27,7 +27,7 @@ def main():
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.18,
+        learning_rate=0.2,
         n_estimators=80,
         objective="multi:softprob",
         gamma=0,
