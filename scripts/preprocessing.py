@@ -4,7 +4,7 @@ from utils.preprocessing import one_hot_encoding
 
 # Define data path and suffix
 processed_data_path = '../data/processed/'
-suffix = '4'
+suffix = '2'
 
 # Load raw data
 train_users = pd.read_csv(processed_data_path + 'train_users.csv' + suffix)
