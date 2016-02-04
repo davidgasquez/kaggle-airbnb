@@ -50,7 +50,7 @@ if __name__ == '__main__':
     users['month_first_active'] = date_first_active.month
     users['year_first_active'] = date_first_active.year
 
-    # IDEA: Add distance to holidays
+    # Add distance to holidays
     user_holidays = users['date_account_created'].apply(distance_to_holidays)
     users = pd.concat([users, user_holidays], axis=1)
 
