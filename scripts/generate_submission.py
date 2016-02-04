@@ -5,8 +5,8 @@ from xgboost.sklearn import XGBClassifier
 
 from kairbnb.io import generate_submission, load_users
 
-VERSION = '3'
-NAME = 'gb_3'
+VERSION = '1'
+NAME = 'gb_' + VERSION 
 
 if __name__ == '__main__':
     train_users, test_users = load_users(version=VERSION)
@@ -24,13 +24,13 @@ if __name__ == '__main__':
     x_test = test_users.values
 
     clf = XGBClassifier(
-        max_depth=6,
-        learning_rate=0.1,
+        max_depth=7,
+        learning_rate=0.18,
         n_estimators=80,
         objective="multi:softprob",
         gamma=0,
         min_child_weight=1,
-        max_delta_step=0,
+        max_delta_step=1,
         subsample=1,
         colsample_bytree=1,
         colsample_bylevel=1,
