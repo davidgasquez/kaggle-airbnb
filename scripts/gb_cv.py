@@ -8,7 +8,7 @@ from sklearn.cross_validation import KFold
 from kairbnb.metrics import ndcg_scorer
 from kairbnb.io import load_users
 
-VERSION = '1'
+VERSION = '4'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
