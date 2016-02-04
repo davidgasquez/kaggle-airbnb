@@ -30,7 +30,7 @@ if __name__ == '__main__':
         objective="multi:softprob",
         gamma=0,
         min_child_weight=1,
-        max_delta_step=1,
+        max_delta_step=0,
         subsample=1,
         colsample_bytree=1,
         colsample_bylevel=1,
