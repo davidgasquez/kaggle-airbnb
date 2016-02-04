@@ -163,6 +163,7 @@ def process_user_secs_elapsed(sessions, user):
     user_processed_secs = pd.Series()
     user_processed_secs['id'] = user
 
+    # IDEA: Use log scale
     user_processed_secs['secs_elapsed_sum'] = user_secs.sum()
     user_processed_secs['secs_elapsed_mean'] = user_secs.mean()
     user_processed_secs['secs_elapsed_min'] = user_secs.min()
