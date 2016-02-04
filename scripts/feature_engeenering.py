@@ -3,18 +3,19 @@ import pandas as pd
 import multiprocessing
 from functools import partial
 from sklearn.preprocessing import LabelEncoder
-from utils.preprocessing import distance_to_holidays
-from utils.preprocessing import process_user_actions
-from utils.preprocessing import process_user_secs_elapsed
-from utils.io import load_users
+
+from kairbnb.preprocessing import distance_to_holidays
+from kairbnb.preprocessing import process_user_actions
+from kairbnb.preprocessing import process_user_secs_elapsed
+from kairbnb.io import load_users
 
 NROWS = 1000
-VERSION = ''
+VERSION = '1'
 
 if __name__ == '__main__':
     # Load raw data
     train_users, test_users = load_users(nrows=NROWS)
-    sessions = pd.read_csv('../data/raw/sessions.csv', nrows=NROWS)
+    sessions = pd.read_csv('../data/sessions.csv', nrows=NROWS)
 
     # Join users
     users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -67,7 +68,6 @@ if __name__ == '__main__':
     # because Python pickes strings and integers differently
     le = LabelEncoder()
     sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
-
     sessions_ids = sessions['user_id'].unique()
 
     # Make pool to process in parallel
@@ -96,5 +96,5 @@ if __name__ == '__main__':
     processed_test_users.drop(['country_destination'], inplace=True, axis=1)
 
     # Save to csv
-    processed_train_users.to_csv('../data/processed/train_users.csv' + VERSION)
-    processed_test_users.to_csv('../data/processed/test_users.csv' + VERSION)
+    processed_train_users.to_csv('../cache/train_users.csv' + VERSION)
+    processed_test_users.to_csv('../cache/test_users.csv' + VERSION)

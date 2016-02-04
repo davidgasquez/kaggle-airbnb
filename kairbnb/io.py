@@ -7,11 +7,11 @@ import datetime
 
 def load_users(version='', nrows=None, na_values='-unknown-'):
     """Load user data."""
-    path = '../data/'
+
     if version:
-        path += 'processed/processed_'
+        path = '../cache/'
     else:
-        path += 'raw/'
+        path = '../data/'
 
     train_users = path + 'train_users.csv' + version
     test_users = path + 'test_users.csv' + version
@@ -60,6 +60,6 @@ def generate_submission(y_pred, test_users_ids, label_encoder,
     submission = pd.DataFrame(id_stacks, columns=['id', 'country'])
 
     date = datetime.datetime.now().strftime("%m-%d-%H:%M:%S")
-    name = name + str(date) + '.csv'
+    name = name + '_' + str(date) + '.csv'
 
-    return submission.to_csv('../data/submissions/' + name, index=False)
+    return submission.to_csv('../' + name, index=False)

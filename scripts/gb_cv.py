@@ -1,4 +1,3 @@
-import pandas as pd
 import argparse
 
 from xgboost.sklearn import XGBClassifier
@@ -6,7 +5,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
 
-from utils.metrics import ndcg_scorer
+from kairbnb.metrics import ndcg_scorer
+from kairbnb.io import load_users
 
 
 if __name__ == '__main__':
@@ -19,16 +19,11 @@ if __name__ == '__main__':
     parser.add_argument('-sub', '--subsample', default=1, type=float)
     args = parser.parse_args()
 
-    path = '../data/processed/'
-    prefix = 'processed_'
-    suffix = '4'
-
-    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
+    train_users, _ = load_users(version='1')
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
-
-    x_train = train_users.astype('int32').values
+    x_train = train_users.values
 
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
@@ -59,4 +54,4 @@ if __name__ == '__main__':
     score = cross_val_score(xgb, x_train, encoded_y_train,
                             cv=kf, scoring=ndcg_scorer)
 
-    print xgb.get_params(), score.mean()
+    print(xgb.get_params(), score.mean())

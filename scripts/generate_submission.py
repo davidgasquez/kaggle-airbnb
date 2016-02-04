@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 
-import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBClassifier
-from utils.io import generate_submission
+
+from kairbnb.io import generate_submission, load_users
 
 
-def main():
-    path = '../data/processed/'
-    prefix = 'processed_'
-    suffix = '4'
-    train_users = pd.read_csv(path + prefix + 'train_users.csv' + suffix)
-    test_users = pd.read_csv(path + prefix + 'test_users.csv' + suffix)
+if __name__ == '__main__':
+    train_users, test_users = load_users('1')
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -50,7 +46,3 @@ def main():
     y_pred = clf.predict_proba(x_test)
 
     generate_submission(y_pred, test_users_ids, label_encoder, name='gb')
-
-
-if __name__ == '__main__':
-    main()
