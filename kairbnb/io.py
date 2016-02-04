@@ -7,7 +7,6 @@ import datetime
 
 def load_users(version='', nrows=None, na_values='-unknown-'):
     """Load user data."""
-
     if version:
         path = '../cache/'
     else:

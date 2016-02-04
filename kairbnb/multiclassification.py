@@ -138,7 +138,10 @@ def _sample_values(X, y, method=None, ratio=1, verbose=False):
 
 
 def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
-    """Fit a single binary estimator (one-vs-one)."""
+    """Fit a single binary estimator (one-vs-one).
+
+    It is possible to apply a sampling method.
+    """
     cond = np.logical_or(y == i, y == j)
     y = y[cond]
     y_binary = np.empty(y.shape, np.int)

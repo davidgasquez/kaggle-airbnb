@@ -7,7 +7,6 @@ Usage: grid_search script.py -lr [learning_rate] ...
 import os
 import subprocess
 import argparse
-import time
 from sklearn.grid_search import ParameterGrid
 
 
@@ -102,4 +101,3 @@ if __name__ == '__main__':
     for i, params in enumerate(grid):
         send_code(args.script, queue=args.queue, job_name=args.job_name,
                   suffix=i + 1, **params)
-
