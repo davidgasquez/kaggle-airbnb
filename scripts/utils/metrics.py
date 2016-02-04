@@ -62,8 +62,7 @@ def ndcg_score(ground_truth, predictions, k=5):
     0.6666666666
     """
     lb = LabelBinarizer()
-    lb.fit(range(len(predictions) + 1))
-    T = lb.transform(ground_truth)
+    T = lb.fit_transform(range(len(predictions) + 1))
 
     scores = []
 
