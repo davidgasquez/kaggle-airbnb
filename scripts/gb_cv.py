@@ -8,6 +8,7 @@ from sklearn.cross_validation import KFold
 from kairbnb.metrics import ndcg_scorer
 from kairbnb.io import load_users
 
+VERSION = '1'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('-sub', '--subsample', default=1, type=float)
     args = parser.parse_args()
 
-    train_users, _ = load_users(version='1')
+    train_users, _ = load_users(version=VERSION)
     train_users.fillna(-1, inplace=True)
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
