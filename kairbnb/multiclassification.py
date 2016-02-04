@@ -117,7 +117,6 @@ def _sample_values(X, y, method=None, ratio=1, verbose=False):
     X, y : tuple
         Sampled X and y.
     """
-    # TODO: Add kwargs
     if method == 'SMOTE':
         sampler = SMOTE(ratio=ratio, verbose=verbose)
 

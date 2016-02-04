@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     # IDEA: Add interaction features
 
-    # TODO: add singup flow to categorical features
+    # IDEA: Add singup flow to categorical features
 
     # Encode categorical features
     categorical_features = [
