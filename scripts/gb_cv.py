@@ -18,6 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-ct', '--colsample_bytree', default=1, type=float)
     parser.add_argument('-cl', '--colsample_bylevel', default=1, type=float)
     parser.add_argument('-sub', '--subsample', default=1, type=float)
+    parser.add_argument('-md', '--max_delta', default=0, type=float)
     args = parser.parse_args()
 
     train_users, _ = load_users(version=VERSION)
