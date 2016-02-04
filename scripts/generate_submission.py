@@ -5,9 +5,11 @@ from xgboost.sklearn import XGBClassifier
 
 from kairbnb.io import generate_submission, load_users
 
+VERSION = '1'
+NAME = 'gb'
 
 if __name__ == '__main__':
-    train_users, test_users = load_users('1')
+    train_users, test_users = load_users(version=VERSION)
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
@@ -23,7 +25,7 @@ if __name__ == '__main__':
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.2,
+        learning_rate=0.15,
         n_estimators=80,
         objective="multi:softprob",
         gamma=0,
@@ -45,4 +47,4 @@ if __name__ == '__main__':
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
 
-    generate_submission(y_pred, test_users_ids, label_encoder, name='gb')
+    generate_submission(y_pred, test_users_ids, label_encoder, name=NAME)
