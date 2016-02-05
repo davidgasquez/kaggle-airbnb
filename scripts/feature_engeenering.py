@@ -9,13 +9,21 @@ from kairbnb.preprocessing import process_user_actions
 from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
 
-NROWS = None
+NROWS = 1000
 VERSION = '4'
 
 if __name__ == '__main__':
     # Load raw data
     train_users, test_users = load_users(nrows=NROWS)
     sessions = pd.read_csv('../data/sessions.csv', nrows=NROWS)
+
+    # Select only users with sessions
+    sessions_ids = sessions['user_id'].unique()
+    train_users_ids = train_users['id'].values
+    intersection = list(set(sessions_ids).intersection(train_users_ids))
+    train_users.set_index('id', inplace=True)
+    train_users = train_users.loc[intersection]
+    train_users.reset_index(inplace=True)
 
     # Join users
     users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
