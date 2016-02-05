@@ -2,5 +2,7 @@ holidays
 numpy
 pandas
 scipy
+pytest
+flake8
 scikit-learn
 xgboost
