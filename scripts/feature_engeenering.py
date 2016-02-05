@@ -10,7 +10,7 @@ from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
 
 NROWS = None
-VERSION = '5'
+VERSION = '4'
 
 if __name__ == '__main__':
     # Load raw data
@@ -18,12 +18,12 @@ if __name__ == '__main__':
     sessions = pd.read_csv('../data/sessions.csv', nrows=NROWS)
 
     # Select only users with sessions
-    sessions_ids = sessions['user_id'].unique()
-    train_users_ids = train_users['id'].values
-    intersection = list(set(sessions_ids).intersection(train_users_ids))
-    train_users.set_index('id', inplace=True)
-    train_users = train_users.loc[intersection]
-    train_users.reset_index(inplace=True)
+    # sessions_ids = sessions['user_id'].unique()
+    # train_users_ids = train_users['id'].values
+    # intersection = list(set(sessions_ids).intersection(train_users_ids))
+    # train_users.set_index('id', inplace=True)
+    # train_users = train_users.loc[intersection]
+    # train_users.reset_index(inplace=True)
 
     # Join users
     users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
@@ -58,10 +58,6 @@ if __name__ == '__main__':
     users['month_first_active'] = date_first_active.month
     users['year_first_active'] = date_first_active.year
 
-    # Add distance to holidays
-    user_holidays = users['date_account_created'].apply(distance_to_holidays)
-    users = pd.concat([users, user_holidays], axis=1)
-
     # IDEA: Classify and group by dispositive
 
     # Get the count of general session information
@@ -93,6 +89,10 @@ if __name__ == '__main__':
     result = pd.DataFrame(result).set_index('id')
     result.index = le.inverse_transform(result.index.values.astype(int))
     users = pd.concat([users, result], axis=1)
+
+    # Add distance to holidays
+    user_holidays = users['date_account_created'].apply(distance_to_holidays)
+    users = pd.concat([users, user_holidays], axis=1)
 
     # Set ID as index
     train_users = train_users.set_index('id')
