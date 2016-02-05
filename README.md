@@ -10,7 +10,7 @@ leaderboard, enough to be in the best 5% participants and only 0.001% ahead of
 the winner.
 
 The entire run should not take more than 2 hours(parallel preprocessing magic)
-in a modern computer, although you may run into memory issues with less
+in a modern computer, though you may run into memory issues with less
 than 8GB RAM.
 
 Feel free to contribute to the code or open an issue if you see something wrong.
