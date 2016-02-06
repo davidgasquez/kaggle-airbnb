@@ -8,17 +8,13 @@ from kairbnb.io import generate_submission
 NAME = 'gb_ensemble'
 
 if __name__ == '__main__':
-    train_users = pd.read_csv('../cache/train_users.csv4')
-    test_users = pd.read_csv('../cache/test_users.csv4')
-    sessions = pd.read_csv('../cache/train_users.csv5')
+    train_users = pd.read_csv('../cache/train_users.csv3')
+    test_users = pd.read_csv('../cache/test_users.csv3')
 
     y_train = train_users['country_destination']
     train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
-    sessions.drop(['country_destination', 'id'], axis=1, inplace=True)
     train_users = train_users.fillna(-1)
-    sessions = sessions.fillna(-1)
     x_train = train_users.values
-    x_train_2 = sessions.values
     label_encoder = LabelEncoder()
     encoded_y_train = label_encoder.fit_transform(y_train)
     test_users_ids = test_users['id']
@@ -49,7 +45,17 @@ if __name__ == '__main__':
 
     clf.fit(x_train, encoded_y_train)
     y_pred = clf.predict_proba(x_test)
-    clf.fit(x_train_2, encoded_y_train)
+
+    train_users = pd.read_csv('../cache/train_users.csv5')
+
+    y_train = train_users['country_destination']
+    train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
+    train_users = train_users.fillna(-1)
+    x_train = train_users.values
+    label_encoder = LabelEncoder()
+    encoded_y_train = label_encoder.fit_transform(y_train)
+
+    clf.fit(x_train, encoded_y_train)
     y_pred += clf.predict_proba(x_test) * 0.3
 
     generate_submission(y_pred, test_users_ids, label_encoder, name=NAME)
