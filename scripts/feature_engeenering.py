@@ -18,14 +18,6 @@ if __name__ == '__main__':
     sessions = pd.read_csv('../data/sessions.csv',
                            nrows=NROWS, na_values='-unknown-')
 
-    # Select only users with sessions
-    # sessions_ids = sessions['user_id'].unique()
-    # train_users_ids = train_users['id'].values
-    # intersection = list(set(sessions_ids).intersection(train_users_ids))
-    # train_users.set_index('id', inplace=True)
-    # train_users = train_users.loc[intersection]
-    # train_users.reset_index(inplace=True)
-
     # Join users
     users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
     users = users.set_index('id')
