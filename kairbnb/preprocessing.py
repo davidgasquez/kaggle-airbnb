@@ -177,6 +177,8 @@ def process_user_secs_elapsed(sessions, user):
     user_processed_secs['secs_elapsed_var'] = user_secs.var()
     user_processed_secs['secs_elapsed_skew'] = user_secs.skew()
 
+    user_processed_secs = np.log(user_processed_secs)
+
     # Number of elapsed seconds greater than 1 day
     user_processed_secs['day_pauses'] = user_secs[user_secs > 86400].count()
 

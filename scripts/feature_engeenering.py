@@ -15,7 +15,8 @@ VERSION = '4'
 if __name__ == '__main__':
     # Load raw data
     train_users, test_users = load_users(nrows=NROWS)
-    sessions = pd.read_csv('../data/sessions.csv', nrows=NROWS)
+    sessions = pd.read_csv('../data/sessions.csv',
+                           nrows=NROWS, na_values='-unknown-')
 
     # Select only users with sessions
     # sessions_ids = sessions['user_id'].unique()
