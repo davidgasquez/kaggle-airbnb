@@ -5,7 +5,7 @@ import numpy as np
 import datetime
 
 
-def load_users(version='', nrows=None, na_values='-unknown-'):
+def load_users(version='', nrows=None, na_values=np.nan):
     """Load user data."""
     if version:
         path = '../cache/'
