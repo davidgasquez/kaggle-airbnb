@@ -98,5 +98,5 @@ if __name__ == '__main__':
     processed_test_users.drop(['country_destination'], inplace=True, axis=1)
 
     # Save to csv
-    processed_train_users.to_csv('../cache/train_users.csv' + VERSION)
-    processed_test_users.to_csv('../cache/test_users.csv' + VERSION)
+    processed_train_users.to_csv('train_users.csv' + VERSION)
+    processed_test_users.to_csv('test_users.csv' + VERSION)
