@@ -8,7 +8,7 @@ from sklearn.cross_validation import KFold
 from kairbnb.metrics import ndcg_scorer
 from kairbnb.io import load_users
 
-VERSION = '3'
+VERSION = '2'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -54,6 +54,6 @@ if __name__ == '__main__':
     kf = KFold(len(x_train), n_folds=10, random_state=42)
 
     score = cross_val_score(xgb, x_train, encoded_y_train,
-                            cv=kf, scoring=ndcg_scorer, verbose=10)
+                            cv=kf, scoring=ndcg_scorer)
 
     print(xgb.get_params(), score.mean())
