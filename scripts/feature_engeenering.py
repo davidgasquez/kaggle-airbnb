@@ -8,7 +8,7 @@ from kairbnb.preprocessing import process_user_actions
 from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
 
-NROWS = 100000
+NROWS = None
 VERSION = '5'
 
 if __name__ == '__main__':
