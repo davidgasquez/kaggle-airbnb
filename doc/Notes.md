@@ -5,6 +5,10 @@ Notes
 
 - Data Exploration
 
+- XGBoost is the new Random Forest
+
+- Extracted almost all the signal from the data.
+
 - Way of handling missing values
     - Drop data points with missing values
     - Fill in missing values with the median or mode.
