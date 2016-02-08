@@ -8,7 +8,7 @@ from kairbnb.preprocessing import process_user_actions
 from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
 
-NROWS = None
+NROWS = 100000
 VERSION = '5'
 
 if __name__ == '__main__':
@@ -72,9 +72,9 @@ if __name__ == '__main__':
 
     # Count of each user action in sessions
     result = p.map(partial(process_user_actions, sessions), sessions_ids)
-    result = pd.DataFrame(result).set_index('id')
-    result.index = le.inverse_transform(result.index)
-    users = pd.concat([users, result], axis=1)
+    result = pd.DataFrame(result)
+    result['id'] = le.inverse_transform(result['id'])
+    users = pd.concat([users, result.set_index('id')], axis=1)
 
     print(users.most_used_device.value_counts())
     # Elapsed seconds statistics
