@@ -4,7 +4,6 @@ import multiprocessing
 from functools import partial
 from sklearn.preprocessing import LabelEncoder
 
-from kairbnb.preprocessing import distance_to_holidays
 from kairbnb.preprocessing import process_user_actions
 from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
@@ -82,10 +81,6 @@ if __name__ == '__main__':
     result = pd.DataFrame(result).set_index('id')
     result.index = le.inverse_transform(result.index.values.astype(int))
     users = pd.concat([users, result], axis=1)
-
-    # Add distance to holidays
-    # user_holidays = users['date_account_created'].apply(distance_to_holidays)
-    # users = pd.concat([users, user_holidays], axis=1)
 
     # Set ID as index
     train_users = train_users.set_index('id')

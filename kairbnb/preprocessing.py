@@ -139,9 +139,14 @@ def process_user_actions(sessions, user):
 
     # Get the most used device
     user_session_data['most_used_device'] = user_session['device_type'].mode()
+    grouped_session = user_session_data.groupby(user_session_data.index).sum()
+
+    # Replace empty lists with nan
+    if not grouped_session.most_used_device:
+        grouped_session.most_used_device = np.nan
 
     # Grouby ID and add values
-    return user_session_data.groupby(user_session_data.index).sum()
+    return grouped_session
 
 
 def process_user_secs_elapsed(sessions, user):
