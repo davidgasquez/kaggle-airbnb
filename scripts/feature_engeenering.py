@@ -10,7 +10,7 @@ from kairbnb.preprocessing import process_user_secs_elapsed
 from kairbnb.io import load_users
 
 NROWS = None
-VERSION = '4'
+VERSION = '5'
 
 if __name__ == '__main__':
     # Load raw data
