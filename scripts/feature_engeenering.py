@@ -76,6 +76,7 @@ if __name__ == '__main__':
     result.index = le.inverse_transform(result.index)
     users = pd.concat([users, result], axis=1)
 
+    print(users.most_used_device.value_counts())
     # Elapsed seconds statistics
     result = p.map(partial(process_user_secs_elapsed, sessions), sessions_ids)
     result = pd.DataFrame(result).set_index('id')
