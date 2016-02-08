@@ -84,8 +84,8 @@ if __name__ == '__main__':
     users = pd.concat([users, result], axis=1)
 
     # Add distance to holidays
-    user_holidays = users['date_account_created'].apply(distance_to_holidays)
-    users = pd.concat([users, user_holidays], axis=1)
+    # user_holidays = users['date_account_created'].apply(distance_to_holidays)
+    # users = pd.concat([users, user_holidays], axis=1)
 
     # Set ID as index
     train_users = train_users.set_index('id')
