@@ -131,7 +131,8 @@ def process_user_actions(sessions, user):
     user_session_data['id'] = user
 
     # Take the count of each value per column
-    for column in ['action', 'action_type', 'action_detail', 'device_type']:
+    columns = ['action', 'action_type', 'action_detail']  # device_type
+    for column in columns:
         column_data = user_session[column].value_counts()
         column_data.index = column_data.index + '_count'
         user_session_data = user_session_data.append(column_data)
