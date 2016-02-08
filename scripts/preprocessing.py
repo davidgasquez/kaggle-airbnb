@@ -3,7 +3,7 @@ import pandas as pd
 from kairbnb.preprocessing import one_hot_encoding
 from kairbnb.io import load_users
 
-VERSION = '4'
+VERSION = '5'
 
 if __name__ == '__main__':
 
