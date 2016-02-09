@@ -146,6 +146,9 @@ def process_user_actions(sessions, user):
     if session['most_used_device'] == 0:
         session['most_used_device'] = np.nan
 
+    # For Python 2 it's only needed to do:
+    # session['most_used_device'] = user_session['device_type'].max()
+
     # Grouby ID and add values
     return session
 
