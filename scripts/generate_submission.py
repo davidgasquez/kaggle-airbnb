@@ -5,7 +5,7 @@ from xgboost.sklearn import XGBClassifier
 
 from kairbnb.io import generate_submission, load_users
 
-VERSION = '1'
+VERSION = '5'
 NAME = 'gb_' + VERSION
 
 if __name__ == '__main__':
