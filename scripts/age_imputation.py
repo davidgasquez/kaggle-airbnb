@@ -1,26 +1,34 @@
-from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 import pandas as pd
-import numpy as np
 
-train_users = pd.read_csv('../cache/train_users.csv1', nrows=400)
-test_users = pd.read_csv('../cache/test_users.csv1', nrows=400)
+train_users = pd.read_csv('../cache/train_users.csv1')
+test_users = pd.read_csv('../cache/test_users.csv1')
 
-train_users.drop(['country_destination', 'id'], axis=1, inplace=True)
-test_users.drop('id', axis=1, inplace=True)
+train = train_users.drop(['country_destination', 'id'], axis=1)
+test = test_users.drop('id', axis=1)
 
-users = pd.concat((train_users, test_users), axis=0, ignore_index=True)
-processed_train_users = users.loc[users['age'].notnull()]
+users = pd.concat((train, test), axis=0, ignore_index=True)
 
-y_train = processed_train_users['age']
-processed_train_users = processed_train_users.drop('age', axis=1)
-processed_train_users = processed_train_users.fillna(-1)
-x_train = processed_train_users.values
+x_train = users.loc[users['age'].notnull()]
 
-rf = RandomForestRegressor()
+y_train = x_train['age']
+x_train = x_train.drop('age', axis=1)
+x_train = x_train.fillna(-1)
 
+rf = RandomForestRegressor(n_estimators=300, n_jobs=-1)
 rf.fit(x_train, y_train)
 
-predictions = rf.predict(users.loc[users['age'].isnull()].drop('age', axis=1).fillna(-1).values).astype(int)
+train = train_users.drop(['country_destination', 'id'], axis=1)
+x_train = train.loc[train['age'].isnull()]
+x_train = x_train.drop('age', axis=1)
+x_train = x_train.fillna(-1)
+train_users.loc[train_users['age'].isnull(), 'age'] = rf.predict(x_train).astype(int)
 
-users.loc[users['age'].isnull(), 'age'] = predictions
+test = test_users.drop('id', axis=1)
+x_train = test.loc[test['age'].isnull()]
+x_train = x_train.drop('age', axis=1)
+x_train = x_train.fillna(-1)
+test_users.loc[test_users['age'].isnull(), 'age'] = rf.predict(x_train).astype(int)
+
+train_users.to_csv('train_users_with_age.csv')
+test_users.to_csv('test_users_with_age.csv')
