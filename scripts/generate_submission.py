@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     clf = XGBClassifier(
         max_depth=7,
-        learning_rate=0.15,
+        learning_rate=0.18,
         n_estimators=80,
         objective="rank:pairwise",
         gamma=0,
