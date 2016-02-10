@@ -72,7 +72,7 @@ clf = XGBClassifier(
     min_child_weight=1,
     max_delta_step=0,
     subsample=1,
-    colsample_bytree=0.8,
+    colsample_bytree=1,
     colsample_bylevel=1,
     reg_alpha=0,
     reg_lambda=1,
@@ -88,7 +88,7 @@ clf.fit(x_train, encoded_y_train)
 y_pred_2 = clf.predict_proba(x_test)
 
 months = train_users['month_account_created'] > 2
-years = train_users['year_account_created'] > 2014
+years = train_users['year_account_created'] > 2013
 
 x_train_users = train_users.loc[months & years]
 print(x_train_users.shape)
@@ -110,7 +110,7 @@ clf = XGBClassifier(
     min_child_weight=1,
     max_delta_step=0,
     subsample=1,
-    colsample_bytree=0.8,
+    colsample_bytree=1,
     colsample_bylevel=1,
     reg_alpha=0,
     reg_lambda=1,
