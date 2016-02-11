@@ -20,7 +20,7 @@ x_train = x_train_users.values
 label_encoder = LabelEncoder()
 encoded_y_train = label_encoder.fit_transform(y_train)
 
-test_users_ids = test_users['id']
+id_test_users = test_users['id']
 test_users.drop('id', axis=1, inplace=True)
 test_users = test_users.fillna(-1)
 x_test = test_users.values
@@ -125,7 +125,6 @@ clf = XGBClassifier(
 clf.fit(x_train, encoded_y_train)
 y_pred_3 = clf.predict_proba(x_test)
 
-
 y_pred = (y_pred * 0.5) + (y_pred_2 * 0.5) + (y_pred_3 * 0.5)
 
-generate_submission(y_pred, test_users_ids, label_encoder, name='ensemble_date')
+generate_submission(y_pred, id_test_users, label_encoder, name='ensemble_date')
