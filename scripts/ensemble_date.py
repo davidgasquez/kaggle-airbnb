@@ -27,7 +27,7 @@ x_test = test_users.values
 
 clf = XGBClassifier(
     max_depth=7,
-    learning_rate=0.15,
+    learning_rate=0.18,
     n_estimators=80,
     objective="rank:pairwise",
     gamma=0,
@@ -65,8 +65,8 @@ encoded_y_train = label_encoder.fit_transform(y_train)
 
 clf = XGBClassifier(
     max_depth=7,
-    learning_rate=0.15,
-    n_estimators=60,
+    learning_rate=0.18,
+    n_estimators=80,
     objective="rank:pairwise",
     gamma=0,
     min_child_weight=1,
@@ -87,7 +87,7 @@ clf = XGBClassifier(
 clf.fit(x_train, encoded_y_train)
 y_pred_2 = clf.predict_proba(x_test)
 
-months = train_users['month_account_created'] > 2
+months = train_users['month_account_created'] > 3
 years = train_users['year_account_created'] > 2013
 
 x_train_users = train_users.loc[months & years]
@@ -103,8 +103,8 @@ encoded_y_train = label_encoder.fit_transform(y_train)
 
 clf = XGBClassifier(
     max_depth=7,
-    learning_rate=0.1,
-    n_estimators=60,
+    learning_rate=0.18,
+    n_estimators=80,
     objective="rank:pairwise",
     gamma=0,
     min_child_weight=1,
@@ -125,6 +125,6 @@ clf = XGBClassifier(
 clf.fit(x_train, encoded_y_train)
 y_pred_3 = clf.predict_proba(x_test)
 
-y_pred = (y_pred * 0.5) + (y_pred_2 * 0.5) + (y_pred_3 * 0.5)
+y_pred = (y_pred * 0.6) + (y_pred_2 * 0.5) + (y_pred_3 * 0.5)
 
 generate_submission(y_pred, id_test_users, label_encoder, name='ensemble_date')
