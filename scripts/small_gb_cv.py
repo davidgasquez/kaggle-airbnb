@@ -6,7 +6,6 @@ from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import KFold
 
 from kairbnb.metrics import ndcg_scorer
-from kairbnb.io import load_users
 import pandas as pd
 
 VERSION = '1'
