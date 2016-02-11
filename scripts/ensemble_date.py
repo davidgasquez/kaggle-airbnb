@@ -66,7 +66,7 @@ encoded_y_train = label_encoder.fit_transform(y_train)
 clf = XGBClassifier(
     max_depth=7,
     learning_rate=0.15,
-    n_estimators=80,
+    n_estimators=60,
     objective="rank:pairwise",
     gamma=0,
     min_child_weight=1,
@@ -103,8 +103,8 @@ encoded_y_train = label_encoder.fit_transform(y_train)
 
 clf = XGBClassifier(
     max_depth=7,
-    learning_rate=0.15,
-    n_estimators=80,
+    learning_rate=0.1,
+    n_estimators=60,
     objective="rank:pairwise",
     gamma=0,
     min_child_weight=1,
@@ -124,5 +124,8 @@ clf = XGBClassifier(
 
 clf.fit(x_train, encoded_y_train)
 y_pred_3 = clf.predict_proba(x_test)
+
+
+y_pred = (y_pred * 0.5) + (y_pred_2 * 0.5) + (y_pred_3 * 0.5)
 
 generate_submission(y_pred, test_users_ids, label_encoder, name='ensemble_date')
