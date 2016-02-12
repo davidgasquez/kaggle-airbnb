@@ -9,7 +9,7 @@ import subprocess
 import argparse
 
 
-TEMPLATE_SERIAL = """
+TEMPLATE = """
 #$ -cwd
 #$ -N {job_name}
 #$ -e {errfile}
@@ -49,7 +49,7 @@ def add_to_queue(python_file, job_name=None, cleanup=True, queue='larga',
         job_name = python_file[:-3]
 
     # Fill template
-    template = TEMPLATE_SERIAL.format(
+    template = TEMPLATE.format(
         script_name=python_file,
         job_name=job_name,
         logfile=logfile,
