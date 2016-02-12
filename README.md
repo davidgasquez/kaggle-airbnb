@@ -1,3 +1,4 @@
+
 New User Bookings
 =================
 
@@ -27,16 +28,16 @@ travel experience, *Airbnb* can share more personalized content with their
 community, decrease the average time to first booking, and better forecast
 demand.
 
-In this competition, the objective is to predict in which country a new user
+In this competition, the goal is to predict in which country a new user
 will make his or her first booking. There are **12** possible outcomes of the
-destination country and the datasets consists in a list of users with their
+destination country and the datasets consist of a list of users with their
 demographics, web session records, and some summary statistics.
 
 Data
 ----
 
-Due to the [*Competition Rules*][rules], the datasets can not be shared. If
-you want to take a look to the data, head over the [competition][competition]
+Due to the [*Competition Rules*][rules], the data sets can not be shared. If
+you want to take a look at the data, head over the [competition][competition]
 page and download it.
 
 You need to download `train_users_2.csv`, `test_users.csv` and `sessions.csv`
@@ -50,8 +51,8 @@ administrators, rename `train_users_2.csv` as `train_users.csv`.
 Main Ideas
 ----------
 
-1. The provided datasets have lot of NaNs and some other weirds values, so, a
-good preprocessing is the primary key to obtain a good solution:
+1. The provided datasets have lot of NaNs and some other *random* values, so, a
+good preprocessing is the primary key to get a good solution:
     - Replace *-unknown-* values with NaNs
     - Clean age values
     - Extract day, weekday, month, year from `date_account_created`
@@ -61,7 +62,7 @@ good preprocessing is the primary key to obtain a good solution:
         - Number of different values in `action`, `action_type`,
         `action_detail` and `device_type`
 
-2. Those kind of classification task works nicely with tree based methods, like
+2. That kind of classification task works nicely with tree-based methods, like
 many other participants I used `xgboost` library and the Gradient Boosting
 Classifier that provides.
 
