@@ -7,12 +7,12 @@ competition][competition]. It's written in **Python**, some in the form
 of **Jupyter Notebooks**, and other in pure Python 3.
 
 The code produces predictions with scores around 0.88090% in the public
-leaderboard, enough to be in the best 5% participants and only 0.001% ahead of
-the winner.
+leader-board, enough to be in the best 5% participants(0.001% behind the best)
+and 0.88509% in the private leader-board(0.0018% behind the winner)
 
-The entire run should not take more than 2 hours(parallel preprocessing magic)
-in a modern computer, though you may run into memory issues with less
-than 8GB RAM.
+The entire run should not take more than 4 hours(thanks to the parallel
+preprocessing) in a modern/recent computer, though you may run into memory
+issues with less than 8GB RAM.
 
 Feel free to contribute to the code or open an issue if you see something wrong.
 
@@ -63,7 +63,7 @@ good preprocessing is the primary key to get a good solution:
         `action_detail` and `device_type`
 
 2. That kind of classification task works nicely with tree-based methods, like
-many other participants I used `xgboost` library and the Gradient Boosting
+other participants I used `xgboost` library and the Gradient Boosting
 Classifier that provides.
 
 Requirements
