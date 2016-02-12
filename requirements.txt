@@ -2,8 +2,6 @@ holidays
 numpy
 pandas
 scipy
-pytest
-flake8
 scikit-learn
 xgboost
 git+https://github.com/fmfn/UnbalancedDataset
