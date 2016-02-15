@@ -199,6 +199,10 @@ def process_user_secs_elapsed(sessions, user):
     return user_processed_secs
 
 
+def _empty_columns(x):
+    return np.all(x == 0)
+
+
 def interaction_features(data, degree):
     """Generate polynomial features given a dataset and a degree."""
     poly = PolynomialFeatures(degree, interaction_only=True)
@@ -211,8 +215,7 @@ def interaction_features(data, degree):
     interaction = interaction.ix[:, base_columns:]
 
     # Drop empty columns
-    y = lambda x: np.all(x == 0)
-    drop_columns = interaction.columns[interaction.apply(y)]
+    drop_columns = interaction.columns[interaction.apply(_empty_columns)]
     df = interaction.drop(drop_columns, axis=1)
 
     return df
