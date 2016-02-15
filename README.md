@@ -80,8 +80,8 @@ basically the next Python packages:
 Resources
 ---------
 
-- [XGBoost Documentation](https://xgboost.readthedocs.org) - A library that is
-designed, and optimized for boosted (tree) algorithms.
+- [XGBoost Documentation](https://xgboost.readthedocs.org) - A library designed
+and optimized for boosted (tree) algorithms.
 - [Pattern Classification](https://github.com/rasbt/pattern_classification) -
 Tutorials, examples, collections, and everything else that falls into the
 categories: pattern classification, machine learning, and data mining.

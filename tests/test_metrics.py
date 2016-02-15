@@ -3,7 +3,7 @@ from kairbnb.metrics import ndcg_score
 
 
 class TestMetrics(object):
-    """Simple testing class to make sure the score is computed correctly."""
+    """Simple testing class to make sure the score is computed properly."""
 
     def test_dcg_score(self):
         y_true = [0, 1, 0]
