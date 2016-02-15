@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 import holidays
 from xgboost.sklearn import XGBClassifier
+from sklearn.preprocessing import PolynomialFeatures
 
 
 def one_hot_encoding(data, categorical_features):
@@ -196,3 +197,22 @@ def process_user_secs_elapsed(sessions, user):
     user_processed_secs['long_pauses'] = user_secs[user_secs > 300000].count()
 
     return user_processed_secs
+
+
+def interaction_features(data, degree):
+    """Generate polynomial features given a dataset and a degree."""
+    poly = PolynomialFeatures(degree, interaction_only=True)
+
+    interaction_data = poly.fit_transform(data)
+
+    interaction = pd.DataFrame(interaction_data).drop(0, axis=1)
+
+    base_columns = np.shape(data)[1] + 1
+    interaction = interaction.ix[:, base_columns:]
+
+    # Drop empty columns
+    y = lambda x: np.all(x == 0)
+    drop_columns = interaction.columns[interaction.apply(y)]
+    df = interaction.drop(drop_columns, axis=1)
+
+    return df
