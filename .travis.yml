@@ -10,9 +10,12 @@ env:
   - TOX_ENV=py34
   - TOX_ENV=flake8
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y python-scipy
+
 install:
   - pip install tox
-  - apt-get install python-scipy
   - pip install -r requirements.txt
   - pip install -r tests/requirements.txt
 
