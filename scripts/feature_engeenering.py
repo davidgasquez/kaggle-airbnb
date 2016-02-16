@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     # To improve performance we translate each different user_id string into a
     # integer. This yields almost 50% of performance gain when multiprocessing
-    # because Python pickes strings and integers differently
+    # because Python pickles strings and integers differently
     le = LabelEncoder()
     sessions['user_id'] = le.fit_transform(sessions['user_id'].astype(str))
     sessions_ids = sessions['user_id'].unique()
