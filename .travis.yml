@@ -10,9 +10,18 @@ env:
   - TOX_ENV=py34
   - TOX_ENV=flake8
 
+virtualenv:
+  system_site_packages: true
+
+addons:
+  apt:
+    packages:
+    - libblas-dev
+    - liblapack-dev
+    - gfortran
+
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y python-scipy
+  - pip install -U pip
 
 install:
   - pip install tox
