@@ -3,8 +3,8 @@ language: python
 sudo: false
 
 python:
-  - 2.7
-  - 3.4
+  - "2.7"
+  - "3.4"
 
 addons:
   apt:
@@ -14,9 +14,6 @@ addons:
 
 virtualenv:
   system_site_packages: true
-
-before_install:
-  - pip install -U pip
 
 install:
   - pip install -r requirements.txt
