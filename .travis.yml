@@ -9,11 +9,19 @@ python:
 addons:
   apt:
     packages:
-    - libblas-dev
+    - libatlas-dev
     - liblapack-dev
-    - python-scipy
+    - libatlas-base-dev
+    - gfortran
+
+before_install:
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda update --yes conda
 
 install:
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy
   - pip install -r requirements.txt
   - pip install pytest flake8
   - pip install .
