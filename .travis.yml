@@ -9,9 +9,9 @@ python:
 addons:
   apt:
     packages:
-    - python-scipy
-    - python-numpy
-
+    - libblas-dev
+    - liblapack-dev
+    - gfortran
 
 install:
   - pip install -r requirements.txt
