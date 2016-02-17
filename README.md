@@ -1,5 +1,4 @@
-New User Bookings
-=================
+# New User Bookings
 
 [![Build Status](https://travis-ci.org/davidgasquez/kaggle-airbnb.svg?branch=master)](https://travis-ci.org/davidgasquez/kaggle-airbnb) [![Code Issues](https://www.quantifiedcode.com/api/v1/project/c75f3e6167d940fd89484b651b062109/badge.svg)](https://www.quantifiedcode.com/app/project/c75f3e6167d940fd89484b651b062109)
 
@@ -20,8 +19,7 @@ Feel free to contribute to the code or open an issue if you see something wrong.
 [competition]: https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings
 
 
-Description
------------
+## Description
 
 New users on *Airbnb* can book a place to stay in 34,000+ cities across 190+
 countries. By accurately predicting where a new user will book their first
@@ -34,8 +32,7 @@ will make his or her first booking. There are **12** possible outcomes of the
 destination country and the datasets consist of a list of users with their
 demographics, web session records, and some summary statistics.
 
-Data
-----
+## Data
 
 Due to the [*Competition Rules*][rules], the data sets can not be shared. If
 you want to take a look at the data, head over the [competition][competition]
@@ -49,8 +46,7 @@ administrators, rename `train_users_2.csv` as `train_users.csv`.
 
 [rules]: https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings/rules
 
-Main Ideas
-----------
+## Main Ideas
 
 1. The provided datasets have lot of NaNs and some other *random* values, so, a
 good preprocessing is the primary key to get a good solution:
@@ -67,8 +63,8 @@ good preprocessing is the primary key to get a good solution:
 used `xgboost` library and the Gradient Boosting Classifier that provides along
 `scikit-learn` to make the probabilities predictions.
 
-Requirements
-------------
+## Requirements
+
 To replicate the findings and execute the code in this repository you will need
 basically the next Python packages:
 
@@ -79,8 +75,7 @@ basically the next Python packages:
 - [Matplotlib](http://matplotlib.org/)
 - [Unbalanced Dataset](https://github.com/fmfn/UnbalancedDataset)
 
-Resources
----------
+## Resources
 
 - [XGBoost Documentation](https://xgboost.readthedocs.org) - A library designed
 and optimized for boosted (tree) algorithms.
@@ -88,8 +83,7 @@ and optimized for boosted (tree) algorithms.
 Tutorials, examples, collections, and everything else that falls into the
 categories: pattern classification, machine learning, and data mining.
 
-License
--------
+## License
 
 Copyright © 2015 David Gasquez
 Licensed under the MIT license.
