@@ -11,7 +11,7 @@ addons:
     packages:
     - libblas-dev
     - liblapack-dev
-    - gfortran
+    - python-scipy
 
 install:
   - pip install -r requirements.txt
