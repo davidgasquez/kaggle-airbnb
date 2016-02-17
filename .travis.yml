@@ -2,7 +2,10 @@ language: python
 
 sudo: false
 
-python: 3.5
+python:
+  - 2.7
+  - 3.4
+  - 3.5
 
 addons:
   apt:
@@ -15,14 +18,9 @@ before_install:
   - pip install -U pip
 
 install:
-  - pip install tox
-
-env:
-  - TOX_ENV=py27
-  - TOX_ENV=py32
-  - TOX_ENV=py33
-  - TOX_ENV=py34
-  - TOX_ENV=flake8
+  - pip install -r requirements.txt
+  - pip install pytest flake8
 
 script:
-  - tox -e $TOX_ENV
+  - py.test
+  - flake8
