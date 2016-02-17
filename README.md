@@ -1,4 +1,4 @@
-# New User Bookings
+# Airbnb Kaggle Competition: *New User Bookings*
 
 [![Build Status](https://travis-ci.org/davidgasquez/kaggle-airbnb.svg?branch=master)](https://travis-ci.org/davidgasquez/kaggle-airbnb) [![Code Issues](https://www.quantifiedcode.com/api/v1/project/c75f3e6167d940fd89484b651b062109/badge.svg)](https://www.quantifiedcode.com/app/project/c75f3e6167d940fd89484b651b062109)
 
