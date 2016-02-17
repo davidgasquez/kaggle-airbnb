@@ -61,9 +61,9 @@ good preprocessing is the primary key to get a good solution:
         - Number of different values in `action`, `action_type`,
         `action_detail` and `device_type`
 
-2. That kind of classification task works nicely with tree-based methods, like
-other participants I used `xgboost` library and the Gradient Boosting
-Classifier that provides.
+2. That kind of classification task works nicely with tree-based methods, I
+used `xgboost` library and the Gradient Boosting Classifier that provides along
+`scikit-learn` to make the probabilities predictions.
 
 Requirements
 ------------
@@ -89,5 +89,5 @@ categories: pattern classification, machine learning, and data mining.
 License
 -------
 
-Copyright (c) 2015 David Gasquez
+Copyright © 2015 David Gasquez
 Licensed under the MIT license.
