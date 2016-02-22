@@ -1,9 +1,6 @@
 id,date_account_created,timestamp_first_active,date_first_booking,gender,age,signup_method,signup_flow,language,affiliate_channel,affiliate_provider,first_affiliate_tracked,signup_app,first_device_type,first_browser,country_destination
-gxn3p5htnn,2010-06-28,20090319043255,,-unknown-,,facebook,0,en,direct,direct,untracked,Web,Mac Desktop,Chrome,NDF
-820tgsjxq7,2011-05-25,20090523174809,,MALE,38.0,facebook,0,en,seo,google,untracked,Web,Mac Desktop,Chrome,NDF
-4ft3gnwmtx,2010-09-28,20090609231247,2010-08-02,FEMALE,56.0,basic,3,en,direct,direct,untracked,Web,Windows Desktop,IE,US
-bjjt8pjhuk,2011-12-05,20091031060129,2012-09-08,FEMALE,42.0,facebook,0,en,direct,direct,untracked,Web,Mac Desktop,Firefox,other
-osr2jwljor,2010-01-01,20100101215619,2010-01-02,-unknown-,,basic,0,en,other,other,omg,Web,Mac Desktop,Chrome,US
-lsw9q7uk0j,2010-01-02,20100102012558,2010-01-05,FEMALE,46.0,basic,0,en,other,craigslist,untracked,Web,Mac Desktop,Safari,US
-0d01nltbrs,2010-01-03,20100103191905,2010-01-13,FEMALE,47.0,basic,0,en,direct,direct,omg,Web,Mac Desktop,Safari,US
-a1vcnhxeij,2010-01-04,20100104004211,2010-07-29,FEMALE,50.0,basic,0,en,other,craigslist,untracked,Web,Mac Desktop,Safari,US
+user_1,2010-06-28,20090319043255,,MALE,,facebook,0,en,direct,direct,untracked,Web,Mac Desktop,Chrome,NDF
+user_2,2011-05-25,20090523174809,,MALE,38.0,facebook,0,en,seo,google,untracked,Web,Mac Desktop,Chrome,NDF
+user_3,2010-09-28,20090609231247,2010-08-02,FEMALE,56.0,basic,3,en,direct,direct,untracked,Web,Windows Desktop,IE,US
+user_4,2011-12-05,20091031060129,2012-09-08,FEMALE,42.0,facebook,0,en,direct,direct,untracked,Web,Mac Desktop,Firefox,other
+user_5,2010-01-01,20100101215619,2010-01-02,FEMALE,33.0,basic,0,en,other,other,omg,Web,Mac Desktop,Chrome,US
