@@ -136,7 +136,7 @@ def _sample_values(X, y, method=None, ratio=1, verbose=False):
     return sampler.fit_transform(X, y)
 
 
-def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
+def _fit_ovo_binary(estimator, X, y, i, j, sampling=None):
     """Fit a single binary estimator (one-vs-one).
 
     It is possible to apply a sampling method.
@@ -148,7 +148,7 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
     y_binary[y == j] = 1
     ind = np.arange(X.shape[0])
 
-    X_values = X[ind[cond]]
+    x_values = X[ind[cond]]
     y_values = y_binary
 
     if sampling:
@@ -159,10 +159,10 @@ def _fit_ovo_binary(estimator, X, y, i, j, sampling=None, verbose=False):
         ratio = abs(ones - zeros) / min(ones, zeros)
 
         # Sample X and y
-        X_values, y_values = _sample_values(
-            X_values, y_values, method=sampling, ratio=ratio)
+        x_values, y_values = _sample_values(
+            x_values, y_values, method=sampling, ratio=ratio)
 
-    return _fit_binary(estimator, X_values, y_values, classes=[i, j])
+    return _fit_binary(estimator, x_values, y_values, classes=[i, j])
 
 
 class CustomOneVsOneClassifier(OneVsOneClassifier):
@@ -239,12 +239,12 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         valid_strategies = ('vote', 'weighted_vote',
                             'dynamic_vote', 'relative_competence')
         if self.strategy not in valid_strategies:
-            raise ValueError('Strategy %s is not valid.' % (self.strategy))
+            raise ValueError('Strategy {0} not valid.'.format(self.strategy))
 
         valid_sampling_methods = ('SMOTE', 'SMOTEENN', 'random_over_sample',
                                   'random_under_sample', 'TomekLinks', None)
         if self.sampling not in valid_sampling_methods:
-            raise ValueError('Sampling %s is not valid.' % (self.sampling))
+            raise ValueError('Sampling {0} not valid.'.format(self.sampling))
 
         y = np.asarray(y)
 
