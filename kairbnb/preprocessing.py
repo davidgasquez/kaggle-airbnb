@@ -22,6 +22,10 @@ def one_hot_encoding(data, categorical_features):
     -------
     data : DataFrame
         Returns a pandas DataFrame with one-hot scheme binary columns.
+
+    Warning
+    -------
+    Is the same as pd.get_dummies(data, columns=categorical_features)
     """
     for feature in categorical_features:
         data_dummy = pd.get_dummies(data[feature], prefix=feature)
