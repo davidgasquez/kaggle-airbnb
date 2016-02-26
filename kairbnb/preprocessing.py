@@ -77,6 +77,7 @@ class XGBFeatureSelection(XGBClassifier):
 
 
 def _sanitize_holiday_name(name):
+    """Remove weird character from the input string."""
     new_name = [c for c in name if c.isalpha() or c.isdigit() or c == ' ']
     new_name = "".join(new_name).lower().replace(" ", "_")
     return new_name
