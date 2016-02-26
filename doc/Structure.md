@@ -2,6 +2,7 @@ New User Bookings
 =================
 
 - Problem Definition
+    - Introduction or motivation
     - Source
     - Scoring: Normalized Cumulative Discounted Gain
 
@@ -32,7 +33,7 @@ New User Bookings
 - Modeling
     - Random Forest
     - XGBoost(XGBoost is the new Random Forest)
-    - One Vs One
+    - One Vs One (pseudocode)
     - Ensembles
     - Cross Validation
     - Grid Search
@@ -40,9 +41,11 @@ New User Bookings
 
 - Results
     - Rank
+    - Results including measures of uncertainty
     - Differences with other approaches
     - Over-fitting
     - Generalization
+    - Conclusions including potential problems
 
 - Others
     - Reproducibility
