@@ -1,3 +1,4 @@
+"""Base file to test anything related with the metrics of this competition."""
 from kairbnb.metrics import dcg_score
 from kairbnb.metrics import ndcg_score
 
@@ -6,11 +7,13 @@ class TestMetrics(object):
     """Simple testing class to make sure the score is computed properly."""
 
     def test_dcg_score(self):
+        """Perfect DCG case."""
         y_true = [0, 1, 0]
         y_score = [0.2, 0.6, 0.2]
         assert dcg_score(y_true, y_score) == 1.0
 
     def test_ndcg_score_perfect(self):
+        """Perfect NDCG case."""
         ground_truth = [1, 0, 2]
         predictions = [
             [0.15, 0.55, 0.2],
@@ -21,6 +24,7 @@ class TestMetrics(object):
         assert score == 1.0
 
     def test_ndcg_score(self):
+        """Different k."""
         ground_truth = [1, 0, 2]
         predictions = [
             [0.35, 0.05, 0.2],
