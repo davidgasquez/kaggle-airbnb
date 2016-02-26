@@ -413,7 +413,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             weighted_matrix = _get_weight_matrix(mean_distances)
             weighted_matrices.append(weighted_matrix)
 
-        # R_w = r * w
-        R_w = [r * w for r, w in zip(scores, weighted_matrices)]
+        # r_w = r * w
+        r_w = [r * w for r, w in zip(scores, weighted_matrices)]
 
-        return R_w
+        return r_w
