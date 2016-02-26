@@ -49,8 +49,8 @@ def generate_submission(y_pred, test_users_ids, label_encoder,
     """
     ids = []
     cts = []
-    for i in range(len(test_users_ids)):
-        idx = test_users_ids[i]
+    for i, user in enumerate(test_users_ids):
+        idx = user
         ids += [idx] * 5
         sorted_countries = np.argsort(y_pred[i])[::-1]
         cts += label_encoder.inverse_transform(sorted_countries)[:5].tolist()
