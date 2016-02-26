@@ -6,14 +6,15 @@ over sampling algorithms and variances of the decision function.
 from __future__ import division
 
 import numpy as np
+from itertools import product
 
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import _fit_binary, check_is_fitted
 from sklearn.multiclass import _ovr_decision_function, _predict_binary
+from sklearn.neighbors import NearestNeighbors
 from sklearn.externals.joblib import Parallel, delayed
 from unbalanced_dataset import SMOTE, SMOTEENN, OverSampler
 from unbalanced_dataset import UnderSampler, TomekLinks
-from sklearn.neighbors import NearestNeighbors
 
 
 def _get_weight_matrix(distances):
@@ -43,15 +44,15 @@ def _get_weight_matrix(distances):
     n_classes = len(distances)
     matrix = np.zeros((n_classes, n_classes))
 
-    for i in range(n_classes):
-        for j in range(n_classes):
-            if i == j:
-                continue
+    # FIXME: Possible bug when computing weight matrix
+    for i, j in product(range(n_classes), repeat=2):
+        if i == j:
+            continue
 
-            # Formula to compute the weight W_i_j
-            numerator = distances[i] * distances[i]
-            denominator = numerator + (distances[j] * distances[j])
-            matrix[i][j] = numerator / denominator
+        # Formula to compute the weight W_i_j
+        numerator = distances[i] * distances[i]
+        denominator = numerator + (distances[j] * distances[j])
+        matrix[i][j] = numerator / denominator
 
     return matrix
 
