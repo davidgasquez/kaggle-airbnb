@@ -377,7 +377,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         else:
             return neighbors_classes
 
-    def _relative_competence(self, scores, x, n_classes, neighbors=5):
+    def _relative_competence(self, scores, x, n_classes, neighbors=None):
         """Extract the weighted vote matrix for the samples.
 
         # TODO: Better documentation
@@ -388,8 +388,11 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         and Francisco Herrera. Dynamic classifier selection for One-vs-One
         strategy: Avoiding non-competent classifiers. 2013.
         """
-        # Select all the neighborhood
-        k = n_classes * 200
+        # Select the neighborhood
+        if neighbors:
+            k = neighbors
+        else:
+            k = n_classes * 200
 
         # Fit the training data
         neigh = NearestNeighbors(n_neighbors=k, n_jobs=-1)
@@ -399,6 +402,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
         distances, indices = neigh.kneighbors(x)
         weighted_matrices = []
 
+        # For each distance matrix, compute its weighted distance matrix
         for d, i in zip(distances, indices):
             mean_distances = np.zeros(n_classes)
 
@@ -409,6 +413,7 @@ class CustomOneVsOneClassifier(OneVsOneClassifier):
             weighted_matrix = _get_weight_matrix(mean_distances)
             weighted_matrices.append(weighted_matrix)
 
+        # R_w = r * w
         R_w = [r * w for r, w in zip(scores, weighted_matrices)]
 
         return R_w
