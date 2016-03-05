@@ -55,6 +55,7 @@ class XGBFeatureSelection(XGBClassifier):
 
     @n_features.setter
     def n_features(self, value):
+        """Set the number of features in the XGBClassifier."""
         self._n_features = value
 
     @property
@@ -205,6 +206,7 @@ def process_user_secs_elapsed(sessions, user):
 
 
 def _empty_columns(x):
+    """Returns true when the columns is all zero."""
     return np.all(x == 0)
 
 
