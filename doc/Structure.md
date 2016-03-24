@@ -1,9 +1,22 @@
 New User Bookings
 =================
 
-- Problem Definition
-    - Introduction or motivation
+- Introduction
+    - Problem definition
+    - Motivation
+    - Objectives
+    - Scope
     - Source
+        - Kaggle
+        - Airbnb
+
+- Theory
+    - Data mining
+    - Data tyding
+    - Preprocessing
+    - Classification (Multiclass)
+
+- General Information
     - Scoring: Normalized Cumulative Discounted Gain
 
 - Data Exploration
