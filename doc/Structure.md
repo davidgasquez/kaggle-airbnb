@@ -52,15 +52,13 @@ New User Bookings
     - Grid Search
     - Pipelines
 
-- Results
+- Solution
     - Rank
     - Results including measures of uncertainty
     - Differences with other approaches
     - Over-fitting
     - Generalization
     - Conclusions including potential problems
-
-- Others
     - Reproducibility
     - Data Signal
     - Small improvements in the score of a classifier have dramatic effect on $
