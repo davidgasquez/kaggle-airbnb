@@ -1,6 +1,6 @@
 # Airbnb Kaggle Competition: *New User Bookings*
 
-[![Build Status](https://travis-ci.org/davidgasquez/kaggle-airbnb.svg?branch=master)](https://travis-ci.org/davidgasquez/kaggle-airbnb) [![Code Health](https://landscape.io/github/davidgasquez/kaggle-airbnb/master/landscape.svg?style=flat)](https://landscape.io/github/davidgasquez/kaggle-airbnb/master)
+[![Code Health](https://landscape.io/github/davidgasquez/kaggle-airbnb/master/landscape.svg?style=flat)](https://landscape.io/github/davidgasquez/kaggle-airbnb/master)
 
 This repository contains the code developed for the [Airbnb's Kaggle
 competition][competition]. It's written in **Python**, some in the form
